@@ -13,4 +13,6 @@ void setup() {
 }
 
 void loop() {
+    wifiHandler.handle();
+    delay(100);
 }

@@ -8,7 +8,7 @@
 #define BlUETOOTH_HANDLER_HPP
 
 #include <Arduino.h>
-#include "BluetoothSerial.h"
+#include <NimBLEDevice.h>
 
 class BluetoothHandler
 {
@@ -16,6 +16,6 @@ class BluetoothHandler
         void initialize();
 
     private:
-        BluetoothSerial m_serialBt;
+        NimBLEServer *m_server = nullptr;
 };
 #endif // BlUETOOTH_HANDLER_HPP

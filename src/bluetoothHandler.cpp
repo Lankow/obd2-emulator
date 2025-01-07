@@ -9,12 +9,20 @@
 
 void BluetoothHandler::initialize()
 {
-  if(m_serialBt.begin("OBDII"))
-  {
-    Serial.println("Bluetooth device started successfully");
-  }
-  else
-  {
-    Serial.println("Bluetooth device initialization failed");
-  }
-};
+    NimBLEDevice::init("OBDII");
+
+    m_server = NimBLEDevice::createServer();
+    if (m_server) {
+        Serial.println("Bluetooth Low Energy server created successfully");
+    } else {
+        Serial.println("Failed to create Bluetooth Low Energy server");
+        return;
+    }
+
+    NimBLEAdvertising *advertising = NimBLEDevice::getAdvertising();
+    advertising->addServiceUUID(NimBLEUUID((uint16_t)0x180D));
+    advertising->start();
+
+    Serial.println("Bluetooth Low Energy device started successfully");
+    Serial.println("Device is now advertising as OBDII");
+}
