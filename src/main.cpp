@@ -1,9 +1,12 @@
 #include <Arduino.h>
+#include <memory>
 #include "BluetoothHandler.hpp"
 #include "WifiHandler.hpp"
+#include "DataProvider.hpp"
 
+std::shared_ptr<DataProvider> dataProvider;
 BluetoothHandler bluetoothHandler;
-WifiHandler wifiHandler;
+WifiHandler wifiHandler(dataProvider);
 
 void setup() {
   Serial.begin(115200);
