@@ -16,10 +16,10 @@ WifiHandler::WifiHandler(std::shared_ptr<DataProvider> dataProvider)
 void WifiHandler::handleRoot()
 {
     uint16_t minSpeed = m_dataProvider->getMinSpeed();
-    uint16_t maxSpeed = m_dataProvider->getMaxSpeed();;
+    uint16_t maxSpeed = m_dataProvider->getMaxSpeed();
 
-    uint16_t minRpm = m_dataProvider->getMinRpm();;
-    uint16_t maxRpm = m_dataProvider->getMaxRpm();;
+    uint16_t minRpm = m_dataProvider->getMinRpm();
+    uint16_t maxRpm = m_dataProvider->getMaxRpm();
 
     std::string dynamicWebpage = R"rawliteral(
         <!DOCTYPE html>
@@ -52,11 +52,17 @@ void WifiHandler::handleRoot()
 
 void WifiHandler::handleSubmit()
 {
-    String minSpeedStr = m_server.arg("minSpeed");
-    String maxSpeedStr = m_server.arg("maxSpeed");
+    uint16_t minSpeed = std::stoi(m_server.arg("minSpeed").c_str());;
+    uint16_t maxSpeed = std::stoi(m_server.arg("maxSpeed").c_str());;
+    
+    uint16_t minRpm = std::stoi(m_server.arg("minRpm").c_str());;
+    uint16_t maxRpm = std::stoi(m_server.arg("maxRpm").c_str());;
+    
+    m_dataProvider->setMinSpeed(minSpeed);
+    m_dataProvider->setMaxSpeed(maxSpeed);
 
-    Serial.println("Min Speed: " + minSpeedStr);
-    Serial.println("Max Speed: " + maxSpeedStr);
+    m_dataProvider->setMinRpm(minRpm);
+    m_dataProvider->setMaxRpm(maxRpm);
 
     m_server.send(200, "text/plain", "Data received. You can close this page.");
 }

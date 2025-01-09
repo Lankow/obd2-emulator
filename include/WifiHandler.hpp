@@ -14,7 +14,6 @@
 
 class WifiHandler
 {
-
     public:
         WifiHandler(std::shared_ptr<DataProvider> dataProvider);
 
