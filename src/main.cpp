@@ -8,7 +8,9 @@
 std::shared_ptr<DataProvider> dataProvider  = std::make_shared<DataProvider>();
 BluetoothHandler bluetoothHandler;
 WifiHandler wifiHandler(dataProvider);
-EmulatedData<int> data(0, 0, 100, 10, 100);
+EmulatedData<int> vehicleSpeed(0, 0, 255, 10, 100);
+EmulatedData<float> engineSpeed(0, 0, 16383.75 , 10, 100);
+
 
 void setup() {
   Serial.begin(115200);
@@ -19,7 +21,14 @@ void setup() {
 
 void loop() {
     wifiHandler.handle();
-    data.update();
-    Serial.println(data.getCurrent());
+    
+    vehicleSpeed.update();
+    engineSpeed.update();
+
+    Serial.println("Vehicle Speed:");
+    Serial.println(vehicleSpeed.getCurrent());
+
+    Serial.println("Engine Speed:");
+    Serial.println(engineSpeed.getCurrent());
     delay(100);
 }

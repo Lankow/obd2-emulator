@@ -25,6 +25,8 @@ private:
     T m_min;
     T m_max;
     T m_increment;
+
+    uint8_t m_pid;
     int m_pace;
     bool m_increasing;
 };
