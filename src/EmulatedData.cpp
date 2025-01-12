@@ -4,11 +4,13 @@
  * @author Lankow
  * @version 1.0
  */
+#include <Arduino.h>
 #include "EmulatedData.hpp"
 
 template<typename T>
-EmulatedData<T>::EmulatedData(T current, T min, T max, T increment, int pace)
-    : m_current(current),
+EmulatedData<T>::EmulatedData(uint8_t pid, T current, T min, T max, T increment, int pace)
+    : m_pid(pid),
+      m_current(current),
       m_min(min),
       m_max(max),
       m_increment(increment),
@@ -50,6 +52,14 @@ void EmulatedData<T>::update() {
             m_increasing = true;
         }
     }
+}
+
+template<typename T>
+void EmulatedData<T>::printCurrent() const{
+    Serial.println("Current Value: ");
+    Serial.println(m_pid);
+    Serial.println(m_current);
+    Serial.println("---------------");
 }
 
 // Explicit instantiation for specific types
