@@ -10,16 +10,15 @@ const std::string SSID = "OBDII-config";
 const std::string PASSWORD = "obd2config";
 constexpr uint16_t SERVER_PORT = 80;
 
-WifiHandler::WifiHandler(std::shared_ptr<DataProvider> dataProvider)
-    : m_dataProvider(dataProvider), m_server(SERVER_PORT) {}
+WifiHandler::WifiHandler() :  m_server(SERVER_PORT) {}
 
 void WifiHandler::handleRoot()
 {
-    uint16_t minSpeed = m_dataProvider->getMinSpeed();
-    uint16_t maxSpeed = m_dataProvider->getMaxSpeed();
+    uint16_t minSpeed = 0;
+    uint16_t maxSpeed = 255;
 
-    uint16_t minRpm = m_dataProvider->getMinRpm();
-    uint16_t maxRpm = m_dataProvider->getMaxRpm();
+    uint16_t minRpm = 0;
+    uint16_t maxRpm = 10000;
 
     std::string dynamicWebpage = R"rawliteral(
         <!DOCTYPE html>
@@ -58,11 +57,10 @@ void WifiHandler::handleSubmit()
     uint16_t minRpm = std::stoi(m_server.arg("minRpm").c_str());;
     uint16_t maxRpm = std::stoi(m_server.arg("maxRpm").c_str());;
     
-    m_dataProvider->setMinSpeed(minSpeed);
-    m_dataProvider->setMaxSpeed(maxSpeed);
-
-    m_dataProvider->setMinRpm(minRpm);
-    m_dataProvider->setMaxRpm(maxRpm);
+    Serial.println("Min Speed: " + minSpeed);
+    Serial.println("Max Speed: " + maxSpeed);
+    Serial.println("Min RPM: " + minRpm);
+    Serial.println("Max RPM: " + maxRpm);
 
     m_server.send(200, "text/plain", "Data received. You can close this page.");
 }

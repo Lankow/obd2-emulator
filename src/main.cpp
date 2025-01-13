@@ -1,15 +1,12 @@
 #include <Arduino.h>
 #include <memory>
-#include "BluetoothHandler.hpp"
-#include "WifiHandler.hpp"
-#include "DataProvider.hpp"
-#include "EmulatedData.hpp"
 #include "DataStorage.hpp"
+#include "WifiHandler.hpp"
+#include "BluetoothHandler.hpp"
 
-std::shared_ptr<DataProvider> dataProvider  = std::make_shared<DataProvider>();
-BluetoothHandler bluetoothHandler;
-WifiHandler wifiHandler(dataProvider);
 DataStorage dataStorage;
+WifiHandler wifiHandler;
+BluetoothHandler bluetoothHandler;
 
 void setup() {
   Serial.begin(115200);

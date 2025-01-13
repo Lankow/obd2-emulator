@@ -10,18 +10,16 @@
 #include <Arduino.h>
 #include <WebServer.h>
 #include <memory>
-#include "DataProvider.hpp"
 
 class WifiHandler
 {
     public:
-        WifiHandler(std::shared_ptr<DataProvider> dataProvider);
+        WifiHandler();
 
         void initialize();
         void handle();
 
     private:
-        std::shared_ptr<DataProvider> m_dataProvider;
         WebServer m_server;
         IPAddress m_apIP;
 
