@@ -23,7 +23,7 @@ class EmulatedData : public IEmulatedData{
 public:
     static_assert(std::is_arithmetic<T>::value, "EmulatedData only supports arithmetic types.");
 
-    EmulatedData(uint8_t pid, T current, T min, T max, T increment, int pace);
+    EmulatedData(uint8_t pid, T current, T min, T max, T increment, int pace, std::function<int32_t(T& current)> customGetter = nullptr);
     
     T getCurrent() const;
     void update() override;
@@ -38,6 +38,7 @@ private:
 
     int m_pace;
     bool m_increasing;
+    std::function<int32_t(T&)> m_customGetter;
 };
 
 #endif // EMULATED_DATA_HPP

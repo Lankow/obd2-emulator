@@ -8,7 +8,15 @@
 #define DISPLAY_HANDLER_HPP
 
 #include <Arduino.h>
-
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 class DisplayHandler
-{};
+{
+    public:
+        DisplayHandler();
+
+        void initialize();
+    private:
+        Adafruit_SSD1306 m_display;
+};
 #endif // DISPLAY_HANDLER_HPP

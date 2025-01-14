@@ -8,27 +8,16 @@
 #include "EmulatedData.hpp"
 
 template<typename T>
-EmulatedData<T>::EmulatedData(uint8_t pid, T current, T min, T max, T increment, int pace)
+EmulatedData<T>::EmulatedData(uint8_t pid, T current, T min, T max, T increment, int pace, std::function<int32_t(T& current)> customGetter)
     : m_pid(pid),
       m_current(current),
       m_min(min),
       m_max(max),
       m_increment(increment),
       m_pace(pace),
-      m_increasing(true) {
-    if (m_min > m_max) {
-        throw std::invalid_argument("Minimum value cannot be greater than maximum value.");
-    }
-    if (m_current < m_min || m_current > m_max) {
-        throw std::out_of_range("Current value must be within the range defined by min and max.");
-    }
-    if (m_increment <= 0) {
-        throw std::invalid_argument("Increment must be greater than 0.");
-    }
-    if (m_pace <= 0) {
-        throw std::invalid_argument("Pace must be greater than 0.");
-    }
-}
+      m_increasing(true),
+      m_customGetter(customGetter){}
+
 
 template<typename T>
 T EmulatedData<T>::getCurrent() const {
