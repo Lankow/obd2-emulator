@@ -8,7 +8,7 @@
 #include "EmulatedData.hpp"
 
 template<typename T>
-EmulatedData<T>::EmulatedData(uint8_t pid, T current, T min, T max, T increment, int pace, std::function<int32_t(T& current)> customGetter)
+EmulatedData<T>::EmulatedData(uint8_t pid, T current, T min, T max, T increment, int pace, std::function<int32_t(const T& current)> customGetter)
     : m_pid(pid),
       m_current(current),
       m_min(min),
@@ -49,6 +49,14 @@ void EmulatedData<T>::printCurrent() const{
     Serial.println(m_pid);
     Serial.println(m_current);
     Serial.println("---------------");
+}
+
+template<typename T>
+uint32_t EmulatedData<T>::getCustom() const {
+    if (m_customGetter) {
+        return m_customGetter(m_current);
+    }
+    return 0;
 }
 
 // Explicit instantiation for specific types
