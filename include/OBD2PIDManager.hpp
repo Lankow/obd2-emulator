@@ -1,5 +1,5 @@
 /**
- * @file DataStorage.hpp
+ * @file OBD2PIDManager.hpp
  * @date   2025-01-12
  * @author Lankow
  * @version 1.0
@@ -10,17 +10,17 @@
 #include <Arduino.h>
 #include <vector>
 #include <memory>
-#include "EmulatedData.hpp"
+#include "OBD2PIDInfo.hpp"
 
-class DataStorage
+class OBD2PIDManager
 {
     public:
-        explicit DataStorage();
+        explicit OBD2PIDManager();
 
         void updateAll();
         void printAll() const;
 
     private:
-        std::vector<std::unique_ptr<IEmulatedData>> m_emulatedDataList;
+        std::vector<std::unique_ptr<IOBD2PIDInfo>> m_OBD2PIDInfoList;
 };
 #endif // DATA_STORAGE_HPP

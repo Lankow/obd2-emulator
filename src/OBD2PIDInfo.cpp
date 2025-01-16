@@ -1,15 +1,15 @@
 /**
- * @file EmulatedData.cpp
+ * @file OBD2PIDInfo.cpp
  * @date   2025-01-09
  * @author Lankow
  * @version 1.0
  */
 #include <Arduino.h>
-#include "EmulatedData.hpp"
+#include "OBD2PIDInfo.hpp"
 
 template<typename T>
-EmulatedData<T>::EmulatedData(uint8_t pid, T current, T min, T max, T increment, int pace, std::function<int32_t(const T& current)> customGetter)
-    : m_pid(pid),
+OBD2PIDInfo<T>::OBD2PIDInfo(uint8_t length, T current, T min, T max, T increment, int pace, std::function<int32_t(const T& current)> customGetter)
+    : m_length(length),
       m_current(current),
       m_min(min),
       m_max(max),
@@ -20,12 +20,12 @@ EmulatedData<T>::EmulatedData(uint8_t pid, T current, T min, T max, T increment,
 
 
 template<typename T>
-T EmulatedData<T>::getCurrent() const {
+T OBD2PIDInfo<T>::getCurrent() const {
     return m_current;
 }
 
 template<typename T>
-void EmulatedData<T>::update() {
+void OBD2PIDInfo<T>::update() {
     if (m_increasing) {
         m_current += m_increment;
         if (m_current >= m_max) 
@@ -44,15 +44,15 @@ void EmulatedData<T>::update() {
 }
 
 template<typename T>
-void EmulatedData<T>::printCurrent() const{
+void OBD2PIDInfo<T>::printCurrent() const{
     Serial.println("Current Value: ");
-    Serial.println(m_pid);
+    Serial.println(m_length);
     Serial.println(m_current);
     Serial.println("---------------");
 }
 
 template<typename T>
-uint32_t EmulatedData<T>::getCustom() const {
+uint32_t OBD2PIDInfo<T>::getCustom() const {
     if (m_customGetter) {
         return m_customGetter(m_current);
     }
@@ -60,6 +60,6 @@ uint32_t EmulatedData<T>::getCustom() const {
 }
 
 // Explicit instantiation for specific types
-template class EmulatedData<int>;
-template class EmulatedData<float>;
-template class EmulatedData<double>;
+template class OBD2PIDInfo<int>;
+template class OBD2PIDInfo<float>;
+template class OBD2PIDInfo<double>;

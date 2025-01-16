@@ -1,11 +1,11 @@
 #include <Arduino.h>
 #include <memory>
-#include "DataStorage.hpp"
+#include "OBD2PIDManager.hpp"
 #include "WifiHandler.hpp"
 #include "BluetoothHandler.hpp"
 #include "DisplayHandler.hpp"
 
-DataStorage dataStorage;
+OBD2PIDManager manager;
 WifiHandler wifiHandler;
 BluetoothHandler bluetoothHandler;
 DisplayHandler displayHandler;
@@ -21,7 +21,7 @@ void setup() {
 
 void loop() {
     wifiHandler.handle();
-    dataStorage.updateAll();
-    dataStorage.printAll();
+    manager.updateAll();
+    manager.printAll();
     delay(100);
 }
