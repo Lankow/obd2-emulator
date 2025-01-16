@@ -8,7 +8,7 @@
 #include "OBD2PIDInfo.hpp"
 
 template<typename T>
-OBD2PIDInfo<T>::OBD2PIDInfo(uint8_t length, T current, T min, T max, T increment, int pace, std::function<int32_t(const T& current)> customGetter)
+OBD2PIDInfo<T>::OBD2PIDInfo(uint8_t length, T current, T min, T max, T increment, int pace, std::function<int32_t(const T& current)> formulaGetter)
     : m_length(length),
       m_current(current),
       m_min(min),
@@ -16,7 +16,7 @@ OBD2PIDInfo<T>::OBD2PIDInfo(uint8_t length, T current, T min, T max, T increment
       m_increment(increment),
       m_pace(pace),
       m_increasing(true),
-      m_customGetter(customGetter){}
+      m_formulaGetter(formulaGetter){}
 
 
 template<typename T>
@@ -52,9 +52,9 @@ void OBD2PIDInfo<T>::printCurrent() const{
 }
 
 template<typename T>
-uint32_t OBD2PIDInfo<T>::getCustom() const {
-    if (m_customGetter) {
-        return m_customGetter(m_current);
+uint32_t OBD2PIDInfo<T>::getFormula() const {
+    if (m_formulaGetter) {
+        return m_formulaGetter(m_current);
     }
     return 0;
 }
