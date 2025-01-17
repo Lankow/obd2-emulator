@@ -45,10 +45,18 @@ void OBD2PIDInfo<T>::update() {
 
 template<typename T>
 void OBD2PIDInfo<T>::printCurrent() const{
-    Serial.println("Current Value: ");
+    Serial.print("Length: " );
     Serial.println(m_length);
+    Serial.print("Current: " );
     Serial.println(m_current);
-    Serial.println("---------------");
+    Serial.print("Min: " );
+    Serial.println(m_min);
+    Serial.print("Max: " );
+    Serial.println(m_max);
+    Serial.print("Pace: " );
+    Serial.println(m_pace);
+    Serial.print("Increment: " );
+    Serial.println(m_increment);
 }
 
 template<typename T>
@@ -58,6 +66,12 @@ uint32_t OBD2PIDInfo<T>::getFormula() const {
     }
     return 0;
 }
+
+template<typename T>
+uint8_t OBD2PIDInfo<T>::getLength() const {
+    return m_length;
+}
+
 
 // Explicit instantiation for specific types
 template class OBD2PIDInfo<int>;

@@ -17,6 +17,7 @@ public:
     virtual void update() = 0;
     virtual void printCurrent() const = 0;
     virtual uint32_t getFormula() const = 0;
+    virtual uint8_t getLength() const = 0;
 };
 
 template<typename T>
@@ -30,6 +31,7 @@ public:
     void update() override;
     void printCurrent() const override;
     uint32_t getFormula() const override;
+    uint8_t getLength() const override;
 
 private:
     uint8_t m_length;

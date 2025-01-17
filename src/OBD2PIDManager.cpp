@@ -7,13 +7,20 @@
 #include "OBD2PIDManager.hpp"
 
 OBD2PIDManager::OBD2PIDManager() {
+
     // Engine Speed (0x0C)
     addPID<float>(
-        0x0C, 2, 0.0f, 0.0f, 16383.75f, 1.0f, 100, 
+        0x0C, 2, 0.0f, 0.0f, 16383.75f, 100.0f, 100,
         [this](const float& current) -> int32_t {
             Serial.println("Formula Engine Speed:");
-            Serial.println(current);
-            return static_cast<int32_t>(current);
+
+            int32_t scaledValue = static_cast<int32_t>(current * 4);
+            uint8_t A = (scaledValue / 256) & 0xFF;
+            uint8_t B = scaledValue % 256;
+
+            int32_t result = (A << 8) | B;
+
+            return result;
         }
     );
 
@@ -22,7 +29,6 @@ OBD2PIDManager::OBD2PIDManager() {
         0x0D, 1, 0, 0, 255, 1, 100, 
         [this](const int& current) -> int32_t {
             Serial.println("Formula Vehicle Speed:");
-            Serial.println(current);
             return current;
         }
     );
@@ -36,8 +42,11 @@ void OBD2PIDManager::updateAll() {
 
 void OBD2PIDManager::printAll() const {
     for (const auto& pair : m_OBD2PIDInfoMap) {
+        Serial.println("---------------");
+        Serial.print("ID: " );
+        Serial.println(pair.first, HEX);
         pair.second->printCurrent();
-        pair.second->getFormula();
+        Serial.println("---------------");
     }
 }
 
