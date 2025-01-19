@@ -10,7 +10,7 @@ const std::string SSID = "OBDII-config";
 const std::string PASSWORD = "obd2config";
 constexpr uint16_t SERVER_PORT = 80;
 
-WifiHandler::WifiHandler() :  m_server(SERVER_PORT) {}
+WifiHandler::WifiHandler(std::shared_ptr<OBD2PIDManager> manager) : m_manager(manager), m_server(SERVER_PORT) {}
 
 void WifiHandler::handleRoot()
 {

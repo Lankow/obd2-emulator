@@ -10,7 +10,7 @@
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 
-DisplayHandler::DisplayHandler(): m_display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1){}
+DisplayHandler::DisplayHandler(std::shared_ptr<OBD2PIDManager> manager): m_manager(manager), m_display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1){}
 
 void DisplayHandler::initialize() 
 {

@@ -5,10 +5,10 @@
 #include "BluetoothHandler.hpp"
 #include "DisplayHandler.hpp"
 
-OBD2PIDManager manager;
-WifiHandler wifiHandler;
-BluetoothHandler bluetoothHandler;
-DisplayHandler displayHandler;
+std::shared_ptr<OBD2PIDManager> manager  = std::make_shared<OBD2PIDManager>();
+WifiHandler wifiHandler(manager);
+BluetoothHandler bluetoothHandler(manager);
+DisplayHandler displayHandler(manager);
 
 void setup() {
   Serial.begin(115200);
@@ -21,7 +21,8 @@ void setup() {
 
 void loop() {
     wifiHandler.handle();
-    manager.updateAll();
-    manager.printAll();
+    manager->updateAll();
+    manager->printAll();
+    bluetoothHandler.write();
     delay(100);
 }

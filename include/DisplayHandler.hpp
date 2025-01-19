@@ -10,13 +10,17 @@
 #include <Arduino.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <memory>
+#include "OBD2PIDManager.hpp"
+
 class DisplayHandler
 {
     public:
-        DisplayHandler();
+        DisplayHandler(std::shared_ptr<OBD2PIDManager> manager);
 
         void initialize();
     private:
+        std::shared_ptr<OBD2PIDManager> m_manager;
         Adafruit_SSD1306 m_display;
 };
 #endif // DISPLAY_HANDLER_HPP
