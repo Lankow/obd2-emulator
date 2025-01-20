@@ -22,7 +22,6 @@ void setup() {
 void loop() {
     wifiHandler.handle();
     manager->updateAll();
-    manager->printAll();
-    bluetoothHandler.write();
+    // manager->printAll();
     delay(100);
 }
