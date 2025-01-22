@@ -26,13 +26,17 @@ class BLEHandler
 
         // Callbacks
         class ServerCallbacks : public NimBLEServerCallbacks {
-            void onConnect(NimBLEServer* pServer, NimBLEConnInfo& connInfo) override;
-            void onDisconnect(NimBLEServer* pServer, NimBLEConnInfo& connInfo, int reason) override;
+            public:
+                void onConnect(NimBLEServer* pServer, NimBLEConnInfo& connInfo) override;
+                void onDisconnect(NimBLEServer* pServer, NimBLEConnInfo& connInfo, int reason) override;
+            
+            private:
+                std::string disconnectReasonToString(int reason);
         };
 
         class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
             public:
-            CharacteristicCallbacks(std::shared_ptr<OBD2PIDManager> manager);
+                CharacteristicCallbacks(std::shared_ptr<OBD2PIDManager> manager);
 
             private:
                 void onWrite(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) override;
