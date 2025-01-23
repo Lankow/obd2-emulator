@@ -8,7 +8,6 @@
 #define BlUETOOTH_HANDLER_HPP
 
 #include <Arduino.h>
-#include <NimBLEDevice.h>
 #include <memory>
 #include "OBD2PIDManager.hpp"
 
@@ -22,26 +21,5 @@ class BLEHandler
         
     private:
         std::shared_ptr<OBD2PIDManager> m_manager;
-        NimBLEServer *m_server = nullptr;
-
-        // Callbacks
-        class ServerCallbacks : public NimBLEServerCallbacks {
-            public:
-                void onConnect(NimBLEServer* pServer, NimBLEConnInfo& connInfo) override;
-                void onDisconnect(NimBLEServer* pServer, NimBLEConnInfo& connInfo, int reason) override;
-            
-            private:
-                std::string disconnectReasonToString(int reason);
-        };
-
-        class CharacteristicCallbacks : public NimBLECharacteristicCallbacks {
-            public:
-                CharacteristicCallbacks(std::shared_ptr<OBD2PIDManager> manager);
-
-            private:
-                void onWrite(NimBLECharacteristic* pCharacteristic, NimBLEConnInfo& connInfo) override;
-
-                std::shared_ptr<OBD2PIDManager> m_manager;
-        };
 };  
 #endif // BlUETOOTH_HANDLER_HPP
