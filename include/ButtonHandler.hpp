@@ -9,6 +9,7 @@
 
 #include <Arduino.h>
 #include <Button.h>
+#include "Constants.hpp"
 
 class ButtonHandler
 {
@@ -20,6 +21,6 @@ class ButtonHandler
         
     private:
         Button m_button;
-        uint8_t m_state;
+        BootButton::State m_state;
 };  
 #endif // BUTTON_HANDLER_HPP

@@ -6,9 +6,7 @@
  */
 #include "ButtonHandler.hpp"
 
-#define BOOT_BUTTON_PIN 0
-
-ButtonHandler::ButtonHandler() : m_button(BOOT_BUTTON_PIN), m_state(0){}
+ButtonHandler::ButtonHandler() : m_button(BootButton::PIN), m_state(BootButton::State::NotPressed){}
 
 void ButtonHandler::initialize()
 {
@@ -20,5 +18,6 @@ void ButtonHandler::cyclic()
     if (m_button.pressed())
     {
         Serial.println("Button Pressed.");
+        m_state = BootButton::State::Click;
     }
 }
