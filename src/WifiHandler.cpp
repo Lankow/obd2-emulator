@@ -5,9 +5,10 @@
  * @version 1.0
  */
 #include "WifiHandler.hpp"
+#include "Constants.hpp"
 
-const std::string SSID = "OBDII-config";
-const std::string PASSWORD = "obd2config";
+const std::string SSID = "";
+const std::string PASSWORD = "";
 constexpr uint16_t SERVER_PORT = 80;
 
 WifiHandler::WifiHandler(std::shared_ptr<OBD2PIDManager> manager) : m_manager(manager), m_server(SERVER_PORT) {}
@@ -67,7 +68,7 @@ void WifiHandler::handleSubmit()
 
 void WifiHandler::initialize()
 {
-    WiFi.softAP(SSID.c_str(), PASSWORD.c_str());
+    WiFi.softAP(Config::SSID.c_str(), Config::PASSWORD.c_str());
     IPAddress apIp = WiFi.softAPIP();
 
     m_server.on("/", [this]()

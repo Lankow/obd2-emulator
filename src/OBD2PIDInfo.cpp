@@ -7,8 +7,8 @@
 #include <Arduino.h>
 #include "OBD2PIDInfo.hpp"
 
-template<typename T>
-OBD2PIDInfo<T>::OBD2PIDInfo(uint8_t length, T current, T min, T max, T increment, int pace, std::function<int32_t(const T& current)> formulaGetter)
+template <typename T>
+OBD2PIDInfo<T>::OBD2PIDInfo(uint8_t length, T current, T min, T max, T increment, int pace, std::function<int32_t(const T &current)> formulaGetter)
     : m_length(length),
       m_current(current),
       m_min(min),
@@ -16,26 +16,30 @@ OBD2PIDInfo<T>::OBD2PIDInfo(uint8_t length, T current, T min, T max, T increment
       m_increment(increment),
       m_pace(pace),
       m_increasing(true),
-      m_formulaGetter(formulaGetter){}
+      m_formulaGetter(formulaGetter) {}
 
-
-template<typename T>
-T OBD2PIDInfo<T>::getCurrent() const {
+template <typename T>
+T OBD2PIDInfo<T>::getCurrent() const
+{
     return m_current;
 }
 
-template<typename T>
-void OBD2PIDInfo<T>::update() {
-    if (m_increasing) {
+template <typename T>
+void OBD2PIDInfo<T>::update()
+{
+    if (m_increasing)
+    {
         m_current += m_increment;
-        if (m_current >= m_max) 
+        if (m_current >= m_max)
         {
             m_current = m_max;
             m_increasing = false;
         }
-    } else {
+    }
+    else
+    {
         m_current -= m_increment;
-        if (m_current <= m_min) 
+        if (m_current <= m_min)
         {
             m_current = m_min;
             m_increasing = true;
@@ -43,35 +47,38 @@ void OBD2PIDInfo<T>::update() {
     }
 }
 
-template<typename T>
-void OBD2PIDInfo<T>::printCurrent() const{
-    Serial.print("Length: " );
+template <typename T>
+void OBD2PIDInfo<T>::printCurrent() const
+{
+    Serial.print("Length: ");
     Serial.println(m_length);
-    Serial.print("Current: " );
+    Serial.print("Current: ");
     Serial.println(m_current);
-    Serial.print("Min: " );
+    Serial.print("Min: ");
     Serial.println(m_min);
-    Serial.print("Max: " );
+    Serial.print("Max: ");
     Serial.println(m_max);
-    Serial.print("Pace: " );
+    Serial.print("Pace: ");
     Serial.println(m_pace);
-    Serial.print("Increment: " );
+    Serial.print("Increment: ");
     Serial.println(m_increment);
 }
 
-template<typename T>
-uint32_t OBD2PIDInfo<T>::getFormula() const {
-    if (m_formulaGetter) {
+template <typename T>
+uint32_t OBD2PIDInfo<T>::getFormula() const
+{
+    if (m_formulaGetter)
+    {
         return m_formulaGetter(m_current);
     }
     return 0;
 }
 
-template<typename T>
-uint8_t OBD2PIDInfo<T>::getLength() const {
+template <typename T>
+uint8_t OBD2PIDInfo<T>::getLength() const
+{
     return m_length;
 }
-
 
 // Explicit instantiation for specific types
 template class OBD2PIDInfo<int>;

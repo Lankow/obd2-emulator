@@ -12,22 +12,24 @@ BtHandler::BtHandler(std::shared_ptr<OBD2PIDManager> manager) : m_manager(manage
 
 void BtHandler::initialize()
 {
-    m_btSerial.begin("OBDII-ESP");
-    Serial.println("Bluetooth started.");
+  m_btSerial.begin("OBDII-ESP");
+  Serial.println("Bluetooth started.");
 }
 
 void BtHandler::cyclic()
 {
-  if (m_btSerial.available()){
+  if (m_btSerial.available())
+  {
     String message = "";
 
     char incomingChar = m_btSerial.read();
-    if (incomingChar != '\n'){
+    if (incomingChar != '\n')
+    {
       message += String(incomingChar);
     }
-    else{
+    else
+    {
       message = "";
     }
   }
 }
-

@@ -14,18 +14,18 @@
 
 class WifiHandler
 {
-    public:
-        WifiHandler(std::shared_ptr<OBD2PIDManager> manager);
+public:
+    WifiHandler(std::shared_ptr<OBD2PIDManager> manager);
 
-        void initialize();
-        void handle();
+    void initialize();
+    void handle();
 
-    private:
-        std::shared_ptr<OBD2PIDManager> m_manager;
-        WebServer m_server;
-        IPAddress m_apIP;
+private:
+    std::shared_ptr<OBD2PIDManager> m_manager;
+    WebServer m_server;
+    IPAddress m_apIP;
 
-        void handleRoot();
-        void handleSubmit();
+    void handleRoot();
+    void handleSubmit();
 };
 #endif // WIFI_HANDLER_HPP

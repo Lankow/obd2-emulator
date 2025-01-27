@@ -13,14 +13,13 @@
 
 class ButtonHandler
 {
-    public:
-        ButtonHandler();
+public:
+    ButtonHandler();
 
-        void initialize();
-        void cyclic();
-        
-    private:
-        Button m_button;
-        BootButton::State m_state;
-};  
+    void initialize();
+    void cyclic();
+
+private:
+    Button m_button;
+};
 #endif // BUTTON_HANDLER_HPP

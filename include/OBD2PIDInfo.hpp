@@ -11,7 +11,8 @@
 #include <type_traits>
 
 // Base class for polymorphism
-class IOBD2PIDInfo {
+class IOBD2PIDInfo
+{
 public:
     virtual ~IOBD2PIDInfo() = default;
     virtual void update() = 0;
@@ -20,13 +21,14 @@ public:
     virtual uint8_t getLength() const = 0;
 };
 
-template<typename T>
-class OBD2PIDInfo : public IOBD2PIDInfo{
+template <typename T>
+class OBD2PIDInfo : public IOBD2PIDInfo
+{
 public:
     static_assert(std::is_arithmetic<T>::value, "OBD2PIDInfo only supports arithmetic types.");
 
-    OBD2PIDInfo(uint8_t length, T current, T min, T max, T increment, int pace, std::function<int32_t(const T& current)> formulaGetter = nullptr);
-    
+    OBD2PIDInfo(uint8_t length, T current, T min, T max, T increment, int pace, std::function<int32_t(const T &current)> formulaGetter = nullptr);
+
     T getCurrent() const;
     void update() override;
     void printCurrent() const override;
@@ -42,7 +44,7 @@ private:
 
     int m_pace;
     bool m_increasing;
-    std::function<int32_t(const T&)> m_formulaGetter;
+    std::function<int32_t(const T &)> m_formulaGetter;
 };
 
 #endif // OBD2_PID_INFO_HPP

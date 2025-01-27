@@ -10,16 +10,21 @@
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 
-DisplayHandler::DisplayHandler(std::shared_ptr<OBD2PIDManager> manager): m_manager(manager), m_display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1){}
+DisplayHandler::DisplayHandler(std::shared_ptr<OBD2PIDManager> manager, std::shared_ptr<ButtonHandler> buttonHandler)
+    : m_manager(manager),
+      m_buttonHandler(buttonHandler),
+      m_display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1) {}
 
-void DisplayHandler::initialize() 
+void DisplayHandler::initialize()
 {
   Wire.begin(21, 22); // SDA = GPIO21, SCL = GPIO22
   Serial.println("Initializing OLED...");
-  
-  if (!m_display.begin(SSD1306_SWITCHCAPVCC, 0x3C)){
+
+  if (!m_display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
+  {
     Serial.println("Failed to initialize SSD1306!");
-    while (true); 
+    while (true)
+      ;
   }
 
   m_display.clearDisplay();

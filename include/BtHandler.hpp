@@ -14,14 +14,14 @@
 
 class BtHandler
 {
-    public:
-        BtHandler(std::shared_ptr<OBD2PIDManager> manager);
+public:
+    BtHandler(std::shared_ptr<OBD2PIDManager> manager);
 
-        void initialize();
-        void cyclic();
-        
-    private:
-        BluetoothSerial m_btSerial;
-        std::shared_ptr<OBD2PIDManager> m_manager;
-};  
+    void initialize();
+    void cyclic();
+
+private:
+    BluetoothSerial m_btSerial;
+    std::shared_ptr<OBD2PIDManager> m_manager;
+};
 #endif // BlUETOOTH_HANDLER_HPP
