@@ -18,8 +18,13 @@ public:
 
     void initialize();
     void cyclic();
+    void reset();
 
 private:
     Button m_button;
+    BootButton::State m_state;
+    uint16_t m_lastPressTimeMs;
+    uint16_t m_pressedCounterMs;
+    
 };
 #endif // BUTTON_HANDLER_HPP
