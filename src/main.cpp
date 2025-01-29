@@ -30,5 +30,6 @@ void loop() {
     wifiHandler.handle();
     manager->updateAll();
     // manager->printAll();
+    displayHandler.cyclic();
     delay(Config::CYCLE_TIME_MS);
 }

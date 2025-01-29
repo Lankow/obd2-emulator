@@ -6,6 +6,7 @@
  */
 #include <Wire.h>
 #include "DisplayHandler.hpp"
+#include "Constants.hpp"
 
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
@@ -13,7 +14,25 @@
 DisplayHandler::DisplayHandler(std::shared_ptr<OBD2PIDManager> manager, std::shared_ptr<ButtonHandler> buttonHandler)
     : m_manager(manager),
       m_buttonHandler(buttonHandler),
-      m_display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1) {}
+      m_display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1) {};
+
+void DisplayHandler::cyclic()
+{
+  BootButton::State state = m_buttonHandler->getState();
+
+  switch (state)
+  {
+  case BootButton::State::DoubleClick:
+      update("Double Clicked!");
+      m_buttonHandler->reset();
+    break;
+  case BootButton::State::LongPressed:
+      update("Long Press!");
+      m_buttonHandler->reset(); 
+  default:
+    break;
+  }
+}
 
 void DisplayHandler::initialize()
 {
@@ -27,10 +46,15 @@ void DisplayHandler::initialize()
       ;
   }
 
+  update("OBD2-Emulator");
+}
+
+void DisplayHandler::update(const std::string &message)
+{
   m_display.clearDisplay();
   m_display.setTextSize(1);
   m_display.setTextColor(SSD1306_WHITE);
   m_display.setCursor(0, 0);
-  m_display.println("OBD2-Emulator");
+  m_display.println(message.c_str());
   m_display.display();
 }

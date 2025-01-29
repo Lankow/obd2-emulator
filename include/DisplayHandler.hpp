@@ -20,10 +20,13 @@ public:
     DisplayHandler(std::shared_ptr<OBD2PIDManager> manager, std::shared_ptr<ButtonHandler> buttonHandler);
 
     void initialize();
+    void cyclic();
 
 private:
     std::shared_ptr<OBD2PIDManager> m_manager;
     std::shared_ptr<ButtonHandler> m_buttonHandler;
     Adafruit_SSD1306 m_display;
+
+    void update(const std::string& message);
 };
 #endif // DISPLAY_HANDLER_HPP

@@ -24,6 +24,8 @@ void ButtonHandler::reset()
     m_pressedCounterMs = BootButton::DEFAULT_TIME;
 }
 
+BootButton::State ButtonHandler::getState() { return m_state; };
+
 void ButtonHandler::cyclic()
 {
     uint16_t currentTime = millis();
@@ -37,7 +39,6 @@ void ButtonHandler::cyclic()
         {
             Serial.println("Double Click detected!");
             m_state = BootButton::State::DoubleClick;
-            reset(); // To be removed
         }
 
         m_lastPressTimeMs = currentTime;
@@ -58,8 +59,7 @@ void ButtonHandler::cyclic()
         if (m_pressedCounterMs >= BootButton::THRESHOLD_LONG_MS)
         {
             Serial.println("Long Click detected!");
-            m_state == BootButton::State::LongPressed;
-            reset(); // To be removed
+            m_state = BootButton::State::LongPressed;
         }
     }
 }
