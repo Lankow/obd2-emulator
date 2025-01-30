@@ -28,5 +28,6 @@ private:
     Adafruit_SSD1306 m_display;
 
     void update(const std::string& message);
+    void displayObd2Info(uint8_t index);
 };
 #endif // DISPLAY_HANDLER_HPP

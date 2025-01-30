@@ -22,13 +22,17 @@ void DisplayHandler::cyclic()
 
   switch (state)
   {
+  case BootButton::State::ShortClick:
+    // Print Next Object in m_manager
+    m_buttonHandler->reset();
+    break;
   case BootButton::State::DoubleClick:
-      update("Double Clicked!");
-      m_buttonHandler->reset();
+    // Print Previous Object in m_manager
+    m_buttonHandler->reset();
     break;
   case BootButton::State::LongPressed:
-      update("Long Press!");
-      m_buttonHandler->reset(); 
+    // Print Main Screen with setup info
+    m_buttonHandler->reset();
   default:
     break;
   }
@@ -57,4 +61,9 @@ void DisplayHandler::update(const std::string &message)
   m_display.setCursor(0, 0);
   m_display.println(message.c_str());
   m_display.display();
+}
+
+void DisplayHandler::displayObd2Info(uint8_t index)
+{
+  m_manager->getPIDInfo(index);
 }

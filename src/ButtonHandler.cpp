@@ -22,6 +22,7 @@ void ButtonHandler::reset()
     Serial.println("Button Reset.");
     m_state = BootButton::State::Released;
     m_pressedCounterMs = BootButton::DEFAULT_TIME;
+    m_lastPressTimeMs = BootButton::DEFAULT_TIME;
 }
 
 BootButton::State ButtonHandler::getState() { return m_state; };
@@ -35,7 +36,7 @@ void ButtonHandler::cyclic()
         Serial.println("Button Pressed...");
         m_state = BootButton::State::Pressed;
 
-        if (currentTime - m_lastPressTimeMs < BootButton::THRESHOLD_DOUBLE_MS)
+        if (currentTime - m_lastPressTimeMs <= BootButton::THRESHOLD_DOUBLE_MS)
         {
             Serial.println("Double Click detected!");
             m_state = BootButton::State::DoubleClick;
@@ -60,6 +61,17 @@ void ButtonHandler::cyclic()
         {
             Serial.println("Long Click detected!");
             m_state = BootButton::State::LongPressed;
+        }
+    }
+
+    if (m_state == BootButton::State::Released)
+    {
+        if (m_lastPressTimeMs != BootButton::DEFAULT_TIME &&
+            currentTime - m_lastPressTimeMs > BootButton::THRESHOLD_DOUBLE_MS)
+        {
+            Serial.println("Short Click detected!");
+            m_state = BootButton::State::ShortClick;
+            m_lastPressTimeMs = BootButton::DEFAULT_TIME;
         }
     }
 }
