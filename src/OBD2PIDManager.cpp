@@ -61,6 +61,21 @@ IOBD2PIDInfo *OBD2PIDManager::getPIDInfo(uint8_t pid) const
     return (it != m_OBD2PIDInfoMap.end()) ? it->second.get() : nullptr;
 }
 
+const std::pair<const uint8_t, std::unique_ptr<IOBD2PIDInfo>> *OBD2PIDManager::getPIDInfoByIndex(uint8_t index) const
+{
+    if (0 == m_OBD2PIDInfoMap.size())
+    {
+        return nullptr;
+    }
+
+    uint8_t indexToDisplay = abs(index % (uint8_t)m_OBD2PIDInfoMap.size());
+
+    auto it = m_OBD2PIDInfoMap.begin();
+    std::advance(it, indexToDisplay);
+
+    return &(*it);
+}
+
 template <typename T>
 void OBD2PIDManager::addPID(uint8_t pid, uint8_t length, T current, T min, T max, T increment, int pace,
                             std::function<int32_t(const T &)> customGetter)

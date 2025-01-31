@@ -14,7 +14,8 @@
 DisplayHandler::DisplayHandler(std::shared_ptr<OBD2PIDManager> manager, std::shared_ptr<ButtonHandler> buttonHandler)
     : m_manager(manager),
       m_buttonHandler(buttonHandler),
-      m_display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1) {};
+      m_display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1),
+      m_displayCounter(0) {};
 
 void DisplayHandler::cyclic()
 {
@@ -23,11 +24,13 @@ void DisplayHandler::cyclic()
   switch (state)
   {
   case BootButton::State::ShortClick:
-    // Print Next Object in m_manager
+    m_displayCounter++;
+    displayObd2Info();
     m_buttonHandler->reset();
     break;
   case BootButton::State::DoubleClick:
-    // Print Previous Object in m_manager
+    m_displayCounter--;
+    displayObd2Info();
     m_buttonHandler->reset();
     break;
   case BootButton::State::LongPressed:
@@ -63,7 +66,13 @@ void DisplayHandler::update(const std::string &message)
   m_display.display();
 }
 
-void DisplayHandler::displayObd2Info(uint8_t index)
+void DisplayHandler::displayObd2Info()
 {
-  m_manager->getPIDInfo(index);
+  const auto *entry = m_manager->getPIDInfoByIndex(m_displayCounter);
+  if (entry)
+  {
+    uint8_t pid = entry->first;
+    IOBD2PIDInfo *info = entry->second.get();
+    update("PID: " + std::to_string(pid));
+  }
 }

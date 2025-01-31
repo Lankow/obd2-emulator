@@ -20,6 +20,7 @@ public:
     void updateAll();
     void printAll() const;
     IOBD2PIDInfo *getPIDInfo(uint8_t pid) const;
+    const std::pair<const uint8_t, std::unique_ptr<IOBD2PIDInfo>> *getPIDInfoByIndex(uint8_t index) const;
 
 private:
     std::unordered_map<uint8_t, std::unique_ptr<IOBD2PIDInfo>> m_OBD2PIDInfoMap;
