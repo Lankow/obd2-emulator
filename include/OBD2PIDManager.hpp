@@ -26,7 +26,7 @@ private:
     std::unordered_map<uint8_t, std::unique_ptr<IOBD2PIDInfo>> m_OBD2PIDInfoMap;
 
     template <typename T>
-    void addPID(uint8_t pid, uint8_t length, T current, T min, T max, T increment, int pace,
+    void addPID(std::string description, uint8_t pid, uint8_t length, T current, T min, T max, T increment, int pace,
                 std::function<int32_t(const T &)> customGetter);
 };
 #endif // DATA_STORAGE_HPP

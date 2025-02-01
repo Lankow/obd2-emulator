@@ -8,8 +8,10 @@
 #include "OBD2PIDInfo.hpp"
 
 template <typename T>
-OBD2PIDInfo<T>::OBD2PIDInfo(uint8_t length, T current, T min, T max, T increment, int pace, std::function<int32_t(const T &current)> formulaGetter)
-    : m_length(length),
+OBD2PIDInfo<T>::OBD2PIDInfo(std::string description, uint8_t length, T current, T min, T max, T increment, int pace,
+                            std::function<int32_t(const T &current)> formulaGetter)
+    : m_description(description),
+      m_length(length),
       m_current(current),
       m_min(min),
       m_max(max),
@@ -75,10 +77,15 @@ uint32_t OBD2PIDInfo<T>::getFormula() const
 }
 
 template <typename T>
-uint8_t OBD2PIDInfo<T>::getLength() const
-{
-    return m_length;
-}
+const std::string &OBD2PIDInfo<T>::getDescription() const { return m_description; }
+template <typename T>
+uint8_t OBD2PIDInfo<T>::getLength() const { return m_length; }
+template <typename T>
+double OBD2PIDInfo<T>::getCurrentAsDouble() const { return static_cast<double>(m_current); }
+template <typename T>
+double OBD2PIDInfo<T>::getMinAsDouble() const { return static_cast<double>(m_min); }
+template <typename T>
+double OBD2PIDInfo<T>::getMaxAsDouble() const { return static_cast<double>(m_max); }
 
 // Explicit instantiation for specific types
 template class OBD2PIDInfo<int>;

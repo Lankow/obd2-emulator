@@ -52,12 +52,16 @@ void WifiHandler::handleRoot()
 
 void WifiHandler::handleSubmit()
 {
-    uint16_t minSpeed = std::stoi(m_server.arg("minSpeed").c_str());;
-    uint16_t maxSpeed = std::stoi(m_server.arg("maxSpeed").c_str());;
-    
-    uint16_t minRpm = std::stoi(m_server.arg("minRpm").c_str());;
-    uint16_t maxRpm = std::stoi(m_server.arg("maxRpm").c_str());;
-    
+    uint16_t minSpeed = std::stoi(m_server.arg("minSpeed").c_str());
+    ;
+    uint16_t maxSpeed = std::stoi(m_server.arg("maxSpeed").c_str());
+    ;
+
+    uint16_t minRpm = std::stoi(m_server.arg("minRpm").c_str());
+    ;
+    uint16_t maxRpm = std::stoi(m_server.arg("maxRpm").c_str());
+    ;
+
     Serial.println("Min Speed: " + minSpeed);
     Serial.println("Max Speed: " + maxSpeed);
     Serial.println("Min RPM: " + minRpm);

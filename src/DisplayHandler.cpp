@@ -5,6 +5,8 @@
  * @version 1.0
  */
 #include <Wire.h>
+#include <iomanip>
+#include <sstream>
 #include "DisplayHandler.hpp"
 #include "Constants.hpp"
 
@@ -25,12 +27,10 @@ void DisplayHandler::cyclic()
   {
   case BootButton::State::ShortClick:
     m_displayCounter++;
-    displayObd2Info();
     m_buttonHandler->reset();
     break;
   case BootButton::State::DoubleClick:
     m_displayCounter--;
-    displayObd2Info();
     m_buttonHandler->reset();
     break;
   case BootButton::State::LongPressed:
@@ -39,6 +39,8 @@ void DisplayHandler::cyclic()
   default:
     break;
   }
+
+  displayObd2Info();
 }
 
 void DisplayHandler::initialize()
@@ -69,10 +71,19 @@ void DisplayHandler::update(const std::string &message)
 void DisplayHandler::displayObd2Info()
 {
   const auto *entry = m_manager->getPIDInfoByIndex(m_displayCounter);
-  if (entry)
-  {
-    uint8_t pid = entry->first;
-    IOBD2PIDInfo *info = entry->second.get();
-    update("PID: " + std::to_string(pid));
-  }
+  if (!entry)
+    return;
+
+  uint8_t pid = entry->first;
+  IOBD2PIDInfo *info = entry->second.get();
+
+  std::ostringstream stream;
+  stream << std::fixed << std::setprecision(2)
+         << info->getDescription() << std::endl
+         << "PID: 0x" << std::uppercase << std::hex << static_cast<int>(pid) << std::endl
+         << "Current: " << info->getCurrentAsDouble() << std::endl
+         << "Max: " << info->getMaxAsDouble() << std::endl
+         << "Min: " << info->getMinAsDouble();
+
+  update(stream.str());
 }
