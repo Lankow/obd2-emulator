@@ -20,16 +20,9 @@ void BtHandler::cyclic()
 {
   if (m_btSerial.available())
   {
-    String message = "";
-
-    char incomingChar = m_btSerial.read();
-    if (incomingChar != '\n')
-    {
-      message += String(incomingChar);
-    }
-    else
-    {
-      message = "";
-    }
+    String received = m_btSerial.readStringUntil('\r');
+    Serial.print("Received: ");
+    Serial.println(received);
+    m_btSerial.println("Message Received: " + received);
   }
 }
