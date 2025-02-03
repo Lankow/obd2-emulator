@@ -7,6 +7,7 @@
 
 #include "BtHandler.hpp"
 #include "OBD2PIDInfo.hpp"
+#include "ResponseParser.hpp"
 
 BtHandler::BtHandler(std::shared_ptr<OBD2PIDManager> manager) : m_manager(manager) {}
 
@@ -23,6 +24,21 @@ void BtHandler::cyclic()
     String received = m_btSerial.readStringUntil('\r');
     Serial.print("Received: ");
     Serial.println(received);
-    m_btSerial.println("Message Received: " + received);
+
+    uint16_t parsedPID = ResponseParser::parseRequest(received.c_str());
+    Serial.println(parsedPID);
+
+    IOBD2PIDInfo *info = m_manager->getPIDInfo(parsedPID);
+    if(info == nullptr)
+    {
+      Serial.println("Requested not found.");
+      return;
+    }
+
+    uint32_t pidValue = info->getFormula();
+    uint8_t pidLength = info->getLength();
+
+    std::string response = ResponseParser::prepareResponse(pidValue, pidLength);
+    m_btSerial.println(response.c_str());
   }
 }

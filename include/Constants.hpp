@@ -33,4 +33,9 @@ namespace BootButton
     };
 }
 
+namespace OBDRequest
+{
+    constexpr uint16_t DEFAULT_VALUE = 0xFFFF; /**< Default value if requested PID is invalid */
+}
+
 #endif // CONSTANTS_HPP

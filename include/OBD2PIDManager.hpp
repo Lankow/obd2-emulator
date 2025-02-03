@@ -19,14 +19,14 @@ public:
 
     void updateAll();
     void printAll() const;
-    IOBD2PIDInfo *getPIDInfo(uint8_t pid) const;
-    const std::pair<const uint8_t, std::unique_ptr<IOBD2PIDInfo>> *getPIDInfoByIndex(uint8_t index) const;
+    IOBD2PIDInfo *getPIDInfo(uint16_t pid) const;
+    const std::pair<const uint16_t, std::unique_ptr<IOBD2PIDInfo>> *getPIDInfoByIndex(uint8_t index) const;
 
 private:
-    std::unordered_map<uint8_t, std::unique_ptr<IOBD2PIDInfo>> m_OBD2PIDInfoMap;
+    std::unordered_map<uint16_t, std::unique_ptr<IOBD2PIDInfo>> m_OBD2PIDInfoMap;
 
     template <typename T>
-    void addPID(std::string description, uint8_t pid, uint8_t length, T current, T min, T max, T increment, int pace,
+    void addPID(std::string description, uint16_t pid, uint8_t length, T current, T min, T max, T increment, int pace,
                 std::function<int32_t(const T &)> customGetter);
 };
 #endif // DATA_STORAGE_HPP
