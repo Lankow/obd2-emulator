@@ -11,7 +11,7 @@
 class ResponseParser
 {
 public:
-    static uint16_t parseRequest(const std::string &response);
+    static uint16_t parseRequest(const std::string &request);
     static std::string prepareResponse(uint32_t value, uint8_t size);
 };
 #endif // RESPONSE_PARSER_HPP

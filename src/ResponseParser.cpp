@@ -5,40 +5,36 @@
  * @version 1.0
  */
 #include <sstream>
+#include <iostream>
 #include <iomanip>
-#include <vector>
-#include <algorithm>
 #include "ResponseParser.hpp"
 #include "Constants.hpp"
 
-uint16_t ResponseParser::parseRequest(const std::string &response) {
-    
-    std::stringstream ss(response);
-    uint16_t result = 0;
-    int byteValue = 0;
-    int byteCount = 0;
-    
-    while (ss >> std::ws >> std::hex >> byteValue) {
-        if (byteValue > 0xFF) return OBDRequest::DEFAULT_VALUE;
-        result = (result << 8) | (byteValue & 0xFF);
-        byteCount++;
-        if (byteCount > 2) return OBDRequest::DEFAULT_VALUE;
-    }
-    return (byteCount == 2) ? result : OBDRequest::DEFAULT_VALUE;
+uint16_t ResponseParser::parseRequest(const std::string &request) {
+    uint16_t result = OBDRequest::DEFAULT_VALUE;
+
+    std::stringstream ss;
+    ss << std::hex << request;
+    ss >> result;
+
+    return result;
 }
+
 std::string ResponseParser::prepareResponse(uint32_t value, uint8_t size) {
-    std::ostringstream stream;
-    std::vector<uint8_t> bytes;
-    
-    for (int i = 0; i < size; ++i) {
-        bytes.push_back((value >> ((size - 1 - i) * 8)) & 0xFF);
+    std::stringstream stream;
+    stream << std::setfill('0') << std::setw(size * 2) << std::hex << value;
+
+    std::string result = stream.str();
+    result = result.substr(result.size() - size * 2); 
+
+    if (size > 1) {
+        std::string formattedStr;
+        for (size_t i = 0; i < result.size(); i += 2) {
+            if (!formattedStr.empty()) formattedStr += " ";
+            formattedStr += result.substr(i, 2);
+        }
+        result = formattedStr;
     }
-    
-    stream << std::hex << std::uppercase << std::setfill('0');
-    for (size_t i = 0; i < bytes.size(); ++i) {
-        if (i > 0) stream << " ";
-        stream << std::setw(2) << static_cast<int>(bytes[i]);
-    }
-    
-    return stream.str();
+
+    return result;
 }

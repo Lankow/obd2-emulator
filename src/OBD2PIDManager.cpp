@@ -12,13 +12,14 @@ OBD2PIDManager::OBD2PIDManager()
                   0x010C, 2, 0.0f, 0.0f, 16383.75f, 100.0f, 100,
                   [this](const float &current) -> int32_t
                   {
-                      Serial.println("Formula Engine Speed:");
-
                       int32_t scaledValue = static_cast<int32_t>(current * 4);
                       uint8_t A = (scaledValue / 256) & 0xFF;
                       uint8_t B = scaledValue % 256;
 
                       int32_t result = (A << 8) | B;
+
+                      Serial.println("Formula Engine Speed:");
+                      Serial.println(result);
 
                       return result;
                   });
@@ -28,6 +29,7 @@ OBD2PIDManager::OBD2PIDManager()
                 [this](const int &current) -> int32_t
                 {
                     Serial.println("Formula Vehicle Speed:");
+                    Serial.println(current);
                     return current;
                 });
 }

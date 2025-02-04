@@ -22,6 +22,8 @@ void BtHandler::cyclic()
   if (m_btSerial.available())
   {
     String received = m_btSerial.readStringUntil('\r');
+    received.replace(" ", "");
+
     Serial.print("Received: ");
     Serial.println(received);
 
