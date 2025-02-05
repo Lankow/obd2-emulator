@@ -31,7 +31,10 @@ void loop()
   btHandler.cyclic();
   wifiHandler.handle();
   manager->updateAll();
-  // manager->printAll();
+#ifdef DEBUG_DATA
+  manager->printAll();
+#endif
+
   displayHandler.cyclic();
   delay(Config::CYCLE_TIME_MS);
 }

@@ -27,20 +27,34 @@ void BtHandler::cyclic()
     Serial.print("Received: ");
     Serial.println(received);
 
-    uint16_t parsedPID = ResponseParser::parseRequest(received.c_str());
-    Serial.println(parsedPID);
-
-    IOBD2PIDInfo *info = m_manager->getPIDInfo(parsedPID);
-    if(info == nullptr)
+    if (ResponseParser::isHexRequest(received.c_str()))
     {
-      Serial.println("Requested not found.");
-      return;
+      std::string response = getOBD2PIDResponse(received.c_str());
+      m_btSerial.println(response.c_str());
     }
-
-    uint32_t pidValue = info->getFormula();
-    uint8_t pidLength = info->getLength();
-
-    std::string response = ResponseParser::prepareResponse(pidValue, pidLength);
-    m_btSerial.println(response.c_str());
+    else
+    {
+      Serial.println("Request is not PID request.");
+    }
   }
+}
+
+std::string BtHandler::getOBD2PIDResponse(const std::string &request)
+{
+  uint16_t parsedPID = ResponseParser::parseRequest(request.c_str());
+  Serial.println(parsedPID);
+
+  IOBD2PIDInfo *info = m_manager->getPIDInfo(parsedPID);
+
+  if (info == nullptr)
+  {
+    Serial.println("Requested not found.");
+    return "";
+  }
+
+  uint32_t pidValue = info->getFormula();
+  uint8_t pidLength = info->getLength();
+
+  std::string response = ResponseParser::prepareResponse(pidValue, pidLength);
+  return response;
 }

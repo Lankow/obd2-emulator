@@ -23,5 +23,6 @@ public:
 private:
     BluetoothSerial m_btSerial;
     std::shared_ptr<OBD2PIDManager> m_manager;
+    std::string getOBD2PIDResponse(const std::string &request);
 };
 #endif // BlUETOOTH_HANDLER_HPP

@@ -11,6 +11,7 @@
 class ResponseParser
 {
 public:
+    static bool isHexRequest(const std::string &request);
     static uint16_t parseRequest(const std::string &request);
     static std::string prepareResponse(uint32_t value, uint8_t size);
 };
