@@ -27,6 +27,8 @@ void setup()
 
 void loop()
 {
+  long cycleStart = millis();
+
   buttonHandler->cyclic();
   btHandler.cyclic();
   wifiHandler.handle();
@@ -34,7 +36,18 @@ void loop()
 #ifdef DEBUG_DATA
   manager->printAll();
 #endif
-
   displayHandler.cyclic();
-  delay(Config::CYCLE_TIME_MS);
+
+  long cycleDiff = millis() - cycleStart;
+  long cycleDelay = Config::CYCLE_TIME_MS - cycleDiff;
+
+  if (cycleDiff > Config::CYCLE_TIME_MS)
+  {
+    Serial.println("Cycle time exceeded. Diff Time: ");
+    Serial.println(cycleDiff);
+  }
+  else
+  {
+    delay(cycleDelay);
+  }
 }
