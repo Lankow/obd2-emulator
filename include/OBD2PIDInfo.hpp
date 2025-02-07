@@ -24,6 +24,9 @@ public:
     virtual double getCurrentAsDouble() const = 0;
     virtual double getMinAsDouble() const = 0;
     virtual double getMaxAsDouble() const = 0;
+
+    virtual void setMin(double min) = 0;
+    virtual void setMax(double max) = 0;
 };
 
 template <typename T>
@@ -45,6 +48,9 @@ public:
     double getCurrentAsDouble() const override;
     double getMinAsDouble() const override;
     double getMaxAsDouble() const override;
+
+    void setMin(double min) override;
+    void setMax(double max) override;
 
 private:
     std::string m_description;

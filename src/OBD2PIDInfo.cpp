@@ -73,6 +73,7 @@ uint32_t OBD2PIDInfo<T>::getFormula() const
     {
         return m_formulaGetter(m_current);
     }
+
     return 0;
 }
 
@@ -86,6 +87,20 @@ template <typename T>
 double OBD2PIDInfo<T>::getMinAsDouble() const { return static_cast<double>(m_min); }
 template <typename T>
 double OBD2PIDInfo<T>::getMaxAsDouble() const { return static_cast<double>(m_max); }
+
+template <typename T>
+void OBD2PIDInfo<T>::setMin(double min)
+{
+    // Add Default min
+    m_min = static_cast<T>(min);
+}
+
+template <typename T>
+void OBD2PIDInfo<T>::setMax(double max)
+{
+    // Add Default max
+    m_max = static_cast<T>(max);
+}
 
 // Explicit instantiation for specific types
 template class OBD2PIDInfo<int>;
