@@ -28,5 +28,7 @@ private:
     template <typename T>
     void addPID(std::string description, uint16_t pid, uint8_t length, T current, T min, T max, T increment, int pace,
                 std::function<int32_t(const T &)> customGetter);
+    template <typename T>
+    void addPID(std::string description, uint16_t pid, uint8_t length, T current, T min, T max, T increment, int pace);
 };
 #endif // DATA_STORAGE_HPP

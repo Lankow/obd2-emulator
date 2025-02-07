@@ -8,8 +8,7 @@
 
 OBD2PIDManager::OBD2PIDManager()
 {
-    addPID<float>("Engine Speed",
-                  0x010C, 2, 0.0f, 0.0f, 16383.75f, 100.0f, 100,
+    addPID<float>("Engine Speed", 0x010C, 2, 0.0f, 0.0f, 16383.75f, 100.0f, 100,
                   [this](const float &current) -> int32_t
                   {
                       int32_t scaledValue = static_cast<int32_t>(current * 4);
@@ -24,14 +23,7 @@ OBD2PIDManager::OBD2PIDManager()
                       return result;
                   });
 
-    addPID<int>("Vehicle Speed",
-                0x010D, 1, 0, 0, 255, 1, 100,
-                [this](const int &current) -> int32_t
-                {
-                    Serial.println("Formula Vehicle Speed:");
-                    Serial.println(current);
-                    return current;
-                });
+    addPID<int>("Vehicle Speed", 0x010D, 1, 0, 0, 255, 1, 100);
 }
 
 void OBD2PIDManager::updateAll()
@@ -81,4 +73,11 @@ void OBD2PIDManager::addPID(std::string description, uint16_t pid, uint8_t lengt
 {
     m_OBD2PIDInfoMap[pid] = std::unique_ptr<IOBD2PIDInfo>(
         new OBD2PIDInfo<T>(description, length, current, min, max, increment, pace, customGetter));
+}
+
+template <typename T>
+void OBD2PIDManager::addPID(std::string description, uint16_t pid, uint8_t length, T current, T min, T max, T increment, int pace)
+{
+    m_OBD2PIDInfoMap[pid] = std::unique_ptr<IOBD2PIDInfo>(
+        new OBD2PIDInfo<T>(description, length, current, min, max, increment, pace, nullptr));
 }

@@ -73,8 +73,8 @@ uint32_t OBD2PIDInfo<T>::getFormula() const
     {
         return m_formulaGetter(m_current);
     }
-
-    return 0;
+    
+    return static_cast<double>(m_current);
 }
 
 template <typename T>
