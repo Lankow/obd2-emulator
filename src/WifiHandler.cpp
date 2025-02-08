@@ -6,35 +6,17 @@
  */
 #include "WifiHandler.hpp"
 #include "Constants.hpp"
+#include "PageGenerator.hpp"
+#include "OBD2PIDInfo.hpp"
 
-const std::string SSID = "";
-const std::string PASSWORD = "";
-constexpr uint16_t SERVER_PORT = 80;
-
-WifiHandler::WifiHandler(std::shared_ptr<OBD2PIDManager> manager) : m_manager(manager), m_server(SERVER_PORT) {}
+WifiHandler::WifiHandler(std::shared_ptr<OBD2PIDManager> manager) : m_manager(manager), m_server(Config::SERVER_PORT) {}
 
 void WifiHandler::handleRoot()
 {
-    uint16_t minValue = 0;
-    uint16_t maxValue = 255;
+    const auto *entry = m_manager->getPIDInfoByIndex(0);
+    IOBD2PIDInfo *info = entry->second.get();
 
-    std::string dynamicWebpage = R"rawliteral(
-        <!DOCTYPE html>
-        <html>
-        <body>
-            <h1>Configure OBD2 Emulator</h1>
-            <form action="/submit" method="get">
-                <label for="minValue">Min Value:</label>
-                <input type="text" id="minValue" name="minValue" value=")rawliteral" +
-                                 std::to_string(minValue) + R"rawliteral("><br>
-                <label for="maxValue">Max Value:</label>
-                <input type="text" id="maxValue" name="maxValue" value=")rawliteral" +
-                                 std::to_string(maxValue) + R"rawliteral("><br>
-                <input type="submit" value="Submit">
-            </form>
-        </body>
-        </html>
-    )rawliteral";
+    std::string dynamicWebpage = PageGenerator::getEditPage(entry->first, *info);
 
     m_server.send(200, "text/html", dynamicWebpage.c_str());
 }
