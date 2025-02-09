@@ -10,6 +10,7 @@
 #include <Arduino.h>
 #include <unordered_map>
 #include <memory>
+#include <vector>
 #include "OBD2PIDInfo.hpp"
 
 class OBD2PIDManager
@@ -21,6 +22,7 @@ public:
     void printAll() const;
     IOBD2PIDInfo *getPIDInfo(uint16_t pid) const;
     const std::pair<const uint16_t, std::unique_ptr<IOBD2PIDInfo>> *getPIDInfoByIndex(uint8_t index) const;
+    std::vector<uint16_t> getAllPIDs() const;
 
 private:
     std::unordered_map<uint16_t, std::unique_ptr<IOBD2PIDInfo>> m_OBD2PIDInfoMap;

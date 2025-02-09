@@ -4,6 +4,7 @@
  * @author Lankow
  * @version 1.0
  */
+#include <vector>
 #include "WifiHandler.hpp"
 #include "Constants.hpp"
 #include "PageGenerator.hpp"
@@ -13,12 +14,28 @@ WifiHandler::WifiHandler(std::shared_ptr<OBD2PIDManager> manager) : m_manager(ma
 
 void WifiHandler::handleRoot()
 {
-    const auto *entry = m_manager->getPIDInfoByIndex(0);
-    IOBD2PIDInfo *info = entry->second.get();
+    std::vector<uint16_t> pids = m_manager->getAllPIDs();
+    std::string mainPageHtml = PageGenerator::getMainPage(pids);
+    m_server.send(200, "text/html", mainPageHtml.c_str());
+}
 
-    std::string dynamicWebpage = PageGenerator::getEditPage(entry->first, *info);
+void WifiHandler::handleEdit()
+{
+    if (!m_server.hasArg("pid"))
+    {
+        m_server.send(400, "text/plain", "Missing PID parameter.");
+        return;
+    }
 
-    m_server.send(200, "text/html", dynamicWebpage.c_str());
+    uint16_t pid = std::stoi(m_server.arg("pid").c_str());
+    const auto *entry = m_manager->getPIDInfoByIndex(pid);
+
+    if (entry != nullptr)
+    {
+        IOBD2PIDInfo *info = entry->second.get();
+        std::string editPageHtml = PageGenerator::getEditPage(entry->first, *info);
+        m_server.send(200, "text/html", editPageHtml.c_str());
+    }
 }
 
 void WifiHandler::handleSubmit()
@@ -40,9 +57,9 @@ void WifiHandler::initialize()
     IPAddress apIp = WiFi.softAPIP();
 
     m_server.on("/", [this]()
-                { handleRoot(); }); // TODO: Handle Root Displays all PIDs
-    
-    // TODO: Handle changing exact PID
+                { handleRoot(); });
+    m_server.on("/edit", [this]()
+                { handleEdit(); });
     m_server.on("/submit", [this]()
                 { handleSubmit(); });
 

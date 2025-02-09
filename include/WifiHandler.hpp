@@ -26,6 +26,7 @@ private:
     IPAddress m_apIP;
 
     void handleRoot();
+    void handleEdit();
     void handleSubmit();
 };
 #endif // WIFI_HANDLER_HPP

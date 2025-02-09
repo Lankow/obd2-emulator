@@ -12,8 +12,8 @@
 class PageGenerator
 {
 public:
-    static std::string getMainPage();
-    static std::string getEditPage(uint16_t pid, const IOBD2PIDInfo& info);
+    static std::string getMainPage(const std::vector<uint16_t> &pids);
+    static std::string getEditPage(uint16_t pid, const IOBD2PIDInfo &info);
 
 private:
     static std::string getHeader();

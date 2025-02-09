@@ -52,6 +52,19 @@ IOBD2PIDInfo *OBD2PIDManager::getPIDInfo(uint16_t pid) const
     return (it != m_OBD2PIDInfoMap.end()) ? it->second.get() : nullptr;
 }
 
+std::vector<uint16_t> OBD2PIDManager::getAllPIDs() const
+{
+    std::vector<uint16_t> pids;
+    pids.reserve(m_OBD2PIDInfoMap.size());
+
+    for (const auto &entry : m_OBD2PIDInfoMap)
+    {
+        pids.push_back(entry.first);
+    }
+
+    return pids;
+}
+
 const std::pair<const uint16_t, std::unique_ptr<IOBD2PIDInfo>> *OBD2PIDManager::getPIDInfoByIndex(uint8_t index) const
 {
     if (0 == m_OBD2PIDInfoMap.size())
