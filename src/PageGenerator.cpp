@@ -63,6 +63,20 @@ std::string PageGenerator::getEditPage(uint16_t pid, const IOBD2PIDInfo &info)
     )rawliteral";
 }
 
+std::string PageGenerator::getErrorPage(const std::string &errorMessage)
+{
+    return getHeader() + R"rawliteral(
+        <body>
+            <h1>ERROR: )rawliteral" +
+           errorMessage.c_str() + R"rawliteral(</h1>
+            <a href="/">
+                <button>Go to Main Page</button>
+            </a>
+        </body>
+        </html>
+    )rawliteral";
+}
+
 std::string PageGenerator::getHeader()
 {
     return R"rawliteral(

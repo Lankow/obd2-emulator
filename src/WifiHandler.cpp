@@ -19,11 +19,17 @@ void WifiHandler::handleRoot()
     m_server.send(200, "text/html", mainPageHtml.c_str());
 }
 
+void WifiHandler::handleError(int errorCode, const std::string &errorMessage)
+{
+    std::string errorPageHtml = PageGenerator::getErrorPage(errorMessage);
+    m_server.send(errorCode, "text/html", errorPageHtml.c_str());
+}
+
 void WifiHandler::handleEdit()
 {
     if (!m_server.hasArg("pid"))
     {
-        m_server.send(400, "text/plain", "Missing PID parameter.");
+        handleError(400, "Edit Page is Missing PID parameter.");
         return;
     }
 
@@ -35,6 +41,11 @@ void WifiHandler::handleEdit()
         IOBD2PIDInfo *info = entry->second.get();
         std::string editPageHtml = PageGenerator::getEditPage(entry->first, *info);
         m_server.send(200, "text/html", editPageHtml.c_str());
+    }
+    else
+    {
+        // TODO: Handle try catch as well
+        handleError(400, "PID to edit not available.");
     }
 }
 
@@ -62,6 +73,9 @@ void WifiHandler::initialize()
                 { handleEdit(); });
     m_server.on("/submit", [this]()
                 { handleSubmit(); });
+
+    m_server.onNotFound([this]()
+                        { handleError(404, "Page not Found."); });
 
     m_server.begin();
     Serial.println("Server started.");

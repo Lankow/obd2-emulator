@@ -28,5 +28,6 @@ private:
     void handleRoot();
     void handleEdit();
     void handleSubmit();
+    void handleError(int errorCode, const std::string &errorMessage);
 };
 #endif // WIFI_HANDLER_HPP
