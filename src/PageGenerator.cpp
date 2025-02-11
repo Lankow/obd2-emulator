@@ -42,6 +42,7 @@ std::string PageGenerator::getMainPage(const std::vector<uint16_t> &pids)
 
 std::string PageGenerator::getEditPage(uint16_t pid, const IOBD2PIDInfo &info)
 {
+    //TODO: Bug with wrong PID on Edit Page
     std::stringstream hexPid;
     hexPid << "0x" << std::uppercase << std::hex << pid;
 
@@ -49,10 +50,12 @@ std::string PageGenerator::getEditPage(uint16_t pid, const IOBD2PIDInfo &info)
         <body>
             <h1>Edit )rawliteral" +
            hexPid.str() + R"rawliteral( PID Values</h1>
-            <form action="/update" method="post">
+            <form action="/submit" method="post">
+                <input type="hidden" id="pid" name="pid" value=")rawliteral" +
+           std::to_string(pid) + R"rawliteral(">
                 <label for="minValue">Min Value:</label>
                 <input type="text" id="minValue" name="minValue" value=")rawliteral" +
-           std::to_string(info.getMinAsDouble()) + R"rawliteral(" readonly><br>
+           std::to_string(info.getMinAsDouble()) + R"rawliteral("><br>
                 <label for="maxValue">Max Value:</label>
                 <input type="text" id="maxValue" name="maxValue" value=")rawliteral" +
            std::to_string(info.getMaxAsDouble()) + R"rawliteral("><br>

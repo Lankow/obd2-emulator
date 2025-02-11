@@ -13,7 +13,9 @@ OBD2PIDInfo<T>::OBD2PIDInfo(std::string description, uint8_t length, T current, 
     : m_description(description),
       m_length(length),
       m_current(current),
+      m_defaultMin(min),
       m_min(min),
+      m_defaultMax(max),
       m_max(max),
       m_increment(increment),
       m_pace(pace),
@@ -73,7 +75,7 @@ uint32_t OBD2PIDInfo<T>::getFormula() const
     {
         return m_formulaGetter(m_current);
     }
-    
+
     return static_cast<double>(m_current);
 }
 
@@ -91,15 +93,21 @@ double OBD2PIDInfo<T>::getMaxAsDouble() const { return static_cast<double>(m_max
 template <typename T>
 void OBD2PIDInfo<T>::setMin(double min)
 {
-    // Add Default min
-    m_min = static_cast<T>(min);
+    T castMin = static_cast<T>(min);
+    if (castMin <= m_max && castMin >= m_defaultMin)
+    {
+        m_min = castMin;
+    }
 }
 
 template <typename T>
 void OBD2PIDInfo<T>::setMax(double max)
 {
-    // Add Default max
-    m_max = static_cast<T>(max);
+    T castMax = static_cast<T>(max);
+    if (castMax >= m_min && castMax <= m_defaultMax)
+    {
+        m_max = castMax;
+    }
 }
 
 // Explicit instantiation for specific types

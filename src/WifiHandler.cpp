@@ -59,7 +59,20 @@ void WifiHandler::handleSubmit()
     Serial.println("Min value: " + minValue);
     Serial.println("Max value: " + maxValue);
 
-    m_server.send(200, "text/plain", "Data received. You can close this page.");
+    const auto *entry = m_manager->getPIDInfoByIndex(pid);
+    if (entry != nullptr)
+    {
+        IOBD2PIDInfo *info = entry->second.get();
+        info->setMin(minValue);
+        info->setMax(maxValue);
+
+        m_server.send(200, "text/plain", "Data received. You can close this page.");
+    }
+    else
+    {
+        // TODO: Handle try catch as well
+        handleError(400, "PID to edit not available.");
+    }
 }
 
 void WifiHandler::initialize()

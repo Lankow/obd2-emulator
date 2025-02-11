@@ -56,7 +56,9 @@ private:
     std::string m_description;
     uint8_t m_length;
     T m_current;
+    T m_defaultMin;
     T m_min;
+    T m_defaultMax;
     T m_max;
     T m_increment;
 
