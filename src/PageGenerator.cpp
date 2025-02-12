@@ -13,12 +13,13 @@ std::string PageGenerator::getMainPage(const std::vector<uint16_t> &pids)
 {
     std::string pageContent = getHeader() + R"rawliteral(
         <body>
-            <h1>OBD2 Emulator Configuration</h1>
+            <div class="container">
+                <h1>OBD2 Emulator Configuration</h1>
     )rawliteral";
 
     if (pids.empty())
     {
-        pageContent += "<p>NO PIDs available to edit.</p>";
+        pageContent += "<p class='error-box'>NO PIDs available to edit.</p>";
     }
     else
     {
@@ -27,12 +28,13 @@ std::string PageGenerator::getMainPage(const std::vector<uint16_t> &pids)
         {
             std::stringstream hexPid;
             hexPid << "0x" << std::uppercase << std::hex << pid;
-            pageContent += "<li><a href=\"/edit?pid=" + std::to_string(pid) + "\">Edit " + hexPid.str() + "</a></li>";
+            pageContent += "<li><a class='button' href=\"/edit?pid=" + std::to_string(pid) + "\">Edit " + hexPid.str() + "</a></li>";
         }
         pageContent += "</ul>";
     }
 
     pageContent += R"rawliteral(
+            </div>
         </body>
         </html>
     )rawliteral";
@@ -42,25 +44,30 @@ std::string PageGenerator::getMainPage(const std::vector<uint16_t> &pids)
 
 std::string PageGenerator::getEditPage(uint16_t pid, const IOBD2PIDInfo &info)
 {
-    //TODO: Bug with wrong PID on Edit Page
     std::stringstream hexPid;
     hexPid << "0x" << std::uppercase << std::hex << pid;
 
     return getHeader() + R"rawliteral(
         <body>
-            <h1>Edit )rawliteral" +
+            <div class="container">
+                <h1>Edit )rawliteral" +
            hexPid.str() + R"rawliteral( PID Values</h1>
-            <form action="/submit" method="post">
-                <input type="hidden" id="pid" name="pid" value=")rawliteral" +
+                <form action="/submit" method="post">
+                    <input type="hidden" id="pid" name="pid" value=")rawliteral" +
            std::to_string(pid) + R"rawliteral(">
-                <label for="minValue">Min Value:</label>
-                <input type="text" id="minValue" name="minValue" value=")rawliteral" +
-           std::to_string(info.getMinAsDouble()) + R"rawliteral("><br>
-                <label for="maxValue">Max Value:</label>
-                <input type="text" id="maxValue" name="maxValue" value=")rawliteral" +
-           std::to_string(info.getMaxAsDouble()) + R"rawliteral("><br>
-                <input type="submit" value="Update">
-            </form>
+                    <label for="minValue">Min Value:</label>
+                    <input type="text" id="minValue" name="minValue" value=")rawliteral" +
+           std::to_string(info.getMinAsDouble()) + R"rawliteral(" required>
+                    <label for="maxValue">Max Value:</label>
+                    <input type="text" id="maxValue" name="maxValue" value=")rawliteral" +
+           std::to_string(info.getMaxAsDouble()) + R"rawliteral(" required>
+
+                    <div class="button-container">
+                        <input type="submit" value="Update">
+                        <a class="button" href="/">Back</a>
+                    </div>
+                </form>
+            </div>
         </body>
         </html>
     )rawliteral";
@@ -70,11 +77,14 @@ std::string PageGenerator::getErrorPage(const std::string &errorMessage)
 {
     return getHeader() + R"rawliteral(
         <body>
-            <h1>ERROR: )rawliteral" +
-           errorMessage.c_str() + R"rawliteral(</h1>
-            <a href="/">
-                <button>Go to Main Page</button>
-            </a>
+            <div class="container">
+                <div class="error-box">
+                    <h1>ERROR</h1>
+                    <p>)rawliteral" +
+           errorMessage + R"rawliteral(</p>
+                </div>
+                <a class="button" href="/">Go to Main Page</a>
+            </div>
         </body>
         </html>
     )rawliteral";
@@ -100,10 +110,126 @@ std::string PageGenerator::getHeader()
 std::string PageGenerator::getCss()
 {
     return R"rawliteral(
-        body { font-family: Arial, sans-serif; text-align: center; padding: 20px; }
-        form { display: inline-block; text-align: left; background: #f4f4f4; padding: 15px; border-radius: 8px; }
-        input { display: block; width: 100%; margin: 10px 0; padding: 5px; }
-        input[type="submit"] { background: #4CAF50; color: white; border: none; padding: 10px; cursor: pointer; }
-        input[type="submit"]:hover { background: #45a049; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #e3e6e8; /* Soft blue-gray */
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #0056b3;
+            margin-bottom: 15px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        a.button {
+            display: block;
+            padding: 12px;
+            background: #28a745; /* Green */
+            color: white;
+            font-weight: bold;
+            border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+            transition: background 0.3s ease-in-out;
+        }
+
+        a.button:hover {
+            background: #218838;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        label {
+            font-weight: bold;
+            text-align: left;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], input[type="hidden"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: #f8f9fa;
+            font-size: 16px;
+        }
+
+        input:focus {
+            outline: 2px solid #007BFF;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        input[type="submit"], .button {
+            flex: 1;
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            text-align: center;
+            transition: background 0.3s ease-in-out;
+        }
+
+        input[type="submit"]:hover, .button:hover {
+            background: #218838;
+        }
+
+        .button.gray {
+            background: #6c757d;
+        }
+
+        .button.gray:hover {
+            background: #545b62;
+        }
+
+        .error-box {
+            background: #ffdddd;
+            padding: 20px;
+            border-radius: 10px;
+            color: #b30000;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border: 1px solid #ff4d4d;
+        }
     )rawliteral";
 }
