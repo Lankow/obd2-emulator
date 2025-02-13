@@ -33,7 +33,16 @@ void WifiHandler::handleEdit()
         return;
     }
 
-    uint16_t pid = std::stoi(m_server.arg("pid").c_str());
+    std::string pidStr = m_server.arg("pid").c_str();
+
+    // Make a single function isNumber
+    if (pidStr.empty() || !std::all_of(pidStr.begin(), pidStr.end(), ::isdigit))
+    {
+        handleError(400, "Invalid PID argument.");
+        return;
+    };
+
+    uint16_t pid = std::stoi(pidStr);
     const auto *entry = m_manager->getPIDInfo(pid);
 
     if (entry != nullptr)
@@ -43,7 +52,6 @@ void WifiHandler::handleEdit()
     }
     else
     {
-        // TODO: Handle try catch as well
         handleError(400, "PID to edit not available.");
     }
 }
