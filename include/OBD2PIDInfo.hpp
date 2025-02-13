@@ -24,6 +24,8 @@ public:
     virtual double getCurrentAsDouble() const = 0;
     virtual double getMinAsDouble() const = 0;
     virtual double getMaxAsDouble() const = 0;
+    virtual double getDefaultMinAsDouble() const = 0;
+    virtual double getDefaultMaxAsDouble() const = 0;
 
     virtual void setMin(double min) = 0;
     virtual void setMax(double max) = 0;
@@ -48,6 +50,8 @@ public:
     double getCurrentAsDouble() const override;
     double getMinAsDouble() const override;
     double getMaxAsDouble() const override;
+    double getDefaultMinAsDouble() const override;
+    double getDefaultMaxAsDouble() const override;
 
     void setMin(double min) override;
     void setMax(double max) override;

@@ -51,17 +51,20 @@ std::string PageGenerator::getEditPage(uint16_t pid, const IOBD2PIDInfo &info)
         <body>
             <div class="container">
                 <h1>Edit )rawliteral" +
-           hexPid.str() + R"rawliteral( PID Values</h1>
+           info.getDescription() + " - " + hexPid.str() + R"rawliteral( PID Values</h1>
                 <form action="/submit" method="post">
                     <input type="hidden" id="pid" name="pid" value=")rawliteral" +
            std::to_string(pid) + R"rawliteral(">
                     <label for="minValue">Min Value:</label>
-                    <input type="text" id="minValue" name="minValue" value=")rawliteral" +
-           std::to_string(info.getMinAsDouble()) + R"rawliteral(" required>
+                    <input type="number" id="minValue" name="minValue" value=")rawliteral" +
+           std::to_string(info.getMinAsDouble()) + R"rawliteral(" min=")rawliteral" +
+           std::to_string(info.getDefaultMinAsDouble()) + R"rawliteral(" max=")rawliteral" +
+           std::to_string(info.getDefaultMaxAsDouble()) + R"rawliteral(" required>
                     <label for="maxValue">Max Value:</label>
-                    <input type="text" id="maxValue" name="maxValue" value=")rawliteral" +
-           std::to_string(info.getMaxAsDouble()) + R"rawliteral(" required>
-
+                    <input type="number" id="maxValue" name="maxValue" value=")rawliteral" +
+           std::to_string(info.getMaxAsDouble()) + R"rawliteral(" min=")rawliteral" +
+           std::to_string(info.getDefaultMinAsDouble()) + R"rawliteral(" max=")rawliteral" +
+           std::to_string(info.getDefaultMaxAsDouble()) + R"rawliteral(" required>
                     <div class="button-container">
                         <input type="submit" value="Update">
                         <a class="button" href="/">Back</a>
@@ -178,7 +181,7 @@ std::string PageGenerator::getCss()
             margin-bottom: 5px;
         }
 
-        input[type="text"], input[type="hidden"] {
+        input[type="number"], input[type="hidden"] {
             width: 100%;
             padding: 10px;
             border: none;

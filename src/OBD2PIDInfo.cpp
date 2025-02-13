@@ -89,6 +89,10 @@ template <typename T>
 double OBD2PIDInfo<T>::getMinAsDouble() const { return static_cast<double>(m_min); }
 template <typename T>
 double OBD2PIDInfo<T>::getMaxAsDouble() const { return static_cast<double>(m_max); }
+template <typename T>
+double OBD2PIDInfo<T>::getDefaultMinAsDouble() const { return static_cast<double>(m_defaultMin); }
+template <typename T>
+double OBD2PIDInfo<T>::getDefaultMaxAsDouble() const { return static_cast<double>(m_defaultMax); }
 
 template <typename T>
 void OBD2PIDInfo<T>::setMin(double min)

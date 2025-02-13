@@ -34,12 +34,11 @@ void WifiHandler::handleEdit()
     }
 
     uint16_t pid = std::stoi(m_server.arg("pid").c_str());
-    const auto *entry = m_manager->getPIDInfoByIndex(pid);
+    const auto *entry = m_manager->getPIDInfo(pid);
 
     if (entry != nullptr)
     {
-        IOBD2PIDInfo *info = entry->second.get();
-        std::string editPageHtml = PageGenerator::getEditPage(entry->first, *info);
+        std::string editPageHtml = PageGenerator::getEditPage(pid, *entry);
         m_server.send(200, "text/html", editPageHtml.c_str());
     }
     else
@@ -59,12 +58,11 @@ void WifiHandler::handleSubmit()
     Serial.println("Min value: " + minValue);
     Serial.println("Max value: " + maxValue);
 
-    const auto *entry = m_manager->getPIDInfoByIndex(pid);
+    auto *const entry = m_manager->getPIDInfo(pid);
     if (entry != nullptr)
     {
-        IOBD2PIDInfo *info = entry->second.get();
-        info->setMin(minValue);
-        info->setMax(maxValue);
+        entry->setMin(minValue);
+        entry->setMax(maxValue);
 
         m_server.send(200, "text/plain", "Data received. You can close this page.");
     }
