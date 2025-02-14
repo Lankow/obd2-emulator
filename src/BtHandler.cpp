@@ -44,7 +44,7 @@ std::string BtHandler::getOBD2PIDResponse(const std::string &request)
   uint16_t parsedPID = ResponseParser::parseRequest(request.c_str());
   Serial.println(parsedPID);
 
-  IOBD2PIDInfo *info = m_manager->getPIDInfo(parsedPID);
+  OBD2PIDInfo *info = m_manager->getPIDInfo(parsedPID);
 
   if (info == nullptr)
   {

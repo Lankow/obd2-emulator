@@ -7,68 +7,42 @@
 #ifndef OBD2_PID_INFO_HPP
 #define OBD2_PID_INFO_HPP
 
-#include <stdexcept>
-#include <type_traits>
-
-// Base class for polymorphism
-class IOBD2PIDInfo
+class OBD2PIDInfo
 {
 public:
-    virtual ~IOBD2PIDInfo() = default;
-    virtual void update() = 0;
-    virtual void printCurrent() const = 0;
-    const virtual std::string &getDescription() const = 0;
-    virtual uint32_t getFormula() const = 0;
-    virtual uint8_t getLength() const = 0;
+    OBD2PIDInfo(std::string description, uint8_t length, double current,
+                double min, double max, double increment, int pace,
+                std::function<int32_t(const double &current)> formulaGetter = nullptr);
 
-    virtual double getCurrentAsDouble() const = 0;
-    virtual double getMinAsDouble() const = 0;
-    virtual double getMaxAsDouble() const = 0;
-    virtual double getDefaultMinAsDouble() const = 0;
-    virtual double getDefaultMaxAsDouble() const = 0;
+    void update();
+    void printCurrent() const;
+    const std::string &getDescription() const;
+    uint32_t getFormula() const;
+    uint8_t getLength() const;
 
-    virtual void setMin(double min) = 0;
-    virtual void setMax(double max) = 0;
-};
+    double getCurrent() const;
+    double getMin() const;
+    double getMax() const;
+    double getDefaultMin() const;
+    double getDefaultMax() const;
 
-template <typename T>
-class OBD2PIDInfo : public IOBD2PIDInfo
-{
-public:
-    static_assert(std::is_arithmetic<T>::value, "OBD2PIDInfo only supports arithmetic types.");
-
-    OBD2PIDInfo(std::string description, uint8_t length, T current, T min, T max, T increment, int pace,
-                std::function<int32_t(const T &current)> formulaGetter = nullptr);
-
-    T getCurrent() const;
-    void update() override;
-    void printCurrent() const override;
-    const std::string &getDescription() const override;
-    uint32_t getFormula() const override;
-    uint8_t getLength() const override;
-
-    double getCurrentAsDouble() const override;
-    double getMinAsDouble() const override;
-    double getMaxAsDouble() const override;
-    double getDefaultMinAsDouble() const override;
-    double getDefaultMaxAsDouble() const override;
-
-    void setMin(double min) override;
-    void setMax(double max) override;
+    void setMin(double min);
+    void setMax(double max);
 
 private:
     std::string m_description;
     uint8_t m_length;
-    T m_current;
-    T m_defaultMin;
-    T m_min;
-    T m_defaultMax;
-    T m_max;
-    T m_increment;
+
+    double m_current;
+    double m_defaultMin;
+    double m_min;
+    double m_defaultMax;
+    double m_max;
+    double m_increment;
 
     int m_pace;
     bool m_increasing;
-    std::function<int32_t(const T &)> m_formulaGetter;
+    std::function<int32_t(const double &)> m_formulaGetter;
 };
 
 #endif // OBD2_PID_INFO_HPP

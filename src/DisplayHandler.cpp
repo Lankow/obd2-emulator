@@ -75,15 +75,15 @@ void DisplayHandler::displayObd2Info()
     return;
 
   uint8_t pid = entry->first;
-  IOBD2PIDInfo *info = entry->second.get();
+  OBD2PIDInfo *info = entry->second.get();
 
   std::ostringstream stream;
   stream << std::fixed << std::setprecision(2)
          << info->getDescription() << std::endl
          << "PID: 0x" << std::uppercase << std::hex << static_cast<int>(pid) << std::endl
-         << "Current: " << info->getCurrentAsDouble() << std::endl
-         << "Max: " << info->getMaxAsDouble() << std::endl
-         << "Min: " << info->getMinAsDouble();
+         << "Current: " << info->getCurrent() << std::endl
+         << "Max: " << info->getMax() << std::endl
+         << "Min: " << info->getMin();
 
   update(stream.str());
 }

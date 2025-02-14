@@ -42,7 +42,7 @@ std::string PageGenerator::getMainPage(const std::vector<uint16_t> &pids)
     return pageContent;
 }
 
-std::string PageGenerator::getEditPage(uint16_t pid, const IOBD2PIDInfo &info)
+std::string PageGenerator::getEditPage(uint16_t pid, const OBD2PIDInfo &info)
 {
     std::stringstream hexPid;
     hexPid << "0x" << std::uppercase << std::hex << pid;
@@ -57,14 +57,14 @@ std::string PageGenerator::getEditPage(uint16_t pid, const IOBD2PIDInfo &info)
            std::to_string(pid) + R"rawliteral(">
                     <label for="minValue">Min Value:</label>
                     <input type="number" id="minValue" name="minValue" value=")rawliteral" +
-           std::to_string(info.getMinAsDouble()) + R"rawliteral(" min=")rawliteral" +
-           std::to_string(info.getDefaultMinAsDouble()) + R"rawliteral(" max=")rawliteral" +
-           std::to_string(info.getDefaultMaxAsDouble()) + R"rawliteral(" required>
+           std::to_string(info.getMin()) + R"rawliteral(" min=")rawliteral" +
+           std::to_string(info.getDefaultMin()) + R"rawliteral(" max=")rawliteral" +
+           std::to_string(info.getDefaultMax()) + R"rawliteral(" required>
                     <label for="maxValue">Max Value:</label>
                     <input type="number" id="maxValue" name="maxValue" value=")rawliteral" +
-           std::to_string(info.getMaxAsDouble()) + R"rawliteral(" min=")rawliteral" +
-           std::to_string(info.getDefaultMinAsDouble()) + R"rawliteral(" max=")rawliteral" +
-           std::to_string(info.getDefaultMaxAsDouble()) + R"rawliteral(" required>
+           std::to_string(info.getMax()) + R"rawliteral(" min=")rawliteral" +
+           std::to_string(info.getDefaultMin()) + R"rawliteral(" max=")rawliteral" +
+           std::to_string(info.getDefaultMax()) + R"rawliteral(" required>
                     <div class="button-container">
                         <input type="submit" value="Update">
                         <a class="button" href="/">Back</a>
