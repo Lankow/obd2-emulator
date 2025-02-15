@@ -1,13 +1,13 @@
 #include <Arduino.h>
 #include <memory>
 #include "Constants.hpp"
-#include "OBD2PIDManager.hpp"
+#include "ObdManager.hpp"
 #include "WifiHandler.hpp"
 #include "BtHandler.hpp"
 #include "DisplayHandler.hpp"
 #include "ButtonHandler.hpp"
 
-std::shared_ptr<OBD2PIDManager> manager = std::make_shared<OBD2PIDManager>();
+std::shared_ptr<ObdManager> manager = std::make_shared<ObdManager>();
 std::shared_ptr<ButtonHandler> buttonHandler = std::make_shared<ButtonHandler>();
 
 WifiHandler wifiHandler(manager);

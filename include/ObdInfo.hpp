@@ -1,37 +1,42 @@
 /**
- * @file OBD2PIDInfo.hpp
+ * @file ObdInfo.hpp
  * @date   2025-01-09
  * @author Lankow
  * @version 1.0
  */
-#ifndef OBD2_PID_INFO_HPP
-#define OBD2_PID_INFO_HPP
+#ifndef OBD_INFO_HPP
+#define OBD_INFO_HPP
 
-class OBD2PIDInfo
+class ObdInfo
 {
 public:
-    OBD2PIDInfo(std::string description, uint8_t length, double current,
-                double min, double max, double increment, int pace,
-                std::function<int32_t(const double &current)> formulaGetter = nullptr);
+    ObdInfo(uint8_t pid, uint8_t length, std::string description, double current,
+            double min, double max, double increment, int pace,
+            std::function<int32_t(const double &current)> formulaGetter = nullptr);
 
     void update();
     void printCurrent() const;
-    const std::string &getDescription() const;
     uint32_t getFormula() const;
+    
+    uint8_t getPid() const;
     uint8_t getLength() const;
+    const std::string &getDescription() const;
 
     double getCurrent() const;
     double getMin() const;
     double getMax() const;
     double getDefaultMin() const;
     double getDefaultMax() const;
+    double getIncrement() const;
+    int getPace() const;
 
     void setMin(double min);
     void setMax(double max);
 
 private:
-    std::string m_description;
+    uint8_t m_pid;
     uint8_t m_length;
+    std::string m_description;
 
     double m_current;
     double m_defaultMin;

@@ -13,7 +13,7 @@
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 
-DisplayHandler::DisplayHandler(std::shared_ptr<OBD2PIDManager> manager, std::shared_ptr<ButtonHandler> buttonHandler)
+DisplayHandler::DisplayHandler(std::shared_ptr<ObdManager> manager, std::shared_ptr<ButtonHandler> buttonHandler)
     : m_manager(manager),
       m_buttonHandler(buttonHandler),
       m_display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1),
@@ -70,20 +70,19 @@ void DisplayHandler::update(const std::string &message)
 
 void DisplayHandler::displayObd2Info()
 {
-  const auto *entry = m_manager->getPIDInfoByIndex(m_displayCounter);
-  if (!entry)
+  const auto *info = m_manager->getByIndex(m_displayCounter);
+  if (!info)
     return;
-
-  uint8_t pid = entry->first;
-  OBD2PIDInfo *info = entry->second.get();
 
   std::ostringstream stream;
   stream << std::fixed << std::setprecision(2)
          << info->getDescription() << std::endl
-         << "PID: 0x" << std::uppercase << std::hex << static_cast<int>(pid) << std::endl
+         << "PID: 0x" << std::uppercase << std::hex << static_cast<int>(info->getPid()) << std::endl
          << "Current: " << info->getCurrent() << std::endl
          << "Max: " << info->getMax() << std::endl
-         << "Min: " << info->getMin();
+         << "Min: " << info->getMin() << std::endl
+         << "Increment: " << info->getIncrement() << std::endl
+         << "Pace: " << info->getPace() << std::endl;
 
   update(stream.str());
 }

@@ -9,6 +9,8 @@
 #define CONSTANTS_HPP
 #include <Arduino.h>
 
+#define NO_CUSTOM_GETTER nullptr
+
 namespace Config
 {
     constexpr uint32_t CYCLE_TIME_MS = 100;    /**< Cycle time in milliseconds. */

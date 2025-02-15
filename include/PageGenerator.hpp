@@ -7,13 +7,13 @@
 #ifndef PAGE_GENERATOR_HPP
 #define PAGE_GENERATOR_HPP
 #include <Arduino.h>
-#include "OBD2PIDInfo.hpp"
+#include "ObdInfo.hpp"
 
 class PageGenerator
 {
 public:
-    static std::string getMainPage(const std::vector<uint16_t> &pids);
-    static std::string getEditPage(uint16_t pid, const OBD2PIDInfo &info);
+    static std::string getMainPage(const std::vector<ObdInfo> &infos);
+    static std::string getEditPage(const ObdInfo &info);
     static std::string getErrorPage(const std::string &errorMessage);
 
 private:

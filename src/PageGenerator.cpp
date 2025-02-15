@@ -9,7 +9,7 @@
 #include <vector>
 #include "PageGenerator.hpp"
 
-std::string PageGenerator::getMainPage(const std::vector<uint16_t> &pids)
+std::string PageGenerator::getMainPage(const std::vector<ObdInfo> &infos)
 {
     std::string pageContent = getHeader() + R"rawliteral(
         <body>
@@ -17,18 +17,18 @@ std::string PageGenerator::getMainPage(const std::vector<uint16_t> &pids)
                 <h1>OBD2 Emulator Configuration</h1>
     )rawliteral";
 
-    if (pids.empty())
+    if (infos.empty())
     {
         pageContent += "<p class='error-box'>NO PIDs available to edit.</p>";
     }
     else
     {
         pageContent += "<ul>";
-        for (uint16_t pid : pids)
+        for (auto info : infos)
         {
             std::stringstream hexPid;
-            hexPid << "0x" << std::uppercase << std::hex << pid;
-            pageContent += "<li><a class='button' href=\"/edit?pid=" + std::to_string(pid) + "\">Edit " + hexPid.str() + "</a></li>";
+            hexPid << "0x" << std::uppercase << std::hex << info.getPid();
+            pageContent += "<li><a class='button' href=\"/edit?pid=" + std::to_string(info.getPid()) + "\">Edit " + info.getDescription() + " - " + hexPid.str() + "</a></li>";
         }
         pageContent += "</ul>";
     }
@@ -42,10 +42,10 @@ std::string PageGenerator::getMainPage(const std::vector<uint16_t> &pids)
     return pageContent;
 }
 
-std::string PageGenerator::getEditPage(uint16_t pid, const OBD2PIDInfo &info)
+std::string PageGenerator::getEditPage(const ObdInfo &info)
 {
     std::stringstream hexPid;
-    hexPid << "0x" << std::uppercase << std::hex << pid;
+    hexPid << "0x" << std::uppercase << std::hex << static_cast<int>(info.getPid());
 
     return getHeader() + R"rawliteral(
         <body>
@@ -54,7 +54,7 @@ std::string PageGenerator::getEditPage(uint16_t pid, const OBD2PIDInfo &info)
            info.getDescription() + " - " + hexPid.str() + R"rawliteral( PID Values</h1>
                 <form action="/submit" method="post">
                     <input type="hidden" id="pid" name="pid" value=")rawliteral" +
-           std::to_string(pid) + R"rawliteral(">
+           std::to_string(info.getPid()) + R"rawliteral(">
                     <label for="minValue">Min Value:</label>
                     <input type="number" id="minValue" name="minValue" value=")rawliteral" +
            std::to_string(info.getMin()) + R"rawliteral(" min=")rawliteral" +

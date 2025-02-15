@@ -8,13 +8,13 @@
 #include "WifiHandler.hpp"
 #include "Constants.hpp"
 #include "PageGenerator.hpp"
-#include "OBD2PIDInfo.hpp"
+#include "ObdInfo.hpp"
 
-WifiHandler::WifiHandler(std::shared_ptr<OBD2PIDManager> manager) : m_manager(manager), m_server(Config::SERVER_PORT) {}
+WifiHandler::WifiHandler(std::shared_ptr<ObdManager> manager) : m_manager(manager), m_server(Config::SERVER_PORT) {}
 
 void WifiHandler::handleRoot()
 {
-    std::vector<uint16_t> pids = m_manager->getAllPIDs();
+    std::vector<ObdInfo> pids = m_manager->getAll();
     std::string mainPageHtml = PageGenerator::getMainPage(pids);
     m_server.send(200, "text/html", mainPageHtml.c_str());
 }
@@ -43,11 +43,11 @@ void WifiHandler::handleEdit()
     };
 
     uint16_t pid = std::stoi(pidStr);
-    const auto *entry = m_manager->getPIDInfo(pid);
+    const auto *entry = m_manager->getByPid(pid);
 
     if (entry != nullptr)
     {
-        std::string editPageHtml = PageGenerator::getEditPage(pid, *entry);
+        std::string editPageHtml = PageGenerator::getEditPage(*entry);
         m_server.send(200, "text/html", editPageHtml.c_str());
     }
     else
@@ -66,7 +66,7 @@ void WifiHandler::handleSubmit()
     Serial.println("Min value: " + minValue);
     Serial.println("Max value: " + maxValue);
 
-    auto *const entry = m_manager->getPIDInfo(pid);
+    auto entry = m_manager->getByPid(pid);
     if (entry != nullptr)
     {
         entry->setMin(minValue);
