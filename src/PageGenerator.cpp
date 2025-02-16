@@ -93,6 +93,12 @@ std::string PageGenerator::getErrorPage(const std::string &errorMessage)
     )rawliteral";
 }
 
+std::string PageGenerator::getResetPage()
+{
+    // TODO: Return confirmation or perform reset page
+    return "";
+}
+
 std::string PageGenerator::getHeader()
 {
     return R"rawliteral(

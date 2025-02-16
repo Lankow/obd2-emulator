@@ -28,19 +28,19 @@ void DisplayHandler::cyclic()
   case BootButton::State::ShortClick:
     m_displayCounter++;
     m_buttonHandler->reset();
+    displayObdInfo();
     break;
   case BootButton::State::DoubleClick:
     m_displayCounter--;
     m_buttonHandler->reset();
+    displayObdInfo();
     break;
   case BootButton::State::LongPressed:
-    // Print Main Screen with setup info
     m_buttonHandler->reset();
+    displayWifiInfo();
   default:
     break;
   }
-
-  displayObd2Info();
 }
 
 void DisplayHandler::initialize()
@@ -55,7 +55,7 @@ void DisplayHandler::initialize()
       ;
   }
 
-  update("OBD2-Emulator");
+  displayMainScreen();
 }
 
 void DisplayHandler::update(const std::string &message)
@@ -68,7 +68,19 @@ void DisplayHandler::update(const std::string &message)
   m_display.display();
 }
 
-void DisplayHandler::displayObd2Info()
+void DisplayHandler::displayMainScreen()
+{
+  std::ostringstream stream;
+  stream << "OBD2-Emulator" << std::endl
+         << "Button clicks: " << std::endl
+         << "- single - next OBD" << std::endl
+         << "- double - back OBD" << std::endl
+         << "- long - Config info" << std::endl;
+
+  update(stream.str());
+}
+
+void DisplayHandler::displayObdInfo()
 {
   const auto *info = m_manager->getByIndex(m_displayCounter);
   if (!info)
@@ -83,6 +95,18 @@ void DisplayHandler::displayObd2Info()
          << "Min: " << info->getMin() << std::endl
          << "Increment: " << info->getIncrement() << std::endl
          << "Pace: " << info->getPace() << std::endl;
+
+  update(stream.str());
+}
+
+void DisplayHandler::displayWifiInfo()
+{
+  std::ostringstream stream;
+  stream << "OBD2-Emulator" << std::endl
+         << "Use to configure: " << std::endl
+         << "SSID: " << Config::SSID.c_str() << std::endl
+         << "Password: " << Config::PASSWORD.c_str() << std::endl
+         << "IP: " << Config::IP.toString().c_str() << std::endl;
 
   update(stream.str());
 }

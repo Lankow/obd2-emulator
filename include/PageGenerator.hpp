@@ -15,6 +15,8 @@ public:
     static std::string getMainPage(const std::vector<ObdInfo> &infos);
     static std::string getEditPage(const ObdInfo &info);
     static std::string getErrorPage(const std::string &errorMessage);
+    static std::string getResetPage();
+    static std::string getResetConfirmPage();
 
 private:
     static std::string getHeader();

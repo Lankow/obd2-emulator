@@ -29,6 +29,8 @@ private:
     uint8_t m_displayCounter;
 
     void update(const std::string &message);
-    void displayObd2Info();
+    void displayMainScreen();
+    void displayObdInfo();
+    void displayWifiInfo();
 };
 #endif // DISPLAY_HANDLER_HPP

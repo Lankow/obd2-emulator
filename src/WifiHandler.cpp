@@ -83,6 +83,7 @@ void WifiHandler::handleSubmit()
 
 void WifiHandler::initialize()
 {
+    WiFi.softAPConfig(Config::IP, Config::GATEWAY, Config::SUBNET);
     WiFi.softAP(Config::SSID.c_str(), Config::PASSWORD.c_str());
     IPAddress apIp = WiFi.softAPIP();
 
