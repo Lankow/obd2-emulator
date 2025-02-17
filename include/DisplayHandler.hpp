@@ -27,6 +27,7 @@ private:
     std::shared_ptr<ButtonHandler> m_buttonHandler;
     Adafruit_SSD1306 m_display;
     uint8_t m_displayCounter;
+    bool m_isDisplayInfo;
 
     void update(const std::string &message);
     void displayMainScreen();

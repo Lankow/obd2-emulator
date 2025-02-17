@@ -40,6 +40,11 @@ namespace BootButton
     };
 }
 
+namespace Display
+{
+    constexpr int DISPLAY_COUNTER_DEFAULT = 0;
+}
+
 namespace OBDRequest
 {
     constexpr uint16_t DEFAULT_VALUE = 0xFFFF; /**< Default value if requested PID is invalid */

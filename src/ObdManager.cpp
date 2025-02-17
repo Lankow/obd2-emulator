@@ -48,9 +48,9 @@ std::vector<ObdInfo> ObdManager::getAll() const
     return m_infos;
 }
 
-ObdInfo *ObdManager::getByPid(uint16_t pid) const
+ObdInfo *ObdManager::getByPid(uint16_t pid)
 {
-    for (auto info : m_infos)
+    for (auto& info : m_infos)
     {
         if (info.getPid() == pid)
             return &info;
@@ -58,6 +58,7 @@ ObdInfo *ObdManager::getByPid(uint16_t pid) const
 
     return nullptr;
 }
+
 const ObdInfo *ObdManager::getByIndex(uint8_t index) const
 {
     if (m_infos.empty())

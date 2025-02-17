@@ -7,7 +7,7 @@
 #include <Arduino.h>
 #include "ObdInfo.hpp"
 
-ObdInfo::ObdInfo(uint8_t pid, uint8_t length, std::string description, double current,
+ObdInfo::ObdInfo(uint16_t pid, uint8_t length, std::string description, double current,
                  double min, double max, double increment, int pace,
                  std::function<int32_t(const double &current)> formulaGetter)
     : m_pid(pid),
@@ -59,7 +59,7 @@ void ObdInfo::printCurrent() const
     Serial.println("---------------");
 }
 
-uint8_t ObdInfo::getPid() const { return m_pid; }
+uint16_t ObdInfo::getPid() const { return m_pid; }
 uint8_t ObdInfo::getLength() const { return m_length; }
 const std::string &ObdInfo::getDescription() const { return m_description; }
 double ObdInfo::getCurrent() const { return m_current; }

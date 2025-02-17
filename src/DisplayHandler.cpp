@@ -17,7 +17,8 @@ DisplayHandler::DisplayHandler(std::shared_ptr<ObdManager> manager, std::shared_
     : m_manager(manager),
       m_buttonHandler(buttonHandler),
       m_display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1),
-      m_displayCounter(0) {};
+      m_displayCounter(Display::DISPLAY_COUNTER_DEFAULT),
+      m_isDisplayInfo(false) {};
 
 void DisplayHandler::cyclic()
 {
@@ -27,19 +28,25 @@ void DisplayHandler::cyclic()
   {
   case BootButton::State::ShortClick:
     m_displayCounter++;
+    m_isDisplayInfo = true;
     m_buttonHandler->reset();
-    displayObdInfo();
     break;
   case BootButton::State::DoubleClick:
     m_displayCounter--;
+    m_isDisplayInfo = true;
     m_buttonHandler->reset();
-    displayObdInfo();
     break;
   case BootButton::State::LongPressed:
     m_buttonHandler->reset();
+    m_isDisplayInfo = false;
     displayWifiInfo();
   default:
     break;
+  }
+
+  if (m_isDisplayInfo)
+  {
+    displayObdInfo();
   }
 }
 
@@ -94,7 +101,7 @@ void DisplayHandler::displayObdInfo()
          << "Max: " << info->getMax() << std::endl
          << "Min: " << info->getMin() << std::endl
          << "Increment: " << info->getIncrement() << std::endl
-         << "Pace: " << info->getPace() << std::endl;
+         << "Pace: " << std::to_string(info->getPace()) << std::endl;
 
   update(stream.str());
 }

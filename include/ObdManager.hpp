@@ -20,9 +20,8 @@ public:
 
     void updateAll();
     void printAll() const;
-    ObdInfo *getByPid(uint16_t pid) const;
+    ObdInfo *getByPid(uint16_t pid);
     const ObdInfo *getByIndex(uint8_t index) const;
-
 
     std::vector<ObdInfo> getAll() const;
 

@@ -10,15 +10,15 @@
 class ObdInfo
 {
 public:
-    ObdInfo(uint8_t pid, uint8_t length, std::string description, double current,
+    ObdInfo(uint16_t pid, uint8_t length, std::string description, double current,
             double min, double max, double increment, int pace,
             std::function<int32_t(const double &current)> formulaGetter = nullptr);
 
     void update();
     void printCurrent() const;
     uint32_t getFormula() const;
-    
-    uint8_t getPid() const;
+
+    uint16_t getPid() const;
     uint8_t getLength() const;
     const std::string &getDescription() const;
 
@@ -34,7 +34,7 @@ public:
     void setMax(double max);
 
 private:
-    uint8_t m_pid;
+    uint16_t m_pid;
     uint8_t m_length;
     std::string m_description;
 
