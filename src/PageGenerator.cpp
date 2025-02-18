@@ -65,6 +65,14 @@ std::string PageGenerator::getEditPage(const ObdInfo &info)
            std::to_string(info.getMax()) + R"rawliteral(" min=")rawliteral" +
            std::to_string(info.getDefaultMin()) + R"rawliteral(" max=")rawliteral" +
            std::to_string(info.getDefaultMax()) + R"rawliteral(" required>
+                    <label for="increment">Increment Value:</label>
+                    <input type="number" id="increment" name="increment" value=")rawliteral" +
+           std::to_string(info.getIncrement()) + R"rawliteral(" min=")rawliteral" +
+           std::to_string(info.getDefaultMin()) + R"rawliteral(" max=")rawliteral" +
+           std::to_string(info.getDefaultMax()) + R"rawliteral(" required>
+                    <label for="pace">Increment Pace:</label>
+                    <input type="number" id="pace" name="pace" value=")rawliteral" +
+           std::to_string(info.getPace()) + R"rawliteral(" min="0" required>
                     <div class="button-container">
                         <input type="submit" value="Update">
                         <a class="button" href="/">Back</a>

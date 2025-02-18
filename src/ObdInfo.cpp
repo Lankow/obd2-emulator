@@ -93,3 +93,19 @@ void ObdInfo::setMax(double max)
         m_max = max;
     }
 }
+
+void ObdInfo::setIncrement(double increment)
+{
+    if (increment >= m_min && increment <= m_defaultMax)
+    {
+        m_increment = increment;
+    }
+}
+
+void ObdInfo::setPace(int pace)
+{
+    if (pace >= 0)
+    {
+        m_pace = pace;
+    }
+}

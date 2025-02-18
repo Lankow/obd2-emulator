@@ -59,18 +59,18 @@ void WifiHandler::handleEdit()
 void WifiHandler::handleSubmit()
 {
     uint16_t pid = std::stoi(m_server.arg("pid").c_str());
-    uint16_t minValue = std::stoi(m_server.arg("minValue").c_str());
-    uint16_t maxValue = std::stoi(m_server.arg("maxValue").c_str());
-
-    Serial.println("Updated PID: " + pid);
-    Serial.println("Min value: " + minValue);
-    Serial.println("Max value: " + maxValue);
+    double minValue = std::stoi(m_server.arg("minValue").c_str());
+    double maxValue = std::stoi(m_server.arg("maxValue").c_str());
+    double increment = std::stoi(m_server.arg("increment").c_str());
+    int pace = std::stoi(m_server.arg("pace").c_str());
 
     auto entry = m_manager->getByPid(pid);
     if (entry != nullptr)
     {
         entry->setMin(minValue);
         entry->setMax(maxValue);
+        entry->setIncrement(increment);
+        entry->setPace(pace);
 
         m_server.send(200, "text/plain", "Data received. You can close this page.");
     }

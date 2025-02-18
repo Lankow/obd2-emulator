@@ -32,6 +32,8 @@ public:
 
     void setMin(double min);
     void setMax(double max);
+    void setIncrement(double increment);
+    void setPace(int pace);
 
 private:
     uint16_t m_pid;
