@@ -18,7 +18,7 @@ class ObdManager
 public:
     explicit ObdManager();
 
-    void updateAll();
+    void updateAll(uint64_t cycleCount);
     void printAll() const;
     ObdInfo *getByPid(uint16_t pid);
     const ObdInfo *getByIndex(uint8_t index) const;
@@ -29,7 +29,7 @@ private:
     std::vector<ObdInfo> m_infos;
 
     void addNewInfo(uint16_t pid, uint8_t length, std::string description, double current,
-                    double min, double max, double increment, int pace,
+                    double min, double max, double increment, uint64_t pace,
                     std::function<int32_t(const double &)> customGetter);
 };
 #endif // DATA_STORAGE_HPP

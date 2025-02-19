@@ -8,7 +8,7 @@
 #include "ObdInfo.hpp"
 
 ObdInfo::ObdInfo(uint16_t pid, uint8_t length, std::string description, double current,
-                 double min, double max, double increment, int pace,
+                 double min, double max, double increment, uint64_t pace,
                  std::function<int32_t(const double &current)> formulaGetter)
     : m_pid(pid),
       m_length(length),
@@ -68,7 +68,7 @@ double ObdInfo::getMax() const { return m_max; }
 double ObdInfo::getDefaultMin() const { return m_defaultMin; }
 double ObdInfo::getDefaultMax() const { return m_defaultMax; }
 double ObdInfo::getIncrement() const { return m_increment; }
-int ObdInfo::getPace() const { return m_pace; }
+uint64_t ObdInfo::getPace() const { return m_pace; }
 uint32_t ObdInfo::getFormula() const
 {
     if (m_formulaGetter)
@@ -102,7 +102,7 @@ void ObdInfo::setIncrement(double increment)
     }
 }
 
-void ObdInfo::setPace(int pace)
+void ObdInfo::setPace(uint64_t pace)
 {
     if (pace >= 0)
     {

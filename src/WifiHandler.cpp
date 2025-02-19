@@ -62,7 +62,7 @@ void WifiHandler::handleSubmit()
     double minValue = std::stoi(m_server.arg("minValue").c_str());
     double maxValue = std::stoi(m_server.arg("maxValue").c_str());
     double increment = std::stoi(m_server.arg("increment").c_str());
-    int pace = std::stoi(m_server.arg("pace").c_str());
+    uint64_t pace = std::stoi(m_server.arg("pace").c_str());
 
     auto entry = m_manager->getByPid(pid);
     if (entry != nullptr)

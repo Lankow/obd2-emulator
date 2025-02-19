@@ -9,7 +9,7 @@
 
 ObdManager::ObdManager()
 {
-    addNewInfo(0x010C, 2, "Engine Speed", 0.0f, 0.0f, 16383.75f, 100.0f, 100,
+    addNewInfo(0x010C, 2, "Engine Speed", 0.0f, 0.0f, 16383.75f, 100.0f, 1,
                [this](const float &current) -> int32_t
                {
                    int32_t scaledValue = static_cast<int32_t>(current * 4);
@@ -24,14 +24,17 @@ ObdManager::ObdManager()
                    return result;
                });
 
-    addNewInfo(0x010D, 1, "Vehicle Speed", 0, 0, 255, 1, 100, NO_CUSTOM_GETTER);
+    addNewInfo(0x010D, 1, "Vehicle Speed", 0, 0, 255, 1, 1, NO_CUSTOM_GETTER);
 }
 
-void ObdManager::updateAll()
+void ObdManager::updateAll(uint64_t cycleCount)
 {
     for (auto &info : m_infos)
     {
-        info.update();
+        if (cycleCount % info.getPace()  == 0)
+        {
+            info.update();
+        }
     }
 }
 
@@ -50,7 +53,7 @@ std::vector<ObdInfo> ObdManager::getAll() const
 
 ObdInfo *ObdManager::getByPid(uint16_t pid)
 {
-    for (auto& info : m_infos)
+    for (auto &info : m_infos)
     {
         if (info.getPid() == pid)
             return &info;
@@ -71,7 +74,7 @@ const ObdInfo *ObdManager::getByIndex(uint8_t index) const
 }
 
 void ObdManager::addNewInfo(uint16_t pid, uint8_t length, std::string description, double current,
-                            double min, double max, double increment, int pace,
+                            double min, double max, double increment, uint64_t pace,
                             std::function<int32_t(const double &)> customGetter)
 {
     m_infos.push_back(ObdInfo(pid, length, description, current, min, max, increment, pace, customGetter));

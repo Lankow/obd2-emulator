@@ -14,6 +14,8 @@ WifiHandler wifiHandler(manager);
 BtHandler btHandler(manager);
 DisplayHandler displayHandler(manager, buttonHandler);
 
+uint64_t cycleCount = 0;
+
 void setup()
 {
   Serial.begin(115200);
@@ -27,12 +29,13 @@ void setup()
 
 void loop()
 {
+  cycleCount++;
   long cycleStart = millis();
 
   buttonHandler->cyclic();
   btHandler.cyclic();
   wifiHandler.handle();
-  manager->updateAll();
+  manager->updateAll(cycleCount);
 #ifdef DEBUG_DATA
   manager->printAll();
 #endif
