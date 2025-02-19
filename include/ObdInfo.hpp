@@ -1,16 +1,17 @@
 /**
- * @file ObdInfo.hpp
+ * @file OBDInfo.hpp
  * @date   2025-01-09
  * @author Lankow
  * @version 1.0
  */
 #ifndef OBD_INFO_HPP
 #define OBD_INFO_HPP
+#include <Arduino.h>
 
-class ObdInfo
+class OBDInfo
 {
 public:
-    ObdInfo(uint16_t pid, uint8_t length, std::string description, double current,
+    OBDInfo(uint16_t pid, uint8_t length, std::string description, double current,
             double min, double max, double increment, uint64_t pace,
             std::function<int32_t(const double &current)> formulaGetter = nullptr);
 

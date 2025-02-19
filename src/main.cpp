@@ -1,18 +1,18 @@
 #include <Arduino.h>
 #include <memory>
 #include "Constants.hpp"
-#include "ObdManager.hpp"
+#include "OBDHandler.hpp"
 #include "WifiHandler.hpp"
 #include "BtHandler.hpp"
 #include "DisplayHandler.hpp"
 #include "ButtonHandler.hpp"
 
-std::shared_ptr<ObdManager> manager = std::make_shared<ObdManager>();
+std::shared_ptr<OBDHandler> obdHandler = std::make_shared<OBDHandler>();
 std::shared_ptr<ButtonHandler> buttonHandler = std::make_shared<ButtonHandler>();
 
-WifiHandler wifiHandler(manager);
-BtHandler btHandler(manager);
-DisplayHandler displayHandler(manager, buttonHandler);
+WifiHandler wifiHandler(obdHandler);
+BtHandler btHandler(obdHandler);
+DisplayHandler displayHandler(obdHandler, buttonHandler);
 
 uint64_t cycleCount = 0;
 
@@ -35,9 +35,9 @@ void loop()
   buttonHandler->cyclic();
   btHandler.cyclic();
   wifiHandler.handle();
-  manager->updateAll(cycleCount);
+  obdHandler->updateAll(cycleCount);
 #ifdef DEBUG_DATA
-  manager->printAll();
+  obdHandler->printAll();
 #endif
   displayHandler.cyclic();
 

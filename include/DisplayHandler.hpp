@@ -11,19 +11,19 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <memory>
-#include "ObdManager.hpp"
+#include "OBDHandler.hpp"
 #include "ButtonHandler.hpp"
 
 class DisplayHandler
 {
 public:
-    DisplayHandler(std::shared_ptr<ObdManager> manager, std::shared_ptr<ButtonHandler> buttonHandler);
+    DisplayHandler(std::shared_ptr<OBDHandler> obdHandler, std::shared_ptr<ButtonHandler> buttonHandler);
 
     void initialize();
     void cyclic();
 
 private:
-    std::shared_ptr<ObdManager> m_manager;
+    std::shared_ptr<OBDHandler> m_obdHandler;
     std::shared_ptr<ButtonHandler> m_buttonHandler;
     Adafruit_SSD1306 m_display;
     uint8_t m_displayCounter;
@@ -31,7 +31,7 @@ private:
 
     void update(const std::string &message);
     void displayMainScreen();
-    void displayObdInfo();
+    void displayOBDInfo();
     void displayWifiInfo();
 };
 #endif // DISPLAY_HANDLER_HPP

@@ -13,8 +13,8 @@
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 
-DisplayHandler::DisplayHandler(std::shared_ptr<ObdManager> manager, std::shared_ptr<ButtonHandler> buttonHandler)
-    : m_manager(manager),
+DisplayHandler::DisplayHandler(std::shared_ptr<OBDHandler> obdHandler, std::shared_ptr<ButtonHandler> buttonHandler)
+    : m_obdHandler(obdHandler),
       m_buttonHandler(buttonHandler),
       m_display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1),
       m_displayCounter(Display::DISPLAY_COUNTER_DEFAULT),
@@ -46,7 +46,7 @@ void DisplayHandler::cyclic()
 
   if (m_isDisplayInfo)
   {
-    displayObdInfo();
+    displayOBDInfo();
   }
 }
 
@@ -87,9 +87,9 @@ void DisplayHandler::displayMainScreen()
   update(stream.str());
 }
 
-void DisplayHandler::displayObdInfo()
+void DisplayHandler::displayOBDInfo()
 {
-  const auto *info = m_manager->getByIndex(m_displayCounter);
+  const auto *info = m_obdHandler->getByIndex(m_displayCounter);
   if (!info)
     return;
 

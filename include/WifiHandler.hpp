@@ -10,18 +10,18 @@
 #include <Arduino.h>
 #include <WebServer.h>
 #include <memory>
-#include "ObdManager.hpp"
+#include "OBDHandler.hpp"
 
 class WifiHandler
 {
 public:
-    WifiHandler(std::shared_ptr<ObdManager> manager);
+    WifiHandler(std::shared_ptr<OBDHandler> obdHandler);
 
     void initialize();
     void handle();
 
 private:
-    std::shared_ptr<ObdManager> m_manager;
+    std::shared_ptr<OBDHandler> m_obdHandler;
     WebServer m_server;
     IPAddress m_apIP;
 

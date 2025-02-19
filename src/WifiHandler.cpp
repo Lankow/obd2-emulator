@@ -8,14 +8,14 @@
 #include "WifiHandler.hpp"
 #include "Constants.hpp"
 #include "PageGenerator.hpp"
-#include "ObdInfo.hpp"
+#include "OBDInfo.hpp"
 
-WifiHandler::WifiHandler(std::shared_ptr<ObdManager> manager) : m_manager(manager), m_server(Config::SERVER_PORT) {}
+WifiHandler::WifiHandler(std::shared_ptr<OBDHandler> obdHandler) : m_obdHandler(obdHandler), m_server(Config::SERVER_PORT) {}
 
 void WifiHandler::handleRoot()
 {
-    std::vector<ObdInfo> pids = m_manager->getAll();
-    std::string mainPageHtml = PageGenerator::getMainPage(pids);
+    std::vector<OBDInfo> infos = m_obdHandler->getAll();
+    std::string mainPageHtml = PageGenerator::getMainPage(infos);
     m_server.send(200, "text/html", mainPageHtml.c_str());
 }
 
@@ -43,7 +43,7 @@ void WifiHandler::handleEdit()
     };
 
     uint16_t pid = std::stoi(pidStr);
-    const auto *entry = m_manager->getByPid(pid);
+    const auto *entry = m_obdHandler->getByPid(pid);
 
     if (entry != nullptr)
     {
@@ -64,7 +64,7 @@ void WifiHandler::handleSubmit()
     double increment = std::stoi(m_server.arg("increment").c_str());
     uint64_t pace = std::stoi(m_server.arg("pace").c_str());
 
-    auto entry = m_manager->getByPid(pid);
+    auto entry = m_obdHandler->getByPid(pid);
     if (entry != nullptr)
     {
         entry->setMin(minValue);

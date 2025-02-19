@@ -10,19 +10,19 @@
 #include <Arduino.h>
 #include <memory>
 #include "BluetoothSerial.h"
-#include "ObdManager.hpp"
+#include "OBDHandler.hpp"
 
 class BtHandler
 {
 public:
-    BtHandler(std::shared_ptr<ObdManager> manager);
+    BtHandler(std::shared_ptr<OBDHandler> obdHandler);
 
     void initialize();
     void cyclic();
 
 private:
     BluetoothSerial m_btSerial;
-    std::shared_ptr<ObdManager> m_manager;
+    std::shared_ptr<OBDHandler> m_obdHandler;
     std::string getOBD2PIDResponse(const std::string &request);
 };
 #endif // BlUETOOTH_HANDLER_HPP

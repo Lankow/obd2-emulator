@@ -9,7 +9,7 @@
 #include <vector>
 #include "PageGenerator.hpp"
 
-std::string PageGenerator::getMainPage(const std::vector<ObdInfo> &infos)
+std::string PageGenerator::getMainPage(const std::vector<OBDInfo> &infos)
 {
     std::string pageContent = getHeader() + R"rawliteral(
         <body>
@@ -42,7 +42,7 @@ std::string PageGenerator::getMainPage(const std::vector<ObdInfo> &infos)
     return pageContent;
 }
 
-std::string PageGenerator::getEditPage(const ObdInfo &info)
+std::string PageGenerator::getEditPage(const OBDInfo &info)
 {
     std::stringstream hexPid;
     hexPid << "0x" << std::uppercase << std::hex << static_cast<int>(info.getPid());

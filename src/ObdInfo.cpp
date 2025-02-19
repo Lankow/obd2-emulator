@@ -1,13 +1,13 @@
 /**
- * @file ObdInfo.cpp
+ * @file OBDInfo.cpp
  * @date   2025-01-09
  * @author Lankow
  * @version 1.0
  */
 #include <Arduino.h>
-#include "ObdInfo.hpp"
+#include "OBDInfo.hpp"
 
-ObdInfo::ObdInfo(uint16_t pid, uint8_t length, std::string description, double current,
+OBDInfo::OBDInfo(uint16_t pid, uint8_t length, std::string description, double current,
                  double min, double max, double increment, uint64_t pace,
                  std::function<int32_t(const double &current)> formulaGetter)
     : m_pid(pid),
@@ -23,7 +23,7 @@ ObdInfo::ObdInfo(uint16_t pid, uint8_t length, std::string description, double c
       m_increasing(true),
       m_formulaGetter(formulaGetter) {}
 
-void ObdInfo::update()
+void OBDInfo::update()
 {
     if (m_increasing)
     {
@@ -45,7 +45,7 @@ void ObdInfo::update()
     }
 }
 
-void ObdInfo::printCurrent() const
+void OBDInfo::printCurrent() const
 {
     Serial.println("---------------");
     Serial.println(m_description.c_str());
@@ -59,17 +59,17 @@ void ObdInfo::printCurrent() const
     Serial.println("---------------");
 }
 
-uint16_t ObdInfo::getPid() const { return m_pid; }
-uint8_t ObdInfo::getLength() const { return m_length; }
-const std::string &ObdInfo::getDescription() const { return m_description; }
-double ObdInfo::getCurrent() const { return m_current; }
-double ObdInfo::getMin() const { return m_min; }
-double ObdInfo::getMax() const { return m_max; }
-double ObdInfo::getDefaultMin() const { return m_defaultMin; }
-double ObdInfo::getDefaultMax() const { return m_defaultMax; }
-double ObdInfo::getIncrement() const { return m_increment; }
-uint64_t ObdInfo::getPace() const { return m_pace; }
-uint32_t ObdInfo::getFormula() const
+uint16_t OBDInfo::getPid() const { return m_pid; }
+uint8_t OBDInfo::getLength() const { return m_length; }
+const std::string &OBDInfo::getDescription() const { return m_description; }
+double OBDInfo::getCurrent() const { return m_current; }
+double OBDInfo::getMin() const { return m_min; }
+double OBDInfo::getMax() const { return m_max; }
+double OBDInfo::getDefaultMin() const { return m_defaultMin; }
+double OBDInfo::getDefaultMax() const { return m_defaultMax; }
+double OBDInfo::getIncrement() const { return m_increment; }
+uint64_t OBDInfo::getPace() const { return m_pace; }
+uint32_t OBDInfo::getFormula() const
 {
     if (m_formulaGetter)
     {
@@ -78,7 +78,7 @@ uint32_t ObdInfo::getFormula() const
 
     return m_current;
 }
-void ObdInfo::setMin(double min)
+void OBDInfo::setMin(double min)
 {
     if (min <= m_max && min >= m_defaultMin)
     {
@@ -86,7 +86,7 @@ void ObdInfo::setMin(double min)
     }
 }
 
-void ObdInfo::setMax(double max)
+void OBDInfo::setMax(double max)
 {
     if (max >= m_min && max <= m_defaultMax)
     {
@@ -94,7 +94,7 @@ void ObdInfo::setMax(double max)
     }
 }
 
-void ObdInfo::setIncrement(double increment)
+void OBDInfo::setIncrement(double increment)
 {
     if (increment >= m_min && increment <= m_defaultMax)
     {
@@ -102,7 +102,7 @@ void ObdInfo::setIncrement(double increment)
     }
 }
 
-void ObdInfo::setPace(uint64_t pace)
+void OBDInfo::setPace(uint64_t pace)
 {
     if (pace >= 0)
     {

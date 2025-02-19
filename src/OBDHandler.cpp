@@ -1,13 +1,13 @@
 /**
- * @file ObdManager.cpp
+ * @file OBDHandler.cpp
  * @date   2025-01-11
  * @author Lankow
  * @version 1.0
  */
-#include "ObdManager.hpp"
+#include "OBDHandler.hpp"
 #include "Constants.hpp"
 
-ObdManager::ObdManager()
+OBDHandler::OBDHandler()
 {
     addNewInfo(0x010C, 2, "Engine Speed", 0.0f, 0.0f, 16383.75f, 100.0f, 1,
                [this](const float &current) -> int32_t
@@ -27,18 +27,18 @@ ObdManager::ObdManager()
     addNewInfo(0x010D, 1, "Vehicle Speed", 0, 0, 255, 1, 1, NO_CUSTOM_GETTER);
 }
 
-void ObdManager::updateAll(uint64_t cycleCount)
+void OBDHandler::updateAll(uint64_t cycleCount)
 {
     for (auto &info : m_infos)
     {
-        if (cycleCount % info.getPace()  == 0)
+        if (cycleCount % info.getPace() == 0)
         {
             info.update();
         }
     }
 }
 
-void ObdManager::printAll() const
+void OBDHandler::printAll() const
 {
     for (const auto &info : m_infos)
     {
@@ -46,12 +46,12 @@ void ObdManager::printAll() const
     }
 }
 
-std::vector<ObdInfo> ObdManager::getAll() const
+std::vector<OBDInfo> OBDHandler::getAll() const
 {
     return m_infos;
 }
 
-ObdInfo *ObdManager::getByPid(uint16_t pid)
+OBDInfo *OBDHandler::getByPid(uint16_t pid)
 {
     for (auto &info : m_infos)
     {
@@ -62,7 +62,7 @@ ObdInfo *ObdManager::getByPid(uint16_t pid)
     return nullptr;
 }
 
-const ObdInfo *ObdManager::getByIndex(uint8_t index) const
+const OBDInfo *OBDHandler::getByIndex(uint8_t index) const
 {
     if (m_infos.empty())
     {
@@ -73,9 +73,9 @@ const ObdInfo *ObdManager::getByIndex(uint8_t index) const
     return &m_infos.at(indexToDisplay);
 }
 
-void ObdManager::addNewInfo(uint16_t pid, uint8_t length, std::string description, double current,
+void OBDHandler::addNewInfo(uint16_t pid, uint8_t length, std::string description, double current,
                             double min, double max, double increment, uint64_t pace,
                             std::function<int32_t(const double &)> customGetter)
 {
-    m_infos.push_back(ObdInfo(pid, length, description, current, min, max, increment, pace, customGetter));
+    m_infos.push_back(OBDInfo(pid, length, description, current, min, max, increment, pace, customGetter));
 }

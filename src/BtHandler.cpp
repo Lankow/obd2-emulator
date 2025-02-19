@@ -6,10 +6,10 @@
  */
 
 #include "BtHandler.hpp"
-#include "ObdInfo.hpp"
+#include "OBDInfo.hpp"
 #include "ResponseParser.hpp"
 
-BtHandler::BtHandler(std::shared_ptr<ObdManager> manager) : m_manager(manager) {}
+BtHandler::BtHandler(std::shared_ptr<OBDHandler> obdHandler) : m_obdHandler(obdHandler) {}
 
 void BtHandler::initialize()
 {
@@ -44,7 +44,7 @@ std::string BtHandler::getOBD2PIDResponse(const std::string &request)
   uint16_t parsedPID = ResponseParser::parseRequest(request.c_str());
   Serial.println(parsedPID);
 
-  ObdInfo *info = m_manager->getByPid(parsedPID);
+  OBDInfo *info = m_obdHandler->getByPid(parsedPID);
 
   if (info == nullptr)
   {
