@@ -12,6 +12,11 @@
 
 WifiHandler::WifiHandler(std::shared_ptr<OBDHandler> obdHandler) : m_obdHandler(obdHandler), m_server(Config::SERVER_PORT) {}
 
+void WifiHandler::cyclic()
+{
+    m_server.handleClient();
+}
+
 void WifiHandler::handleRoot()
 {
     std::vector<OBDInfo> infos = m_obdHandler->getAll();
@@ -100,9 +105,4 @@ void WifiHandler::initialize()
     m_server.begin();
     Serial.println("Server started.");
     Serial.println(apIp.toString());
-}
-
-void WifiHandler::handle()
-{
-    m_server.handleClient();
 }

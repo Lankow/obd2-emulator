@@ -17,9 +17,7 @@ class OBDHandler
 {
 public:
     explicit OBDHandler();
-
-    void updateAll(uint64_t cycleCount);
-    void printAll() const;
+    void cyclic();
     OBDInfo *getByPid(uint16_t pid);
     const OBDInfo *getByIndex(uint8_t index) const;
 
@@ -28,6 +26,8 @@ public:
 private:
     std::vector<OBDInfo> m_infos;
 
+    void updateAll();
+    void printAll() const;
     void addNewInfo(uint16_t pid, uint8_t length, std::string description, double current,
                     double min, double max, double increment, uint64_t pace,
                     std::function<int32_t(const double &)> customGetter);

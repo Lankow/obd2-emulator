@@ -6,6 +6,7 @@
  */
 #include "OBDHandler.hpp"
 #include "Constants.hpp"
+#include "Configurator.hpp"
 
 OBDHandler::OBDHandler()
 {
@@ -27,14 +28,23 @@ OBDHandler::OBDHandler()
     addNewInfo(0x010D, 1, "Vehicle Speed", 0, 0, 255, 1, 1, NO_CUSTOM_GETTER);
 }
 
-void OBDHandler::updateAll(uint64_t cycleCount)
+void OBDHandler::updateAll()
 {
     for (auto &info : m_infos)
     {
-        if (cycleCount % info.getPace() == 0)
+        if (Configurator::getCycleCount() % info.getPace() == 0)
         {
             info.update();
         }
+    }
+}
+
+void OBDHandler::cyclic()
+{
+    updateAll();
+    if (Configurator::isAdditionalDebugEnabled())
+    {
+        printAll();
     }
 }
 

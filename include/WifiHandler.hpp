@@ -18,7 +18,7 @@ public:
     WifiHandler(std::shared_ptr<OBDHandler> obdHandler);
 
     void initialize();
-    void handle();
+    void cyclic();
 
 private:
     std::shared_ptr<OBDHandler> m_obdHandler;
