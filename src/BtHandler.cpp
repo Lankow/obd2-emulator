@@ -9,7 +9,7 @@
 #include "OBDInfo.hpp"
 #include "ResponseParser.hpp"
 
-BtHandler::BtHandler(std::shared_ptr<OBDHandler> obdHandler) : m_obdHandler(obdHandler) {}
+BtHandler::BtHandler(std::shared_ptr<OBDHandler> obdHandler) : m_staticRespHandler(), m_obdHandler(obdHandler) {}
 
 void BtHandler::initialize()
 {
@@ -26,16 +26,18 @@ void BtHandler::cyclic()
 
     Serial.print("Received: ");
     Serial.println(received);
+    std::string response;
 
     if (ResponseParser::isHexRequest(received.c_str()))
     {
-      std::string response = getOBD2PIDResponse(received.c_str());
-      m_btSerial.println(response.c_str());
+      response = getOBD2PIDResponse(received.c_str());
     }
     else
     {
-      Serial.println("Request is not PID request.");
+      response = m_staticRespHandler.getResponse(received.c_str());
     }
+
+    m_btSerial.println(response.c_str());
   }
 }
 

@@ -11,6 +11,7 @@
 #include <memory>
 #include "BluetoothSerial.h"
 #include "OBDHandler.hpp"
+#include "StaticRespHandler.hpp"
 
 class BtHandler
 {
@@ -22,6 +23,7 @@ public:
 
 private:
     BluetoothSerial m_btSerial;
+    StaticRespHandler m_staticRespHandler;
     std::shared_ptr<OBDHandler> m_obdHandler;
     std::string getOBD2PIDResponse(const std::string &request);
 };
