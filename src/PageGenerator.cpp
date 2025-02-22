@@ -11,100 +11,91 @@
 
 std::string PageGenerator::getMainPage(const std::vector<OBDInfo> &infos)
 {
-    std::string pageContent = getHeader() + R"rawliteral(
-        <body>
-            <div class="container">
-                <h1>OBD2 Emulator Configuration</h1>
-    )rawliteral";
+    std::ostringstream page;
+    page << (infos.empty() ? "<p class='error-box'>NO PIDs available to edit."
+                             "</p>"
+                           : "");
 
-    if (infos.empty())
+    if (!infos.empty())
     {
-        pageContent += "<p class='error-box'>NO PIDs available to edit.</p>";
-    }
-    else
-    {
-        pageContent += "<ul>";
-        for (auto info : infos)
+        page << "<ul>";
+        for (const auto &info : infos)
         {
-            std::stringstream hexPid;
+            std::ostringstream hexPid;
             hexPid << "0x" << std::uppercase << std::hex << info.getPid();
-            pageContent += "<li><a class='button' href=\"/edit?pid=" + std::to_string(info.getPid()) + "\">Edit " + info.getDescription() + " - " + hexPid.str() + "</a></li>";
+            page << "<li>" << generateButton("/edit?pid=" + std::to_string(info.getPid()), "Edit " + info.getDescription() + " - " + hexPid.str())
+                 << "</li>";
         }
-        pageContent += "</ul>";
+        page << "</ul>";
     }
 
-    pageContent += R"rawliteral(
-            </div>
-        </body>
-        </html>
-    )rawliteral";
+    page << generateButton("/reset", "Factory Reset");
 
-    return pageContent;
+    return wrapContent("OBD2 Emulator Configuration", page.str());
 }
 
 std::string PageGenerator::getEditPage(const OBDInfo &info)
 {
-    std::stringstream hexPid;
+    std::ostringstream hexPid;
     hexPid << "0x" << std::uppercase << std::hex << static_cast<int>(info.getPid());
 
-    return getHeader() + R"rawliteral(
-        <body>
-            <div class="container">
-                <h1>Edit )rawliteral" +
-           info.getDescription() + " - " + hexPid.str() + R"rawliteral( PID Values</h1>
-                <form action="/submit" method="post">
-                    <input type="hidden" id="pid" name="pid" value=")rawliteral" +
-           std::to_string(info.getPid()) + R"rawliteral(">
-                    <label for="minValue">Min Value:</label>
-                    <input type="number" id="minValue" name="minValue" value=")rawliteral" +
-           std::to_string(info.getMin()) + R"rawliteral(" min=")rawliteral" +
-           std::to_string(info.getDefaultMin()) + R"rawliteral(" max=")rawliteral" +
-           std::to_string(info.getDefaultMax()) + R"rawliteral(" required>
-                    <label for="maxValue">Max Value:</label>
-                    <input type="number" id="maxValue" name="maxValue" value=")rawliteral" +
-           std::to_string(info.getMax()) + R"rawliteral(" min=")rawliteral" +
-           std::to_string(info.getDefaultMin()) + R"rawliteral(" max=")rawliteral" +
-           std::to_string(info.getDefaultMax()) + R"rawliteral(" required>
-                    <label for="increment">Increment Value:</label>
-                    <input type="number" id="increment" name="increment" value=")rawliteral" +
-           std::to_string(info.getIncrement()) + R"rawliteral(" min=")rawliteral" +
-           std::to_string(info.getDefaultMin()) + R"rawliteral(" max=")rawliteral" +
-           std::to_string(info.getDefaultMax()) + R"rawliteral(" required>
-                    <label for="pace">Increment Pace:</label>
-                    <input type="number" id="pace" name="pace" value=")rawliteral" +
-           std::to_string(info.getPace()) + R"rawliteral(" min="0" required>
-                    <div class="button-container">
-                        <input type="submit" value="Update">
-                        <a class="button" href="/">Back</a>
-                    </div>
-                </form>
-            </div>
-        </body>
-        </html>
-    )rawliteral";
+    std::ostringstream form;
+    form << "<form action='/submit' method='post'>"
+         << "<input type='hidden' id='pid' name='pid' value='" << info.getPid() << "'>"
+         << generateInputField("minValue", "Min Value", info.getMin(), info.getDefaultMin(), info.getDefaultMax())
+         << generateInputField("maxValue", "Max Value", info.getMax(), info.getDefaultMin(), info.getDefaultMax())
+         << generateInputField("increment", "Increment Value", info.getIncrement(), info.getDefaultMin(), info.getDefaultMax())
+         << generateInputField("pace", "Increment Pace", info.getPace(), 0, 100)
+         << "<div class='button-container'>"
+         << "<input type='submit' value='Update'>"
+         << generateButton("/", "Back")
+         << "</div></form>";
+
+    return wrapContent("Edit " + info.getDescription() + " - " + hexPid.str() + " PID Values", form.str());
 }
 
 std::string PageGenerator::getErrorPage(const std::string &errorMessage)
 {
-    return getHeader() + R"rawliteral(
-        <body>
-            <div class="container">
-                <div class="error-box">
-                    <h1>ERROR</h1>
-                    <p>)rawliteral" +
-           errorMessage + R"rawliteral(</p>
-                </div>
-                <a class="button" href="/">Go to Main Page</a>
-            </div>
-        </body>
-        </html>
-    )rawliteral";
+    return wrapContent("ERROR", "<div class='error-box'><p>" + errorMessage + "</p></div>" + generateButton("/", "Go to Main Page"));
 }
 
 std::string PageGenerator::getResetPage()
 {
-    // TODO: Return confirmation or perform reset page
-    return "";
+    return wrapContent("Factory Reset",
+                       "<p>Do you really want to perform a device factory reset?</p>"
+                       "<div class='button-container'>" +
+                           generateButton("/", "Go to Main Page", "gray") +
+                           generateButton("/reset?confirm=1", "Yes") +
+                           "</div>");
+}
+
+std::string PageGenerator::getConfirmPage(const std::string &message)
+{
+    return wrapContent("Confirmation", "<p>" + message + "</p>" + generateButton("/", "Go to Main Page"));
+}
+
+std::string PageGenerator::wrapContent(const std::string &title, const std::string &bodyContent)
+{
+    std::ostringstream page;
+    page << getHeader()
+         << "<body><div class='container'><h1>" << title << "</h1>"
+         << bodyContent
+         << "</div></body></html>";
+    return page.str();
+}
+
+std::string PageGenerator::generateButton(const std::string &href, const std::string &label, const std::string &extraClass)
+{
+    return "<a class='button " + extraClass + "' href='" + href + "'>" + label + "</a>";
+}
+
+std::string PageGenerator::generateInputField(const std::string &id, const std::string &label, double value, double min, double max)
+{
+    std::ostringstream input;
+    input << "<label for='" << id << "'>" << label << ":</label>"
+          << "<input type='number' id='" << id << "' name='" << id << "' value='" << value
+          << "' min='" << min << "' max='" << max << "' required>";
+    return input.str();
 }
 
 std::string PageGenerator::getHeader()

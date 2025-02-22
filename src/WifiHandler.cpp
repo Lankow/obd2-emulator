@@ -77,12 +77,29 @@ void WifiHandler::handleSubmit()
         entry->setIncrement(increment);
         entry->setPace(pace);
 
-        m_server.send(200, "text/plain", "Data received. You can close this page.");
+        std::string confirmPageHtml = PageGenerator::getConfirmPage("Object has been edited.");
+        m_server.send(200, "text/html", confirmPageHtml.c_str());
     }
     else
     {
         // TODO: Handle try catch as well
         handleError(400, "PID to edit not available.");
+    }
+}
+
+void WifiHandler::handleReset()
+{
+    if (!m_server.hasArg("confirm"))
+    {
+        std::string resetPageHtml = PageGenerator::getResetPage();
+        m_server.send(200, "text/html", resetPageHtml.c_str());
+    }
+    else
+    {
+        std::string confirmPageHtml = PageGenerator::getConfirmPage("Factory reset Performed.");
+        m_server.send(200, "text/html", confirmPageHtml.c_str());
+
+        // TODO: Perform Factory Reset
     }
 }
 
@@ -98,7 +115,8 @@ void WifiHandler::initialize()
                 { handleEdit(); });
     m_server.on("/submit", [this]()
                 { handleSubmit(); });
-
+    m_server.on("/reset", [this]()
+                { handleReset(); });
     m_server.onNotFound([this]()
                         { handleError(404, "Page not Found."); });
 
