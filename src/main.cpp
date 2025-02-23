@@ -7,6 +7,7 @@
 #include "DisplayHandler.hpp"
 #include "ButtonHandler.hpp"
 #include "Configurator.hpp"
+#include "NVSHandler.hpp"
 
 std::shared_ptr<OBDHandler> obdHandler = std::make_shared<OBDHandler>();
 std::shared_ptr<ButtonHandler> buttonHandler = std::make_shared<ButtonHandler>();
@@ -14,6 +15,7 @@ std::shared_ptr<ButtonHandler> buttonHandler = std::make_shared<ButtonHandler>()
 WifiHandler wifiHandler(obdHandler);
 BtHandler btHandler(obdHandler);
 DisplayHandler displayHandler(obdHandler, buttonHandler);
+NVSHandler nvsHandler(obdHandler);
 
 void handleCycleDiff(long cycleStart)
 {
@@ -40,6 +42,7 @@ void setup()
   btHandler.initialize();
   wifiHandler.initialize();
   displayHandler.initialize();
+  nvsHandler.initialize();
 }
 
 void loop()
