@@ -21,9 +21,9 @@ private:
     std::shared_ptr<OBDHandler> m_obdHandler;
     Preferences m_preferences;
 
+    void initializeSettings();
     bool customSettingsExist();
     void clearSettings();
     void formatNVS();
-
 };
 #endif // NVS_HANDLER_HPP

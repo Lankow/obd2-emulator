@@ -21,7 +21,7 @@ public:
     OBDInfo *getByPid(uint16_t pid);
     const OBDInfo *getByIndex(uint8_t index) const;
 
-    std::vector<OBDInfo> getAll() const;
+    std::vector<OBDInfo> &getAll();
 
 private:
     std::vector<OBDInfo> m_infos;

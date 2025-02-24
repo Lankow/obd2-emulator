@@ -56,7 +56,7 @@ void OBDHandler::printAll() const
     }
 }
 
-std::vector<OBDInfo> OBDHandler::getAll() const
+std::vector<OBDInfo>& OBDHandler::getAll()
 {
     return m_infos;
 }
