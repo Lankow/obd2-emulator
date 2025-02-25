@@ -8,7 +8,7 @@
 #include "OBDInfo.hpp"
 
 OBDInfo::OBDInfo(uint16_t pid, uint8_t length, std::string description, double current,
-                 double min, double max, double increment, uint64_t pace,
+                 double min, double max, double increment, uint32_t pace,
                  std::function<int32_t(const double &current)> formulaGetter)
     : m_pid(pid),
       m_length(length),
@@ -68,7 +68,7 @@ double OBDInfo::getMax() const { return m_max; }
 double OBDInfo::getDefaultMin() const { return m_defaultMin; }
 double OBDInfo::getDefaultMax() const { return m_defaultMax; }
 double OBDInfo::getIncrement() const { return m_increment; }
-uint64_t OBDInfo::getPace() const { return m_pace; }
+uint32_t OBDInfo::getPace() const { return m_pace; }
 uint32_t OBDInfo::getFormula() const
 {
     if (m_formulaGetter)
@@ -102,7 +102,7 @@ void OBDInfo::setIncrement(double increment)
     }
 }
 
-void OBDInfo::setPace(uint64_t pace)
+void OBDInfo::setPace(uint32_t pace)
 {
     if (pace >= 0)
     {

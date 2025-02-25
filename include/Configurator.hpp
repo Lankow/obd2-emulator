@@ -12,11 +12,11 @@ class Configurator
 {
 public:
     static const bool isAdditionalDebugEnabled();
-    static const uint64_t getCycleCount();
+    static const uint32_t getCycleCount();
     static const void endCycle();
 
 private:
     static bool m_additionalDebug;
-    static uint64_t m_cycleCount;
+    static uint32_t m_cycleCount;
 };
 #endif // CONFIGURATOR_HPP

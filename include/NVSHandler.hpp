@@ -16,14 +16,18 @@ class NVSHandler
 public:
     NVSHandler(std::shared_ptr<OBDHandler> obdHandler);
     void initialize();
+    void writeSetting(const std::string &key, double value);
 
 private:
     std::shared_ptr<OBDHandler> m_obdHandler;
     Preferences m_preferences;
 
-    void initializeSettings();
-    bool customSettingsExist();
+    void intializeInfos();
+    void initializeNamespace(const std::string &key);
+    bool openSettings();
     void clearSettings();
     void formatNVS();
+    template <typename SetterFunc>
+    void getNvsToInfo(OBDInfo &info, const std::string &prefix, SetterFunc setter);
 };
 #endif // NVS_HANDLER_HPP

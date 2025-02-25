@@ -12,57 +12,40 @@ NVSHandler::NVSHandler(std::shared_ptr<OBDHandler> obdHandler) : m_obdHandler(ob
 
 void NVSHandler::initialize()
 {
-    if (customSettingsExist())
+    if (openSettings())
     {
-        initializeSettings();
+        intializeInfos();
     }
 }
 
-void NVSHandler::initializeSettings()
+template <typename SetterFunc>
+void NVSHandler::getNvsToInfo(OBDInfo &info, const std::string &prefix, SetterFunc setter)
+{
+    std::string key = prefix + std::to_string(info.getPid());
+    if (m_preferences.isKey(key.c_str()))
+    {
+        (info.*setter)(m_preferences.getDouble(key.c_str()));
+    }
+}
+
+void NVSHandler::initializeNamespace(const std::string &key)
+{
+}
+
+void NVSHandler::intializeInfos()
 {
     for (auto &info : m_obdHandler->getAll())
     {
-        std::string maxKey = "max" + std::to_string(info.getPid());
-        std::string minKey = "min" + std::to_string(info.getPid());
-        std::string paceKey = "pac" + std::to_string(info.getPid());
-        std::string incrementKey = "inc" + std::to_string(info.getPid());
-
-        if (m_preferences.isKey(maxKey.c_str()))
-        {
-            info.setMax(m_preferences.getDouble(maxKey.c_str()));
-        };
-
-        if (m_preferences.isKey(minKey.c_str()))
-        {
-            info.setMin(m_preferences.getDouble(minKey.c_str()));
-        };
-
-        if (m_preferences.isKey(incrementKey.c_str()))
-        {
-            info.setIncrement(m_preferences.getDouble(incrementKey.c_str()));
-        };
-
-        if (m_preferences.isKey(paceKey.c_str()))
-        {
-            info.setPace(m_preferences.getLong64(paceKey.c_str()));
-        };
+        getNvsToInfo(info, "max", &OBDInfo::setMax);
+        getNvsToInfo(info, "min", &OBDInfo::setMin);
+        getNvsToInfo(info, "inc", &OBDInfo::setIncrement);
+        getNvsToInfo(info, "pac", &OBDInfo::setPace);
     }
 };
 
-bool NVSHandler::customSettingsExist()
-{
-    if (!m_preferences.begin("settings", true))
-    {
-        Serial.println("Failed to open NVS namespace.");
-        return false;
-    }
-
-    return true;
-}
-
 void NVSHandler::clearSettings()
 {
-    if (!customSettingsExist())
+    if (!openSettings())
     {
         Serial.println("Settings don't exist.");
     }
@@ -78,3 +61,23 @@ void NVSHandler::formatNVS()
     nvs_flash_erase();
     nvs_flash_init();
 };
+
+void NVSHandler::writeSetting(const std::string &key, double value)
+{
+    if (openSettings())
+    {
+        m_preferences.putDouble(key.c_str(), value);
+        m_preferences.end();
+    }
+}
+
+bool NVSHandler::openSettings()
+{
+    if (!m_preferences.begin("settings", true))
+    {
+        Serial.println("Failed to open NVS namespace.");
+        return false;
+    }
+
+    return true;
+}

@@ -7,10 +7,10 @@
 #include "Configurator.hpp"
 
 bool Configurator::m_additionalDebug = false;
-uint64_t Configurator::m_cycleCount = 0;
+uint32_t Configurator::m_cycleCount = 0;
 
 const bool Configurator::isAdditionalDebugEnabled() { return m_additionalDebug; };
-const uint64_t Configurator::getCycleCount() { return m_cycleCount; };
+const uint32_t Configurator::getCycleCount() { return m_cycleCount; };
 const void Configurator::endCycle()
 {
     m_cycleCount++;

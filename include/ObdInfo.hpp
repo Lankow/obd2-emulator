@@ -12,7 +12,7 @@ class OBDInfo
 {
 public:
     OBDInfo(uint16_t pid, uint8_t length, std::string description, double current,
-            double min, double max, double increment, uint64_t pace,
+            double min, double max, double increment, uint32_t pace,
             std::function<int32_t(const double &current)> formulaGetter = nullptr);
 
     void update();
@@ -29,12 +29,12 @@ public:
     double getDefaultMin() const;
     double getDefaultMax() const;
     double getIncrement() const;
-    uint64_t getPace() const;
+    uint32_t getPace() const;
 
     void setMin(double min);
     void setMax(double max);
     void setIncrement(double increment);
-    void setPace(uint64_t pace);
+    void setPace(uint32_t pace);
 
 private:
     uint16_t m_pid;
@@ -48,7 +48,7 @@ private:
     double m_max;
     double m_increment;
 
-    uint64_t m_pace;
+    uint32_t m_pace;
     bool m_increasing;
     std::function<int32_t(const double &)> m_formulaGetter;
 };
