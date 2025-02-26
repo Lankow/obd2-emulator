@@ -11,17 +11,19 @@
 #include <WebServer.h>
 #include <memory>
 #include "OBDHandler.hpp"
+#include "NVSHandler.hpp"
 
 class WifiHandler
 {
 public:
-    WifiHandler(std::shared_ptr<OBDHandler> obdHandler);
+    WifiHandler(std::shared_ptr<OBDHandler> obdHandler, std::shared_ptr<NVSHandler> nvsHandler);
 
     void initialize();
     void cyclic();
 
 private:
     std::shared_ptr<OBDHandler> m_obdHandler;
+    std::shared_ptr<NVSHandler> m_nvsHandler;
     WebServer m_server;
     IPAddress m_apIP;
 

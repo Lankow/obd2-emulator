@@ -10,7 +10,8 @@
 #include "PageGenerator.hpp"
 #include "OBDInfo.hpp"
 
-WifiHandler::WifiHandler(std::shared_ptr<OBDHandler> obdHandler) : m_obdHandler(obdHandler), m_server(Config::SERVER_PORT) {}
+WifiHandler::WifiHandler(std::shared_ptr<OBDHandler> obdHandler, std::shared_ptr<NVSHandler> nvsHandler)
+    : m_obdHandler(obdHandler), m_nvsHandler(nvsHandler), m_server(Config::SERVER_PORT) {}
 
 void WifiHandler::cyclic()
 {
@@ -72,10 +73,14 @@ void WifiHandler::handleSubmit()
     auto entry = m_obdHandler->getByPid(pid);
     if (entry != nullptr)
     {
-        entry->setMin(minValue);
-        entry->setMax(maxValue);
-        entry->setIncrement(increment);
-        entry->setPace(pace);
+        if (entry->setMin(minValue))
+            m_nvsHandler->writeSetting("min" + std::to_string(entry->getPid()), minValue);
+        if (entry->setMax(maxValue))
+            m_nvsHandler->writeSetting("max" + std::to_string(entry->getPid()), maxValue);
+        if (entry->setIncrement(increment))
+            m_nvsHandler->writeSetting("inc" + std::to_string(entry->getPid()), increment);
+        if (entry->setPace(pace))
+            m_nvsHandler->writeSetting("pac" + std::to_string(entry->getPid()), pace);
 
         std::string confirmPageHtml = PageGenerator::getConfirmPage("Object has been edited.");
         m_server.send(200, "text/html", confirmPageHtml.c_str());

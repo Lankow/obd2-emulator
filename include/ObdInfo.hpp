@@ -31,10 +31,10 @@ public:
     double getIncrement() const;
     uint32_t getPace() const;
 
-    void setMin(double min);
-    void setMax(double max);
-    void setIncrement(double increment);
-    void setPace(uint32_t pace);
+    bool setMin(double min);
+    bool setMax(double max);
+    bool setIncrement(double increment);
+    bool setPace(uint32_t pace);
 
 private:
     uint16_t m_pid;

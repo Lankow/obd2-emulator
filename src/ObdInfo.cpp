@@ -78,34 +78,46 @@ uint32_t OBDInfo::getFormula() const
 
     return m_current;
 }
-void OBDInfo::setMin(double min)
+bool OBDInfo::setMin(double min)
 {
     if (min <= m_max && min >= m_defaultMin)
     {
         m_min = min;
+        return true;
     }
+
+    return false;
 }
 
-void OBDInfo::setMax(double max)
+bool OBDInfo::setMax(double max)
 {
     if (max >= m_min && max <= m_defaultMax)
     {
         m_max = max;
+        return true;
     }
+
+    return false;
 }
 
-void OBDInfo::setIncrement(double increment)
+bool OBDInfo::setIncrement(double increment)
 {
-    if (increment >= m_min && increment <= m_defaultMax)
+    if (increment >= m_defaultMin && increment <= m_defaultMax)
     {
         m_increment = increment;
+        return true;
     }
+
+    return false;
 }
 
-void OBDInfo::setPace(uint32_t pace)
+bool OBDInfo::setPace(uint32_t pace)
 {
     if (pace >= 0)
     {
         m_pace = pace;
+        return true;
     }
+
+    return false;
 }

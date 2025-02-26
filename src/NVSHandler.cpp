@@ -12,7 +12,7 @@ NVSHandler::NVSHandler(std::shared_ptr<OBDHandler> obdHandler) : m_obdHandler(ob
 
 void NVSHandler::initialize()
 {
-    if (openSettings())
+    if (settingsExist())
     {
         intializeInfos();
     }
@@ -45,7 +45,7 @@ void NVSHandler::intializeInfos()
 
 void NVSHandler::clearSettings()
 {
-    if (!openSettings())
+    if (!settingsExist())
     {
         Serial.println("Settings don't exist.");
     }
@@ -64,16 +64,14 @@ void NVSHandler::formatNVS()
 
 void NVSHandler::writeSetting(const std::string &key, double value)
 {
-    if (openSettings())
-    {
-        m_preferences.putDouble(key.c_str(), value);
-        m_preferences.end();
-    }
+    m_preferences.begin("settings", false);
+    m_preferences.putDouble(key.c_str(), value);
+    m_preferences.end();
 }
 
-bool NVSHandler::openSettings()
+bool NVSHandler::settingsExist()
 {
-    if (!m_preferences.begin("settings", true))
+    if (!m_preferences.begin("settings", false))
     {
         Serial.println("Failed to open NVS namespace.");
         return false;

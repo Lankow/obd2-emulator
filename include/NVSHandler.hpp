@@ -24,7 +24,7 @@ private:
 
     void intializeInfos();
     void initializeNamespace(const std::string &key);
-    bool openSettings();
+    bool settingsExist();
     void clearSettings();
     void formatNVS();
     template <typename SetterFunc>

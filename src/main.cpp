@@ -11,11 +11,11 @@
 
 std::shared_ptr<OBDHandler> obdHandler = std::make_shared<OBDHandler>();
 std::shared_ptr<ButtonHandler> buttonHandler = std::make_shared<ButtonHandler>();
+std::shared_ptr<NVSHandler> nvsHandler = std::make_shared<NVSHandler>(obdHandler);
 
-WifiHandler wifiHandler(obdHandler);
+WifiHandler wifiHandler(obdHandler, nvsHandler);
 BtHandler btHandler(obdHandler);
 DisplayHandler displayHandler(obdHandler, buttonHandler);
-NVSHandler nvsHandler(obdHandler);
 
 void handleCycleDiff(long cycleStart)
 {
@@ -38,11 +38,11 @@ void setup()
   Serial.begin(115200);
   Serial.println("Starting OBD2-Emulator.");
 
+  nvsHandler->initialize();
   buttonHandler->initialize();
   btHandler.initialize();
   wifiHandler.initialize();
   displayHandler.initialize();
-  nvsHandler.initialize();
 }
 
 void loop()
