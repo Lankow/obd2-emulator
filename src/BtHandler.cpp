@@ -19,7 +19,7 @@ void BtHandler::initialize()
 
 void BtHandler::cyclic()
 {
-  if (m_btSerial.available())
+  while (m_btSerial.available())
   {
     String received = m_btSerial.readStringUntil('\r');
     received.replace(" ", "");
