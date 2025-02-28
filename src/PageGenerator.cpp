@@ -29,7 +29,7 @@ std::string PageGenerator::getMainPage(const std::vector<OBDInfo> &infos)
         page << "</ul>";
     }
 
-    page << generateButton("/reset", "Factory Reset");
+    page << generateButton("/settings", "Settings");
 
     return wrapContent("OBD2 Emulator Configuration", page.str());
 }
@@ -59,14 +59,16 @@ std::string PageGenerator::getErrorPage(const std::string &errorMessage)
     return wrapContent("ERROR", "<div class='error-box'><p>" + errorMessage + "</p></div>" + generateButton("/", "Go to Main Page"));
 }
 
-std::string PageGenerator::getResetPage()
+std::string PageGenerator::getSettingsPage()
 {
-    return wrapContent("Factory Reset",
-                       "<p>Do you really want to perform a device factory reset?</p>"
-                       "<div class='button-container'>" +
-                           generateButton("/", "Go to Main Page", "gray") +
-                           generateButton("/reset?confirm=1", "Yes") +
-                           "</div>");
+    std::ostringstream page;
+    page << "<ul>";
+    page << "<li>" << generateButton("/settings?update=reset", "Factory Reset") << "</li>";
+    page << "<li>" << generateButton("/settings?update=logging", "Additional Logging") << "</li>";
+    page << "</ul>";
+    page << generateButton("/", "Back");
+
+    return wrapContent("Settings", page.str());
 }
 
 std::string PageGenerator::getConfirmPage(const std::string &message)

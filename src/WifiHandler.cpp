@@ -9,6 +9,7 @@
 #include "Constants.hpp"
 #include "PageGenerator.hpp"
 #include "OBDInfo.hpp"
+#include "Configurator.hpp"
 
 WifiHandler::WifiHandler(std::shared_ptr<OBDHandler> obdHandler, std::shared_ptr<NVSHandler> nvsHandler)
     : m_obdHandler(obdHandler), m_nvsHandler(nvsHandler), m_server(Config::SERVER_PORT) {}
@@ -92,19 +93,33 @@ void WifiHandler::handleSubmit()
     }
 }
 
-void WifiHandler::handleReset()
+void WifiHandler::handleSettings()
 {
-    if (!m_server.hasArg("confirm"))
+    if (!m_server.hasArg("update"))
     {
-        std::string resetPageHtml = PageGenerator::getResetPage();
-        m_server.send(200, "text/html", resetPageHtml.c_str());
+        std::string settingsPageHtml = PageGenerator::getSettingsPage();
+        m_server.send(200, "text/html", settingsPageHtml.c_str());
     }
     else
     {
-        std::string confirmPageHtml = PageGenerator::getConfirmPage("Factory reset Performed.");
+        std::string arg = m_server.arg("update").c_str();
+        std::string confirmPageHtml;
+        if (arg == "reset")
+        {
+            confirmPageHtml = PageGenerator::getConfirmPage("Factory reset Performed.");
+            // TODO: Perform Factory Reset
+        }
+        else if (arg == "logging")
+        {
+            confirmPageHtml = PageGenerator::getConfirmPage("Logging has been updated.");
+            Configurator::toggleAdditionalLogging();
+        }
+        else
+        {
+            handleError(400, "No such setting available.");
+            return;
+        }
         m_server.send(200, "text/html", confirmPageHtml.c_str());
-
-        // TODO: Perform Factory Reset
     }
 }
 
@@ -120,8 +135,8 @@ void WifiHandler::initialize()
                 { handleEdit(); });
     m_server.on("/submit", [this]()
                 { handleSubmit(); });
-    m_server.on("/reset", [this]()
-                { handleReset(); });
+    m_server.on("/settings", [this]()
+                { handleSettings(); });
     m_server.onNotFound([this]()
                         { handleError(404, "Page not Found."); });
 

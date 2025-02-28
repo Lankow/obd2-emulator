@@ -14,6 +14,7 @@ public:
     static const bool isAdditionalDebugEnabled();
     static const uint32_t getCycleCount();
     static const void endCycle();
+    static void toggleAdditionalLogging();
 
 private:
     static bool m_additionalDebug;
