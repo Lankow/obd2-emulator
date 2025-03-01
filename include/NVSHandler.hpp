@@ -17,6 +17,7 @@ public:
     NVSHandler(std::shared_ptr<OBDHandler> obdHandler);
     void initialize();
     void writeSetting(const std::string &key, double value);
+    void formatNVS();
 
 private:
     std::shared_ptr<OBDHandler> m_obdHandler;
@@ -26,7 +27,6 @@ private:
     void initializeNamespace(const std::string &key);
     bool settingsExist();
     void clearSettings();
-    void formatNVS();
     template <typename SetterFunc>
     void getNvsToInfo(OBDInfo &info, const std::string &prefix, SetterFunc setter);
 };

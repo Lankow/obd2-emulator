@@ -60,6 +60,8 @@ void NVSHandler::formatNVS()
 {
     nvs_flash_erase();
     nvs_flash_init();
+    delay(100);
+    ESP.restart();
 };
 
 void NVSHandler::writeSetting(const std::string &key, double value)

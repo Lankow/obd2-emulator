@@ -106,8 +106,8 @@ void WifiHandler::handleSettings()
         std::string confirmPageHtml;
         if (arg == "reset")
         {
-            confirmPageHtml = PageGenerator::getConfirmPage("Factory reset Performed.");
-            // TODO: Perform Factory Reset
+            confirmPageHtml = PageGenerator::getConfirmPage("Factory reset Performed. Reconnect to a device.");
+            m_nvsHandler->formatNVS();
         }
         else if (arg == "logging")
         {
