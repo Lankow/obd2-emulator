@@ -94,8 +94,9 @@ std::string PageGenerator::generateButton(const std::string &href, const std::st
 std::string PageGenerator::generateInputField(const std::string &id, const std::string &label, double value, double min, double max)
 {
     std::ostringstream input;
-    input << "<label for='" << id << "'>" << label << ":</label>"
-          << "<input type='number' id='" << id << "' name='" << id << "' value='" << value
+    input << std::fixed << std::setprecision(2)
+          << "<label for='" << id << "'>" << label << ":</label>"
+          << "<input type='number' step='0.01' id='" << id << "' name='" << id << "' value='" << value
           << "' min='" << min << "' max='" << max << "' required>";
     return input.str();
 }
