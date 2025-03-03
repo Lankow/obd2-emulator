@@ -10,6 +10,8 @@
 #include "ResponseParser.hpp"
 #include "Constants.hpp"
 
+
+// TO DO: Change Class Name
 bool ResponseParser::isHexRequest(const std::string &request)
 {
     return request.size() > 2 && request.find_first_not_of("0123456789abcdefABCDEF") == std::string::npos;

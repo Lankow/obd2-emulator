@@ -8,6 +8,7 @@
 #include <nvs_flash.h>
 #include "OBDInfo.hpp"
 
+// TODO: Could be merged with Configurator functionality
 NVSHandler::NVSHandler(std::shared_ptr<OBDHandler> obdHandler) : m_obdHandler(obdHandler), m_preferences() {};
 
 void NVSHandler::initialize()
@@ -26,10 +27,6 @@ void NVSHandler::getNvsToInfo(OBDInfo &info, const std::string &prefix, SetterFu
     {
         (info.*setter)(m_preferences.getDouble(key.c_str()));
     }
-}
-
-void NVSHandler::initializeNamespace(const std::string &key)
-{
 }
 
 void NVSHandler::intializeInfos()

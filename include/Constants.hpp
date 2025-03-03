@@ -9,9 +9,10 @@
 #define CONSTANTS_HPP
 #include <Arduino.h>
 
+// TODO: Check if there is no use of below constants if related class object is not used
 #define NO_CUSTOM_GETTER nullptr
 
-namespace Config
+namespace Config // TODO: Move to Configurator or .ini file
 {
     constexpr uint32_t CYCLE_TIME_MS = 100;    /**< Cycle time in milliseconds. */
     const std::string SSID = "OBDII-config";   /**< SSID for OBDII Emulator configuration page. */

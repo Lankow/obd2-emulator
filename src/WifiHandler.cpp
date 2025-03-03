@@ -11,6 +11,7 @@
 #include "OBDInfo.hpp"
 #include "Configurator.hpp"
 
+// TODO: Extract Access Point logic to separate class. Rename Request handling class
 WifiHandler::WifiHandler(std::shared_ptr<OBDHandler> obdHandler, std::shared_ptr<NVSHandler> nvsHandler)
     : m_obdHandler(obdHandler), m_nvsHandler(nvsHandler), m_server(Config::SERVER_PORT) {}
 
@@ -122,7 +123,7 @@ void WifiHandler::handleSettings()
         m_server.send(200, "text/html", confirmPageHtml.c_str());
     }
 }
-
+// TODO: Handle Error codes
 void WifiHandler::initialize()
 {
     WiFi.softAPConfig(Config::IP, Config::GATEWAY, Config::SUBNET);

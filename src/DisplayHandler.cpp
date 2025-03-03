@@ -58,8 +58,7 @@ void DisplayHandler::initialize()
   if (!m_display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
   {
     Serial.println("Failed to initialize SSD1306!");
-    while (true)
-      ;
+    // TODO: Handle Screen disconnected
   }
 
   displayMainScreen();

@@ -8,11 +8,14 @@
 #ifndef CONFIGURATOR_HPP
 #define CONFIGURATOR_HPP
 #include <Arduino.h>
+
+// TODO: Add to NVS Handler
+// TODO: Object not static
 class Configurator
 {
 public:
     static const bool isAdditionalDebugEnabled();
-    static const uint32_t getCycleCount();
+    static const uint32_t getCycleCount();  // TODO: Move outside config
     static const void endCycle();
     static void toggleAdditionalLogging();
 

@@ -10,7 +10,6 @@
 #include <Preferences.h>
 #include <memory>
 #include "OBDHandler.hpp"
-
 class NVSHandler
 {
 public:

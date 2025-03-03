@@ -10,7 +10,7 @@
 #include "NVSHandler.hpp"
 
 std::shared_ptr<OBDHandler> obdHandler = std::make_shared<OBDHandler>();
-std::shared_ptr<ButtonHandler> buttonHandler = std::make_shared<ButtonHandler>();
+std::shared_ptr<ButtonHandler> buttonHandler = std::make_shared<ButtonHandler>(); // TODO: Move to DisplayHandler
 std::shared_ptr<NVSHandler> nvsHandler = std::make_shared<NVSHandler>(obdHandler);
 
 WifiHandler wifiHandler(obdHandler, nvsHandler);
@@ -22,6 +22,7 @@ void handleCycleDiff(long cycleStart)
   long cycleDiff = millis() - cycleStart;
   long cycleDelay = Config::CYCLE_TIME_MS - cycleDiff;
 
+  // TODO: Handle case where  
   if (cycleDiff > Config::CYCLE_TIME_MS)
   {
     Serial.println("Cycle time exceeded. Diff Time: ");

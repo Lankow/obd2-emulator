@@ -10,6 +10,8 @@
 
 OBDHandler::OBDHandler()
 {
+    // TODO: OBD2Info as Struct 
+    // TODO: OBD2Info logic move here
     addNewInfo(0x010C, 2, "Engine Speed", 0.0f, 0.0f, 16383.75f, 100.0f, 1,
                [this](const float &current) -> int32_t
                {
