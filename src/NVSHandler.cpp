@@ -25,7 +25,8 @@ void NVSHandler::getNvsToInfo(OBDInfo &info, const std::string &prefix, SetterFu
     std::string key = prefix + std::to_string(info.getPid());
     if (m_preferences.isKey(key.c_str()))
     {
-        (info.*setter)(m_preferences.getDouble(key.c_str()));
+        // TODO: Handle added arg to setter
+        // (info.*setter)(m_preferences.getDouble(key.c_str()));
     }
 }
 
@@ -33,10 +34,10 @@ void NVSHandler::intializeInfos()
 {
     for (auto &info : m_obdHandler->getAll())
     {
-        getNvsToInfo(info, "max", &OBDInfo::setMax);
-        getNvsToInfo(info, "min", &OBDInfo::setMin);
-        getNvsToInfo(info, "inc", &OBDInfo::setIncrement);
-        getNvsToInfo(info, "pac", &OBDInfo::setPace);
+        getNvsToInfo(info, "max", &OBDHandler::setMax);
+        getNvsToInfo(info, "min", &OBDHandler::setMin);
+        getNvsToInfo(info, "inc", &OBDHandler::setIncrement);
+        getNvsToInfo(info, "pac", &OBDHandler::setPace);
     }
 };
 

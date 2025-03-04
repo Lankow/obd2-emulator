@@ -22,6 +22,12 @@ public:
     const OBDInfo *getByIndex(uint8_t index) const;
 
     std::vector<OBDInfo> &getAll();
+    void update(OBDInfo &info);
+    uint32_t getFormula(const OBDInfo &info) const;
+    bool setMin(OBDInfo &info, double min);
+    bool setMax(OBDInfo &info, double max);
+    bool setPace(OBDInfo &info, uint32_t pace);
+    bool setIncrement(OBDInfo &info, double increment);
 
 private:
     std::vector<OBDInfo> m_infos;
