@@ -75,14 +75,17 @@ void WifiHandler::handleSubmit()
     auto entry = m_obdHandler->getByPid(pid);
     if (entry != nullptr)
     {
-        if (entry->setMin(minValue))
-            m_nvsHandler->writeSetting("min" + std::to_string(entry->getPid()), minValue);
-        if (entry->setMax(maxValue))
-            m_nvsHandler->writeSetting("max" + std::to_string(entry->getPid()), maxValue);
-        if (entry->setIncrement(increment))
-            m_nvsHandler->writeSetting("inc" + std::to_string(entry->getPid()), increment);
-        if (entry->setPace(pace))
-            m_nvsHandler->writeSetting("pac" + std::to_string(entry->getPid()), pace);
+        entry->m_min = minValue;
+        m_nvsHandler->writeSetting("min" + std::to_string(entry->m_pid), minValue);
+
+        entry->m_max = maxValue;
+        m_nvsHandler->writeSetting("max" + std::to_string(entry->m_pid), maxValue);
+
+        entry->m_increment = increment;
+        m_nvsHandler->writeSetting("inc" + std::to_string(entry->m_pid), increment);
+
+        entry->m_pace = pace;
+        m_nvsHandler->writeSetting("pac" + std::to_string(entry->m_pid), pace);
 
         std::string confirmPageHtml = PageGenerator::getConfirmPage("Object has been edited.");
         m_server.send(200, "text/html", confirmPageHtml.c_str());

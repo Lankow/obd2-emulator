@@ -22,8 +22,8 @@ std::string PageGenerator::getMainPage(const std::vector<OBDInfo> &infos)
         for (const auto &info : infos)
         {
             std::ostringstream hexPid;
-            hexPid << "0x" << std::uppercase << std::hex << info.getPid();
-            page << "<li>" << generateButton("/edit?pid=" + std::to_string(info.getPid()), "Edit " + info.getDescription() + " - " + hexPid.str())
+            hexPid << "0x" << std::uppercase << std::hex << info.m_pid;
+            page << "<li>" << generateButton("/edit?pid=" + std::to_string(info.m_pid), "Edit " + info.m_description + " - " + hexPid.str())
                  << "</li>";
         }
         page << "</ul>";
@@ -37,21 +37,21 @@ std::string PageGenerator::getMainPage(const std::vector<OBDInfo> &infos)
 std::string PageGenerator::getEditPage(const OBDInfo &info)
 {
     std::ostringstream hexPid;
-    hexPid << "0x" << std::uppercase << std::hex << static_cast<int>(info.getPid());
+    hexPid << "0x" << std::uppercase << std::hex << static_cast<int>(info.m_pid);
 
     std::ostringstream form;
     form << "<form action='/submit' method='post'>"
-         << "<input type='hidden' id='pid' name='pid' value='" << info.getPid() << "'>"
-         << generateInputField("minValue", "Min Value", info.getMin(), info.getDefaultMin(), info.getDefaultMax())
-         << generateInputField("maxValue", "Max Value", info.getMax(), info.getDefaultMin(), info.getDefaultMax())
-         << generateInputField("increment", "Increment Value", info.getIncrement(), info.getDefaultMin(), info.getDefaultMax())
-         << generateInputField("pace", "Increment Pace", info.getPace(), 0, 100)
+         << "<input type='hidden' id='pid' name='pid' value='" << info.m_pid << "'>"
+         << generateInputField("minValue", "Min Value", info.m_min, info.m_defaultMin, info.m_defaultMax)
+         << generateInputField("maxValue", "Max Value", info.m_max, info.m_defaultMin, info.m_defaultMax)
+         << generateInputField("increment", "Increment Value", info.m_increment, info.m_defaultMin, info.m_defaultMax)
+         << generateInputField("pace", "Increment Pace", info.m_pace, 0, 100)
          << "<div class='button-container'>"
          << "<input type='submit' value='Update'>"
          << generateButton("/", "Back")
          << "</div></form>";
 
-    return wrapContent("Edit " + info.getDescription() + " - " + hexPid.str() + " PID Values", form.str());
+    return wrapContent("Edit " + info.m_description + " - " + hexPid.str() + " PID Values", form.str());
 }
 
 std::string PageGenerator::getErrorPage(const std::string &errorMessage)

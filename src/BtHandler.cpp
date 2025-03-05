@@ -54,8 +54,8 @@ std::string BtHandler::getOBD2PIDResponse(const std::string &request)
     return "";
   }
 
-  uint32_t pidValue = info->getFormula();
-  uint8_t pidLength = info->getLength();
+  uint32_t pidValue = m_obdHandler->getFormula(*info);
+  uint8_t pidLength = info->m_length;
 
   std::string response = ResponseParser::prepareResponse(pidValue, pidLength);
   return response;

@@ -94,13 +94,13 @@ void DisplayHandler::displayOBDInfo()
 
   std::ostringstream stream;
   stream << std::fixed << std::setprecision(2)
-         << info->getDescription() << std::endl
-         << "PID: 0x" << std::uppercase << std::hex << static_cast<int>(info->getPid()) << std::endl
-         << "Current: " << info->getCurrent() << std::endl
-         << "Max: " << info->getMax() << std::endl
-         << "Min: " << info->getMin() << std::endl
-         << "Increment: " << info->getIncrement() << std::endl
-         << "Pace: " << std::to_string(info->getPace()) << std::endl;
+         << info->m_description << std::endl
+         << "PID: 0x" << std::uppercase << std::hex << static_cast<int>(info->m_pid) << std::endl
+         << "Current: " << info->m_current << std::endl
+         << "Max: " << info->m_max << std::endl
+         << "Min: " << info->m_min << std::endl
+         << "Increment: " << info->m_increment << std::endl
+         << "Pace: " << std::to_string(info->m_pace) << std::endl;
 
   update(stream.str());
 }

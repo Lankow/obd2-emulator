@@ -22,7 +22,7 @@ void NVSHandler::initialize()
 template <typename SetterFunc>
 void NVSHandler::getNvsToInfo(OBDInfo &info, const std::string &prefix, SetterFunc setter)
 {
-    std::string key = prefix + std::to_string(info.getPid());
+    std::string key = prefix + std::to_string(info.m_pid);
     if (m_preferences.isKey(key.c_str()))
     {
         // TODO: Handle added arg to setter
