@@ -12,11 +12,12 @@
 #include <memory>
 #include <vector>
 #include "OBDInfo.hpp"
+#include "CycleHandler.hpp"
 
 class OBDHandler
 {
 public:
-    explicit OBDHandler();
+    explicit OBDHandler(std::shared_ptr<CycleHandler> cycleHandler);
     void cyclic();
     OBDInfo *getByPid(uint16_t pid);
     const OBDInfo *getByIndex(uint8_t index) const;
@@ -30,6 +31,7 @@ public:
     bool setIncrement(OBDInfo &info, double increment);
 
 private:
+    std::shared_ptr<CycleHandler> m_cycleHandler;
     std::vector<OBDInfo> m_infos;
 
     void updateAll();

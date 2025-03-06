@@ -8,10 +8,8 @@
 #include "Constants.hpp"
 #include "Configurator.hpp"
 
-OBDHandler::OBDHandler()
+OBDHandler::OBDHandler(std::shared_ptr<CycleHandler> cycleHandler) : m_cycleHandler(cycleHandler)
 {
-    // TODO: OBD2Info as Struct
-    // TODO: OBD2Info logic move here
     addNewInfo(0x010C, 2, "Engine Speed", 0.0f, 0.0f, 16383.75f, 100.0f, 1,
                [this](const float &current) -> int32_t
                {
@@ -34,7 +32,7 @@ void OBDHandler::updateAll()
 {
     for (auto &info : m_infos)
     {
-        if (Configurator::getCycleCount() % info.m_pace == 0)
+        if (m_cycleHandler->getCycleCount() % info.m_pace == 0)
         {
             update(info);
         }
