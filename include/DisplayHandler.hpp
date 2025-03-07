@@ -28,6 +28,7 @@ private:
     Adafruit_SSD1306 m_display;
     uint8_t m_displayCounter;
     bool m_isDisplayInfo;
+    bool m_isDisplayInitialized;
 
     void update(const std::string &message);
     void displayMainScreen();

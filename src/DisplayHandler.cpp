@@ -18,7 +18,8 @@ DisplayHandler::DisplayHandler(std::shared_ptr<OBDHandler> obdHandler)
       m_buttonHandler(),
       m_display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1),
       m_displayCounter(Display::DISPLAY_COUNTER_DEFAULT),
-      m_isDisplayInfo(false) {};
+      m_isDisplayInfo(false),
+      m_isDisplayInitialized(false) {};
 
 void DisplayHandler::cyclic()
 {
@@ -61,14 +62,18 @@ void DisplayHandler::initialize()
   if (!m_display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
   {
     Serial.println("Failed to initialize SSD1306!");
-    // TODO: Handle Screen disconnected
+    m_isDisplayInitialized = false;
   }
 
+  m_isDisplayInitialized = true;
   displayMainScreen();
 }
 
 void DisplayHandler::update(const std::string &message)
 {
+  if (!m_isDisplayInitialized)
+    return;
+
   m_display.clearDisplay();
   m_display.setTextSize(1);
   m_display.setTextColor(SSD1306_WHITE);
