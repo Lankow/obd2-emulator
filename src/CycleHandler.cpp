@@ -17,20 +17,23 @@ void CycleHandler::startCycle()
 void CycleHandler::endCycle()
 {
     long cycleDiff = millis() - m_cycleStart;
-    long cycleDelay = Config::CYCLE_TIME_MS - cycleDiff;
 
-    // TODO: Handle case where the cycle time is exceeded.
     if (cycleDiff > Config::CYCLE_TIME_MS)
     {
         Serial.println("Cycle time exceeded. Diff Time: ");
         Serial.println(cycleDiff);
+        uint32_t cycles = cycleDiff / Config::CYCLE_TIME_MS;
+
+        m_cycleCount += cycleDiff % Config::CYCLE_TIME_MS == 0 ? cycles : cycles + 1;
+        cycleDiff = cycleDiff % Config::CYCLE_TIME_MS;
     }
     else
     {
-        delay(cycleDelay);
+        m_cycleCount++;
     }
 
-    m_cycleCount++;
+    long cycleDelay = Config::CYCLE_TIME_MS - cycleDiff;
+    delay(cycleDelay);
 }
 
 const uint32_t CycleHandler::getCycleCount() const { return m_cycleCount; };
