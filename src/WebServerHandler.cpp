@@ -1,39 +1,38 @@
 /**
- * @file WifiHandler.cpp
+ * @file WebServerHandler.cpp
  * @date   2025-01-05
  * @author Lankow
  * @version 1.0
  */
 #include <vector>
-#include "WifiHandler.hpp"
+#include "WebServerHandler.hpp"
 #include "Constants.hpp"
 #include "PageGenerator.hpp"
 #include "OBDInfo.hpp"
 #include "Configurator.hpp"
 
-// TODO: Extract Access Point logic to separate class. Rename Request handling class
-WifiHandler::WifiHandler(std::shared_ptr<OBDHandler> obdHandler, std::shared_ptr<NVSHandler> nvsHandler)
+WebServerHandler::WebServerHandler(std::shared_ptr<OBDHandler> obdHandler, std::shared_ptr<NVSHandler> nvsHandler)
     : m_obdHandler(obdHandler), m_nvsHandler(nvsHandler), m_server(Config::SERVER_PORT) {}
 
-void WifiHandler::cyclic()
+void WebServerHandler::cyclic()
 {
     m_server.handleClient();
 }
 
-void WifiHandler::handleRoot()
+void WebServerHandler::handleRoot()
 {
     std::vector<OBDInfo> infos = m_obdHandler->getAll();
     std::string mainPageHtml = PageGenerator::getMainPage(infos);
     m_server.send(200, "text/html", mainPageHtml.c_str());
 }
 
-void WifiHandler::handleError(int errorCode, const std::string &errorMessage)
+void WebServerHandler::handleError(int errorCode, const std::string &errorMessage)
 {
     std::string errorPageHtml = PageGenerator::getErrorPage(errorMessage);
     m_server.send(errorCode, "text/html", errorPageHtml.c_str());
 }
 
-void WifiHandler::handleEdit()
+void WebServerHandler::handleEdit()
 {
     if (!m_server.hasArg("pid"))
     {
@@ -64,7 +63,7 @@ void WifiHandler::handleEdit()
     }
 }
 
-void WifiHandler::handleSubmit()
+void WebServerHandler::handleSubmit()
 {
     uint16_t pid = std::stoi(m_server.arg("pid").c_str());
     double minValue = std::stod(m_server.arg("minValue").c_str());
@@ -97,7 +96,7 @@ void WifiHandler::handleSubmit()
     }
 }
 
-void WifiHandler::handleSettings()
+void WebServerHandler::handleSettings()
 {
     if (!m_server.hasArg("update"))
     {
@@ -127,12 +126,8 @@ void WifiHandler::handleSettings()
     }
 }
 // TODO: Handle Error codes
-void WifiHandler::initialize()
+void WebServerHandler::initialize()
 {
-    WiFi.softAPConfig(Config::IP, Config::GATEWAY, Config::SUBNET);
-    WiFi.softAP(Config::SSID.c_str(), Config::PASSWORD.c_str());
-    IPAddress apIp = WiFi.softAPIP();
-
     m_server.on("/", [this]()
                 { handleRoot(); });
     m_server.on("/edit", [this]()
@@ -145,6 +140,4 @@ void WifiHandler::initialize()
                         { handleError(404, "Page not Found."); });
 
     m_server.begin();
-    Serial.println("Server started.");
-    Serial.println(apIp.toString());
 }

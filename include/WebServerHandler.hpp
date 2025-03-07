@@ -1,11 +1,11 @@
 /**
- * @file WifiHandler.hpp
+ * @file WebServerHandler.hpp
  * @date   2025-01-05
  * @author Lankow
  * @version 1.0
  */
-#ifndef WIFI_HANDLER_HPP
-#define WIFI_HANDLER_HPP
+#ifndef WEB_SERVER_HANDLER_HPP
+#define WEB_SERVER_HANDLER_HPP
 
 #include <Arduino.h>
 #include <WebServer.h>
@@ -13,10 +13,10 @@
 #include "OBDHandler.hpp"
 #include "NVSHandler.hpp"
 
-class WifiHandler
+class WebServerHandler
 {
 public:
-    WifiHandler(std::shared_ptr<OBDHandler> obdHandler, std::shared_ptr<NVSHandler> nvsHandler);
+    WebServerHandler(std::shared_ptr<OBDHandler> obdHandler, std::shared_ptr<NVSHandler> nvsHandler);
 
     void initialize();
     void cyclic();
@@ -33,4 +33,4 @@ private:
     void handleSettings();
     void handleError(int errorCode, const std::string &errorMessage);
 };
-#endif // WIFI_HANDLER_HPP
+#endif // WEB_SERVER_HANDLER_HPP
