@@ -17,14 +17,14 @@
 class DisplayHandler
 {
 public:
-    DisplayHandler(std::shared_ptr<OBDHandler> obdHandler, std::shared_ptr<ButtonHandler> buttonHandler);
+    DisplayHandler(std::shared_ptr<OBDHandler> obdHandler);
 
     void initialize();
     void cyclic();
 
 private:
     std::shared_ptr<OBDHandler> m_obdHandler;
-    std::shared_ptr<ButtonHandler> m_buttonHandler;
+    ButtonHandler m_buttonHandler;
     Adafruit_SSD1306 m_display;
     uint8_t m_displayCounter;
     bool m_isDisplayInfo;

@@ -13,31 +13,32 @@
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 
-DisplayHandler::DisplayHandler(std::shared_ptr<OBDHandler> obdHandler, std::shared_ptr<ButtonHandler> buttonHandler)
+DisplayHandler::DisplayHandler(std::shared_ptr<OBDHandler> obdHandler)
     : m_obdHandler(obdHandler),
-      m_buttonHandler(buttonHandler),
+      m_buttonHandler(),
       m_display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1),
       m_displayCounter(Display::DISPLAY_COUNTER_DEFAULT),
       m_isDisplayInfo(false) {};
 
 void DisplayHandler::cyclic()
 {
-  BootButton::State state = m_buttonHandler->getState();
+  m_buttonHandler.cyclic();
+  BootButton::State state = m_buttonHandler.getState();
 
   switch (state)
   {
   case BootButton::State::ShortClick:
     m_displayCounter++;
     m_isDisplayInfo = true;
-    m_buttonHandler->reset();
+    m_buttonHandler.reset();
     break;
   case BootButton::State::DoubleClick:
     m_displayCounter--;
     m_isDisplayInfo = true;
-    m_buttonHandler->reset();
+    m_buttonHandler.reset();
     break;
   case BootButton::State::LongPressed:
-    m_buttonHandler->reset();
+    m_buttonHandler.reset();
     m_isDisplayInfo = false;
     displayWifiInfo();
   default:
@@ -52,6 +53,8 @@ void DisplayHandler::cyclic()
 
 void DisplayHandler::initialize()
 {
+  m_buttonHandler.initialize();
+
   Wire.begin(21, 22); // SDA = GPIO21, SCL = GPIO22
   Serial.println("Initializing OLED...");
 
