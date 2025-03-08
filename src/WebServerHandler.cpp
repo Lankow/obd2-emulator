@@ -10,6 +10,7 @@
 #include "PageGenerator.hpp"
 #include "OBDInfo.hpp"
 #include "Configurator.hpp"
+#include "StringUtils.hpp"
 
 WebServerHandler::WebServerHandler(std::shared_ptr<OBDHandler> obdHandler, std::shared_ptr<NVSHandler> nvsHandler)
     : m_obdHandler(obdHandler), m_nvsHandler(nvsHandler), m_server(Config::SERVER_PORT) {}
@@ -42,8 +43,7 @@ void WebServerHandler::handleEdit()
 
     std::string pidStr = m_server.arg("pid").c_str();
 
-    // Make a single function isNumber
-    if (pidStr.empty() || !std::all_of(pidStr.begin(), pidStr.end(), ::isdigit))
+    if (!StringUtils::isDecimalNumber(pidStr))
     {
         handleError(400, "Invalid PID argument.");
         return;
@@ -91,7 +91,6 @@ void WebServerHandler::handleSubmit()
     }
     else
     {
-        // TODO: Handle try catch as well
         handleError(400, "PID to edit not available.");
     }
 }

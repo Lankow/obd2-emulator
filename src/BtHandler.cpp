@@ -7,7 +7,7 @@
 
 #include "BtHandler.hpp"
 #include "OBDInfo.hpp"
-#include "ResponseParser.hpp"
+#include "StringUtils.hpp"
 
 BtHandler::BtHandler(std::shared_ptr<OBDHandler> obdHandler) : m_staticRespHandler(), m_obdHandler(obdHandler) {}
 
@@ -28,7 +28,7 @@ void BtHandler::cyclic()
     Serial.println(received);
     std::string response;
 
-    if (ResponseParser::isHexRequest(received.c_str()))
+    if (StringUtils::isHeximalNumber(received.c_str()))
     {
       response = getOBD2PIDResponse(received.c_str());
     }
@@ -43,7 +43,7 @@ void BtHandler::cyclic()
 
 std::string BtHandler::getOBD2PIDResponse(const std::string &request)
 {
-  uint16_t parsedPID = ResponseParser::parseRequest(request.c_str());
+  uint16_t parsedPID = StringUtils::hexStringToUint16(request.c_str());
   Serial.println(parsedPID);
 
   OBDInfo *info = m_obdHandler->getByPid(parsedPID);
@@ -57,6 +57,6 @@ std::string BtHandler::getOBD2PIDResponse(const std::string &request)
   uint32_t pidValue = m_obdHandler->getFormula(*info);
   uint8_t pidLength = info->m_length;
 
-  std::string response = ResponseParser::prepareResponse(pidValue, pidLength);
+  std::string response = StringUtils::intToHexString(pidValue, pidLength);
   return response;
 }
