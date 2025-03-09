@@ -9,7 +9,24 @@
 
 #include <Arduino.h>
 #include <Button.h>
-#include "Constants.hpp"
+
+namespace BootButton
+{
+    constexpr uint16_t PIN = 0;                   /**< Pin number for the boot button. */
+    constexpr uint16_t THRESHOLD_LONG_MS = 1500;  /**< Threshold time in milliseconds for the long click. */
+    constexpr uint16_t THRESHOLD_DOUBLE_MS = 500; /**< Time window for double click detection */
+    constexpr uint16_t DEFAULT_TIME = 0;          /**< Default Pressed Button Time ms */
+}
+
+enum BootButtonState
+{
+    Released,
+    Pressed,
+    ShortClick,
+    DoubleClick,
+    LongPressed
+};
+
 
 class ButtonHandler
 {
@@ -19,11 +36,11 @@ public:
     void initialize();
     void cyclic();
     void reset();
-    BootButton::State getState();
+    BootButtonState getState();
 
 private:
     Button m_button;
-    BootButton::State m_state;
+    BootButtonState m_state;
     uint16_t m_lastPressTimeMs;
     uint16_t m_pressedCounterMs;
 };

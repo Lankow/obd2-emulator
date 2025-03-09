@@ -5,8 +5,9 @@
  * @version 1.0
  */
 #include "OBDHandler.hpp"
-#include "Constants.hpp"
 #include "Configurator.hpp"
+
+#define NO_CUSTOM_GETTER nullptr
 
 OBDHandler::OBDHandler(std::shared_ptr<CycleHandler> cycleHandler) : m_cycleHandler(cycleHandler)
 {

@@ -8,7 +8,6 @@
 #include <iostream>
 #include <iomanip>
 #include "StringUtils.hpp"
-#include "Constants.hpp"
 
 bool StringUtils::isHeximalNumber(const std::string &str)
 {
@@ -22,7 +21,7 @@ bool StringUtils::isDecimalNumber(const std::string &str)
 
 uint16_t StringUtils::hexStringToUint16(const std::string &str)
 {
-    uint16_t result = OBDRequest::DEFAULT_VALUE;
+    uint16_t result;
 
     std::stringstream ss;
     ss << std::hex << str;

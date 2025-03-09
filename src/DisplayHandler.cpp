@@ -8,37 +8,38 @@
 #include <iomanip>
 #include <sstream>
 #include "DisplayHandler.hpp"
-#include "Constants.hpp"
+#include "Configurator.hpp"
 
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 64
+constexpr int SCREEN_WIDTH = 128;
+constexpr int SCREEN_HEIGHT = 64;
+constexpr int DISPLAY_COUNTER_DEFAULT = 0;
 
 DisplayHandler::DisplayHandler(std::shared_ptr<OBDHandler> obdHandler)
     : m_obdHandler(obdHandler),
       m_buttonHandler(),
       m_display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1),
-      m_displayCounter(Display::DISPLAY_COUNTER_DEFAULT),
+      m_displayCounter(DISPLAY_COUNTER_DEFAULT),
       m_isDisplayInfo(false),
       m_isDisplayInitialized(false) {};
 
 void DisplayHandler::cyclic()
 {
   m_buttonHandler.cyclic();
-  BootButton::State state = m_buttonHandler.getState();
+  BootButtonState state = m_buttonHandler.getState();
 
   switch (state)
   {
-  case BootButton::State::ShortClick:
+  case BootButtonState::ShortClick:
     m_displayCounter++;
     m_isDisplayInfo = true;
     m_buttonHandler.reset();
     break;
-  case BootButton::State::DoubleClick:
+  case BootButtonState::DoubleClick:
     m_displayCounter--;
     m_isDisplayInfo = true;
     m_buttonHandler.reset();
     break;
-  case BootButton::State::LongPressed:
+  case BootButtonState::LongPressed:
     m_buttonHandler.reset();
     m_isDisplayInfo = false;
     displayWifiInfo();

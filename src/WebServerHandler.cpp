@@ -6,7 +6,6 @@
  */
 #include <vector>
 #include "WebServerHandler.hpp"
-#include "Constants.hpp"
 #include "PageGenerator.hpp"
 #include "OBDInfo.hpp"
 #include "Configurator.hpp"

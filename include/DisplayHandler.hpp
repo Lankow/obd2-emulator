@@ -30,6 +30,7 @@ private:
     bool m_isDisplayInfo;
     bool m_isDisplayInitialized;
 
+
     void update(const std::string &message);
     void displayMainScreen();
     void displayOBDInfo();
