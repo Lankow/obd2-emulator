@@ -8,7 +8,7 @@
 #include <nvs_flash.h>
 #include "OBDInfo.hpp"
 
-// TODO: Could be merged with Configurator functionality
+// TODO: Could be merged with Configuration functionality
 NVSHandler::NVSHandler(std::shared_ptr<OBDHandler> obdHandler) : m_obdHandler(obdHandler), m_preferences() {};
 
 void NVSHandler::initialize()

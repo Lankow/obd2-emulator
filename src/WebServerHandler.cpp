@@ -8,7 +8,7 @@
 #include "WebServerHandler.hpp"
 #include "PageGenerator.hpp"
 #include "OBDInfo.hpp"
-#include "Configurator.hpp"
+#include "Configuration.hpp"
 #include "StringUtils.hpp"
 
 namespace HttpCode
@@ -122,7 +122,7 @@ void WebServerHandler::handleSettings()
         else if (arg == "logging")
         {
             confirmPageHtml = PageGenerator::getConfirmPage("Logging has been updated.");
-            Configurator::toggleAdditionalLogging();
+            Configuration::toggleAdditionalLogging();
         }
         else
         {

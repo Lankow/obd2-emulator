@@ -8,6 +8,9 @@
 #include "NVSHandler.hpp"
 #include "CycleHandler.hpp"
 #include "AccessPointInitializer.hpp"
+#include "Configuration.hpp"
+
+Configuration configuration;
 
 std::shared_ptr<CycleHandler> cycleHandler = std::make_shared<CycleHandler>();
 std::shared_ptr<OBDHandler> obdHandler = std::make_shared<OBDHandler>(cycleHandler);

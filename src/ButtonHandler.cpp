@@ -5,7 +5,7 @@
  * @version 1.0
  */
 #include "ButtonHandler.hpp"
-#include "Configurator.hpp"
+#include "Configuration.hpp"
 
 ButtonHandler::ButtonHandler()
     : m_button(BootButton::PIN),

@@ -5,7 +5,7 @@
  * @version 1.0
  */
 #include "OBDHandler.hpp"
-#include "Configurator.hpp"
+#include "Configuration.hpp"
 
 #define NO_CUSTOM_GETTER nullptr
 
@@ -43,7 +43,7 @@ void OBDHandler::updateAll()
 void OBDHandler::cyclic()
 {
     updateAll();
-    if (Configurator::isAdditionalDebugEnabled())
+    if (Configuration::isAdditionalDebugEnabled())
     {
         printAll();
     }

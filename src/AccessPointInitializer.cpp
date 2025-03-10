@@ -6,7 +6,7 @@
  */
 #include "AccessPointInitializer.hpp"
 #include "WiFi.h"
-#include "Configurator.hpp"
+#include "Configuration.hpp"
 
 void AccessPointInitializer::initialize()
 {

@@ -8,7 +8,7 @@
 #include <iomanip>
 #include <sstream>
 #include "DisplayHandler.hpp"
-#include "Configurator.hpp"
+#include "Configuration.hpp"
 
 constexpr int SCREEN_WIDTH = 128;
 constexpr int SCREEN_HEIGHT = 64;

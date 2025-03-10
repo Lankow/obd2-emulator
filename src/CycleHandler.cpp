@@ -5,7 +5,7 @@
  * @version 1.0
  */
 #include "CycleHandler.hpp"
-#include "Configurator.hpp"
+#include "Configuration.hpp"
 
 CycleHandler::CycleHandler() : m_cycleCount(0), m_cycleStart(0) {};
 

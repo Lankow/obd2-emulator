@@ -1,5 +1,5 @@
 /**
- * @file Configurator.hpp
+ * @file Configuration.hpp
  * @date 2025-02-20
  * @author Lankow
  * @version 1.0
@@ -21,15 +21,30 @@ namespace Config
     const IPAddress SUBNET(255, 255, 255, 0);
 }
 
-// TODO: Add to NVS Handler
-// TODO: Object not static
-class Configurator
+class Configuration
 {
 public:
-    static const bool isAdditionalDebugEnabled();
-    static void toggleAdditionalLogging();
+    Configuration();
+
+    bool getCycleTime() const;
+    bool getSsid() const;
+    bool getPassword() const;
+    bool getAdditionalDebug() const;
+
+    void setCycleTime();
+    void setSsid();
+    void setPassword();
+    void setAdditionalDebug();
 
 private:
-    static bool m_additionalDebug;
+    uint32_t m_cycleTime;
+    std::string m_ssid;
+    std::string m_password;
+    bool m_additionalDebug;
+
+    IPAddress m_ipAddress;
+    IPAddress m_gateway;
+    IPAddress m_subnet;
+    uint16_t m_serverPort;
 };
 #endif // CONFIGURATOR_HPP
