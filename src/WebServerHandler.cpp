@@ -11,6 +11,15 @@
 #include "Configurator.hpp"
 #include "StringUtils.hpp"
 
+namespace HttpCode
+{
+    constexpr int OK = 200;
+    constexpr int ACCEPTED = 202;
+    constexpr int BAD_REQUEST = 400;
+    constexpr int NOT_FOUND = 404;
+    constexpr int NOT_ACCEPTABLE = 406;
+}
+
 WebServerHandler::WebServerHandler(std::shared_ptr<OBDHandler> obdHandler, std::shared_ptr<NVSHandler> nvsHandler)
     : m_obdHandler(obdHandler), m_nvsHandler(nvsHandler), m_server(Config::SERVER_PORT) {}
 
@@ -23,7 +32,7 @@ void WebServerHandler::handleRoot()
 {
     std::vector<OBDInfo> infos = m_obdHandler->getAll();
     std::string mainPageHtml = PageGenerator::getMainPage(infos);
-    m_server.send(200, "text/html", mainPageHtml.c_str());
+    m_server.send(HttpCode::OK, "text/html", mainPageHtml.c_str());
 }
 
 void WebServerHandler::handleError(int errorCode, const std::string &errorMessage)
@@ -36,7 +45,7 @@ void WebServerHandler::handleEdit()
 {
     if (!m_server.hasArg("pid"))
     {
-        handleError(400, "Edit Page is Missing PID parameter.");
+        handleError(HttpCode::BAD_REQUEST, "Edit Page is Missing PID parameter.");
         return;
     }
 
@@ -44,7 +53,7 @@ void WebServerHandler::handleEdit()
 
     if (!StringUtils::isDecimalNumber(pidStr))
     {
-        handleError(400, "Invalid PID argument.");
+        handleError(HttpCode::NOT_ACCEPTABLE, "Invalid PID argument.");
         return;
     };
 
@@ -54,11 +63,11 @@ void WebServerHandler::handleEdit()
     if (entry != nullptr)
     {
         std::string editPageHtml = PageGenerator::getEditPage(*entry);
-        m_server.send(200, "text/html", editPageHtml.c_str());
+        m_server.send(HttpCode::OK, "text/html", editPageHtml.c_str());
     }
     else
     {
-        handleError(400, "PID to edit not available.");
+        handleError(HttpCode::BAD_REQUEST, "PID to edit not available.");
     }
 }
 
@@ -86,11 +95,11 @@ void WebServerHandler::handleSubmit()
         m_nvsHandler->writeSetting("pac" + std::to_string(entry->m_pid), pace);
 
         std::string confirmPageHtml = PageGenerator::getConfirmPage("Object has been edited.");
-        m_server.send(200, "text/html", confirmPageHtml.c_str());
+        m_server.send(HttpCode::ACCEPTED, "text/html", confirmPageHtml.c_str());
     }
     else
     {
-        handleError(400, "PID to edit not available.");
+        handleError(HttpCode::BAD_REQUEST, "PID to edit not available.");
     }
 }
 
@@ -99,7 +108,7 @@ void WebServerHandler::handleSettings()
     if (!m_server.hasArg("update"))
     {
         std::string settingsPageHtml = PageGenerator::getSettingsPage();
-        m_server.send(200, "text/html", settingsPageHtml.c_str());
+        m_server.send(HttpCode::OK, "text/html", settingsPageHtml.c_str());
     }
     else
     {
@@ -117,13 +126,13 @@ void WebServerHandler::handleSettings()
         }
         else
         {
-            handleError(400, "No such setting available.");
+            handleError(HttpCode::BAD_REQUEST, "No such setting available.");
             return;
         }
-        m_server.send(200, "text/html", confirmPageHtml.c_str());
+        m_server.send(HttpCode::ACCEPTED, "text/html", confirmPageHtml.c_str());
     }
 }
-// TODO: Handle Error codes
+
 void WebServerHandler::initialize()
 {
     m_server.on("/", [this]()
@@ -135,7 +144,7 @@ void WebServerHandler::initialize()
     m_server.on("/settings", [this]()
                 { handleSettings(); });
     m_server.onNotFound([this]()
-                        { handleError(404, "Page not Found."); });
+                        { handleError(HttpCode::NOT_FOUND, "Page not Found."); });
 
     m_server.begin();
 }
