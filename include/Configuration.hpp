@@ -5,36 +5,28 @@
  * @version 1.0
  */
 
-#ifndef CONFIGURATOR_HPP
-#define CONFIGURATOR_HPP
+#ifndef CONFIGURATION_HPP
+#define CONFIGURATION_HPP
 #include <Arduino.h>
-
-namespace Config
-{
-    constexpr uint32_t CYCLE_TIME_MS = 100;    /**< Cycle time in milliseconds. */
-    const std::string SSID = "OBDII-config";   /**< SSID for OBDII Emulator configuration page. */
-    const std::string PASSWORD = "obd2config"; /**< Password for OBDII Emulator configuration page. */
-    constexpr uint16_t SERVER_PORT = 80;       /**< Server port for access point. */
-
-    const IPAddress IP(192, 168, 4, 2);
-    const IPAddress GATEWAY(192, 168, 4, 2);
-    const IPAddress SUBNET(255, 255, 255, 0);
-}
 
 class Configuration
 {
 public:
     Configuration();
 
-    bool getCycleTime() const;
-    bool getSsid() const;
-    bool getPassword() const;
+    uint32_t getCycleTime() const;
+    std::string getSsid() const;
+    std::string getPassword() const;
     bool getAdditionalDebug() const;
+    IPAddress getIpAddress() const;
+    IPAddress getGateway() const;
+    IPAddress getSubnet() const;
+    uint16_t getServerPort() const;
 
     void setCycleTime();
     void setSsid();
     void setPassword();
-    void setAdditionalDebug();
+    void setAdditionalDebug(bool isAdditionalDebug);
 
 private:
     uint32_t m_cycleTime;
@@ -47,4 +39,4 @@ private:
     IPAddress m_subnet;
     uint16_t m_serverPort;
 };
-#endif // CONFIGURATOR_HPP
+#endif // CONFIGURATION_HPP

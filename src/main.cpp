@@ -10,16 +10,15 @@
 #include "AccessPointInitializer.hpp"
 #include "Configuration.hpp"
 
-Configuration configuration;
-
-std::shared_ptr<CycleHandler> cycleHandler = std::make_shared<CycleHandler>();
-std::shared_ptr<OBDHandler> obdHandler = std::make_shared<OBDHandler>(cycleHandler);
+std::shared_ptr<Configuration> configuration = std::make_shared<Configuration>();
+std::shared_ptr<CycleHandler> cycleHandler = std::make_shared<CycleHandler>(configuration);
+std::shared_ptr<OBDHandler> obdHandler = std::make_shared<OBDHandler>(cycleHandler, configuration);
 std::shared_ptr<NVSHandler> nvsHandler = std::make_shared<NVSHandler>(obdHandler);
 
-AccessPointInitializer apInitializer;
-WebServerHandler webServerHandler(obdHandler, nvsHandler);
+AccessPointInitializer apInitializer(configuration);
+WebServerHandler webServerHandler(obdHandler, nvsHandler, configuration);
 BtHandler btHandler(obdHandler);
-DisplayHandler displayHandler(obdHandler);
+DisplayHandler displayHandler(obdHandler, configuration);
 
 void setup()
 {

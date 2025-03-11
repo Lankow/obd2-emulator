@@ -8,7 +8,6 @@
 #include "WebServerHandler.hpp"
 #include "PageGenerator.hpp"
 #include "OBDInfo.hpp"
-#include "Configuration.hpp"
 #include "StringUtils.hpp"
 
 namespace HttpCode
@@ -20,8 +19,13 @@ namespace HttpCode
     constexpr int NOT_ACCEPTABLE = 406;
 }
 
-WebServerHandler::WebServerHandler(std::shared_ptr<OBDHandler> obdHandler, std::shared_ptr<NVSHandler> nvsHandler)
-    : m_obdHandler(obdHandler), m_nvsHandler(nvsHandler), m_server(Config::SERVER_PORT) {}
+WebServerHandler::WebServerHandler(std::shared_ptr<OBDHandler> obdHandler,
+                                   std::shared_ptr<NVSHandler> nvsHandler,
+                                   std::shared_ptr<Configuration> configuration)
+    : m_obdHandler(obdHandler),
+      m_nvsHandler(nvsHandler),
+      m_server(m_configuration->getServerPort()),
+      m_configuration(configuration) {}
 
 void WebServerHandler::cyclic()
 {
@@ -122,7 +126,7 @@ void WebServerHandler::handleSettings()
         else if (arg == "logging")
         {
             confirmPageHtml = PageGenerator::getConfirmPage("Logging has been updated.");
-            Configuration::toggleAdditionalLogging();
+            m_configuration->setAdditionalDebug(!m_configuration->getAdditionalDebug());
         }
         else
         {

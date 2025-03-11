@@ -7,7 +7,9 @@
 #include "CycleHandler.hpp"
 #include "Configuration.hpp"
 
-CycleHandler::CycleHandler() : m_cycleCount(0), m_cycleStart(0) {};
+CycleHandler::CycleHandler(std::shared_ptr<Configuration> configuration) : m_configuration(configuration),
+                                                                           m_cycleCount(0),
+                                                                           m_cycleStart(0) {};
 
 void CycleHandler::startCycle()
 {
@@ -17,22 +19,23 @@ void CycleHandler::startCycle()
 void CycleHandler::endCycle()
 {
     long cycleDiff = millis() - m_cycleStart;
+    uint32_t cycleTime = m_configuration->getCycleTime();
 
-    if (cycleDiff > Config::CYCLE_TIME_MS)
+    if (cycleDiff > cycleTime)
     {
         Serial.println("Cycle time exceeded. Diff Time: ");
         Serial.println(cycleDiff);
-        uint32_t cycles = cycleDiff / Config::CYCLE_TIME_MS;
+        uint32_t cycles = cycleDiff / cycleTime;
 
-        m_cycleCount += cycleDiff % Config::CYCLE_TIME_MS == 0 ? cycles : cycles + 1;
-        cycleDiff = cycleDiff % Config::CYCLE_TIME_MS;
+        m_cycleCount += cycleDiff % cycleTime == 0 ? cycles : cycles + 1;
+        cycleDiff = cycleDiff % cycleTime;
     }
     else
     {
         m_cycleCount++;
     }
 
-    long cycleDelay = Config::CYCLE_TIME_MS - cycleDiff;
+    long cycleDelay = cycleTime - cycleDiff;
     delay(cycleDelay);
 }
 

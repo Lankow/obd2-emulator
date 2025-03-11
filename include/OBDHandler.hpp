@@ -13,11 +13,12 @@
 #include <vector>
 #include "OBDInfo.hpp"
 #include "CycleHandler.hpp"
+#include "Configuration.hpp"
 
 class OBDHandler
 {
 public:
-    explicit OBDHandler(std::shared_ptr<CycleHandler> cycleHandler);
+    explicit OBDHandler(std::shared_ptr<CycleHandler> cycleHandler, std::shared_ptr<Configuration> configuration);
     void cyclic();
     OBDInfo *getByPid(uint16_t pid);
     const OBDInfo *getByIndex(uint8_t index) const;
@@ -32,6 +33,7 @@ public:
 
 private:
     std::shared_ptr<CycleHandler> m_cycleHandler;
+    std::shared_ptr<Configuration> m_configuration;
     std::vector<OBDInfo> m_infos;
 
     void updateAll();

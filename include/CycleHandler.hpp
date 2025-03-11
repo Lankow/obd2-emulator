@@ -8,15 +8,19 @@
 #define CYCLE_HANDLER_HPP
 
 #include <Arduino.h>
+#include <memory>
+#include "Configuration.hpp"
+
 class CycleHandler
 {
 public:
-    CycleHandler();
+    CycleHandler(std::shared_ptr<Configuration> configuration);
     void startCycle();
     void endCycle();
     const uint32_t getCycleCount() const;
 
 private:
+    std::shared_ptr<Configuration> m_configuration;
     uint32_t m_cycleCount;
     long m_cycleStart;
 };

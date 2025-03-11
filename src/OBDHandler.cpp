@@ -5,11 +5,12 @@
  * @version 1.0
  */
 #include "OBDHandler.hpp"
-#include "Configuration.hpp"
 
 #define NO_CUSTOM_GETTER nullptr
 
-OBDHandler::OBDHandler(std::shared_ptr<CycleHandler> cycleHandler) : m_cycleHandler(cycleHandler)
+OBDHandler::OBDHandler(std::shared_ptr<CycleHandler> cycleHandler,
+                       std::shared_ptr<Configuration> configuration) : m_cycleHandler(cycleHandler),
+                                                                       m_configuration(configuration)
 {
     addNewInfo(0x010C, 2, "Engine Speed", 0.0f, 0.0f, 16383.75f, 100.0f, 1,
                [this](const float &current) -> int32_t
@@ -43,7 +44,7 @@ void OBDHandler::updateAll()
 void OBDHandler::cyclic()
 {
     updateAll();
-    if (Configuration::isAdditionalDebugEnabled())
+    if (m_configuration->getAdditionalDebug())
     {
         printAll();
     }

@@ -9,6 +9,8 @@
 
 #include <Arduino.h>
 #include <Button.h>
+#include <memory>
+#include "Configuration.hpp"
 
 namespace BootButton
 {
@@ -27,11 +29,10 @@ enum BootButtonState
     LongPressed
 };
 
-
 class ButtonHandler
 {
 public:
-    ButtonHandler();
+    ButtonHandler(std::shared_ptr<Configuration> configuration);
 
     void initialize();
     void cyclic();
@@ -39,6 +40,7 @@ public:
     BootButtonState getState();
 
 private:
+    std::shared_ptr<Configuration> m_configuration;
     Button m_button;
     BootButtonState m_state;
     uint16_t m_lastPressTimeMs;

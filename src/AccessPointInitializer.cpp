@@ -6,12 +6,13 @@
  */
 #include "AccessPointInitializer.hpp"
 #include "WiFi.h"
-#include "Configuration.hpp"
+
+AccessPointInitializer::AccessPointInitializer(std::shared_ptr<Configuration> configuration) : m_configuration(configuration) {};
 
 void AccessPointInitializer::initialize()
 {
-    WiFi.softAPConfig(Config::IP, Config::GATEWAY, Config::SUBNET);
-    WiFi.softAP(Config::SSID.c_str(), Config::PASSWORD.c_str());
+    WiFi.softAPConfig(m_configuration->getIpAddress(), m_configuration->getGateway(), m_configuration->getSubnet());
+    WiFi.softAP(m_configuration->getSsid().c_str(), m_configuration->getPassword().c_str());
     IPAddress apIp = WiFi.softAPIP();
 
     Serial.println("Access Point started.");

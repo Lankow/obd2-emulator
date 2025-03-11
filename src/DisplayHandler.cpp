@@ -8,15 +8,15 @@
 #include <iomanip>
 #include <sstream>
 #include "DisplayHandler.hpp"
-#include "Configuration.hpp"
 
 constexpr int SCREEN_WIDTH = 128;
 constexpr int SCREEN_HEIGHT = 64;
 constexpr int DISPLAY_COUNTER_DEFAULT = 0;
 
-DisplayHandler::DisplayHandler(std::shared_ptr<OBDHandler> obdHandler)
+DisplayHandler::DisplayHandler(std::shared_ptr<OBDHandler> obdHandler, std::shared_ptr<Configuration> configuration)
     : m_obdHandler(obdHandler),
-      m_buttonHandler(),
+      m_configuration(configuration),
+      m_buttonHandler(m_configuration),
       m_display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1),
       m_displayCounter(DISPLAY_COUNTER_DEFAULT),
       m_isDisplayInfo(false),
@@ -119,9 +119,9 @@ void DisplayHandler::displayWifiInfo()
   std::ostringstream stream;
   stream << "OBD2-Emulator" << std::endl
          << "Use to configure: " << std::endl
-         << "SSID: " << Config::SSID.c_str() << std::endl
-         << "Password: " << Config::PASSWORD.c_str() << std::endl
-         << "IP: " << Config::IP.toString().c_str() << std::endl;
+         << "SSID: " << m_configuration->getSsid().c_str() << std::endl
+         << "Password: " << m_configuration->getPassword().c_str() << std::endl
+         << "IP: " << m_configuration->getIpAddress().toString().c_str() << std::endl;
 
   update(stream.str());
 }

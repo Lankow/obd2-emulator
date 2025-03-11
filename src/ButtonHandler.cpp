@@ -7,8 +7,9 @@
 #include "ButtonHandler.hpp"
 #include "Configuration.hpp"
 
-ButtonHandler::ButtonHandler()
-    : m_button(BootButton::PIN),
+ButtonHandler::ButtonHandler(std::shared_ptr<Configuration> configuration)
+    : m_configuration(configuration),
+      m_button(BootButton::PIN),
       m_state(BootButtonState::Released),
       m_lastPressTimeMs(BootButton::DEFAULT_TIME),
       m_pressedCounterMs(BootButton::DEFAULT_TIME) {}
@@ -55,7 +56,7 @@ void ButtonHandler::cyclic()
 
     if (m_state == BootButtonState::Pressed)
     {
-        m_pressedCounterMs += Config::CYCLE_TIME_MS;
+        m_pressedCounterMs += m_configuration->getCycleTime();
         Serial.println(m_pressedCounterMs);
 
         if (m_pressedCounterMs >= BootButton::THRESHOLD_LONG_MS)
