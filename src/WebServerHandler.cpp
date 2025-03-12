@@ -20,7 +20,7 @@ namespace HttpCode
 }
 
 WebServerHandler::WebServerHandler(std::shared_ptr<OBDHandler> obdHandler,
-                                   std::shared_ptr<NVSHandler> nvsHandler,
+                                   std::shared_ptr<SPIFFSHandler> nvsHandler,
                                    std::shared_ptr<Configuration> configuration)
     : m_obdHandler(obdHandler),
       m_nvsHandler(nvsHandler),

@@ -1,19 +1,19 @@
 /**
- * @file NVSHandler.hpp
+ * @file SPIFFSHandler.hpp
  * @date   2025-02-23
  * @author Lankow
  * @version 1.0
  */
-#ifndef NVS_HANDLER_HPP
-#define NVS_HANDLER_HPP
+#ifndef SPIFFS_HANDLER_HPP
+#define SPIFFS_HANDLER_HPP
 #include <Arduino.h>
 #include <Preferences.h>
 #include <memory>
 #include "OBDHandler.hpp"
-class NVSHandler
+class SPIFFSHandler
 {
 public:
-    NVSHandler(std::shared_ptr<OBDHandler> obdHandler);
+    SPIFFSHandler(std::shared_ptr<OBDHandler> obdHandler);
     void initialize();
     void writeSetting(const std::string &key, double value);
     void formatNVS();
@@ -29,4 +29,4 @@ private:
     template <typename SetterFunc>
     void getNvsToInfo(OBDInfo &info, const std::string &prefix, SetterFunc setter);
 };
-#endif // NVS_HANDLER_HPP
+#endif // SPIFFS_HANDLER_HPP

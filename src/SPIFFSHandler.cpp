@@ -1,17 +1,17 @@
 /**
- * @file NVSHandler.cpp
+ * @file SPIFFSHandler.cpp
  * @date   2025-02-23
  * @author Lankow
  * @version 1.0
  */
-#include "NVSHandler.hpp"
+#include "SPIFFSHandler.hpp"
 #include <nvs_flash.h>
 #include "OBDInfo.hpp"
 
 // TODO: Could be merged with Configuration functionality
-NVSHandler::NVSHandler(std::shared_ptr<OBDHandler> obdHandler) : m_obdHandler(obdHandler), m_preferences() {};
+SPIFFSHandler::SPIFFSHandler(std::shared_ptr<OBDHandler> obdHandler) : m_obdHandler(obdHandler), m_preferences() {};
 
-void NVSHandler::initialize()
+void SPIFFSHandler::initialize()
 {
     if (settingsExist())
     {
@@ -20,7 +20,7 @@ void NVSHandler::initialize()
 }
 
 template <typename SetterFunc>
-void NVSHandler::getNvsToInfo(OBDInfo &info, const std::string &prefix, SetterFunc setter)
+void SPIFFSHandler::getNvsToInfo(OBDInfo &info, const std::string &prefix, SetterFunc setter)
 {
     std::string key = prefix + std::to_string(info.m_pid);
     if (m_preferences.isKey(key.c_str()))
@@ -30,7 +30,7 @@ void NVSHandler::getNvsToInfo(OBDInfo &info, const std::string &prefix, SetterFu
     }
 }
 
-void NVSHandler::intializeInfos()
+void SPIFFSHandler::intializeInfos()
 {
     for (auto &info : m_obdHandler->getAll())
     {
@@ -41,7 +41,7 @@ void NVSHandler::intializeInfos()
     }
 };
 
-void NVSHandler::clearSettings()
+void SPIFFSHandler::clearSettings()
 {
     if (!settingsExist())
     {
@@ -54,7 +54,7 @@ void NVSHandler::clearSettings()
     }
 };
 
-void NVSHandler::formatNVS()
+void SPIFFSHandler::formatNVS()
 {
     nvs_flash_erase();
     nvs_flash_init();
@@ -62,14 +62,14 @@ void NVSHandler::formatNVS()
     ESP.restart();
 };
 
-void NVSHandler::writeSetting(const std::string &key, double value)
+void SPIFFSHandler::writeSetting(const std::string &key, double value)
 {
     m_preferences.begin("settings", false);
     m_preferences.putDouble(key.c_str(), value);
     m_preferences.end();
 }
 
-bool NVSHandler::settingsExist()
+bool SPIFFSHandler::settingsExist()
 {
     if (!m_preferences.begin("settings", false))
     {

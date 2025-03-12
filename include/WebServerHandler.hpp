@@ -11,14 +11,14 @@
 #include <WebServer.h>
 #include <memory>
 #include "OBDHandler.hpp"
-#include "NVSHandler.hpp"
+#include "SPIFFSHandler.hpp"
 #include "Configuration.hpp"
 
 class WebServerHandler
 {
 public:
     WebServerHandler(std::shared_ptr<OBDHandler> obdHandler,
-                     std::shared_ptr<NVSHandler> nvsHandler,
+                     std::shared_ptr<SPIFFSHandler> nvsHandler,
                      std::shared_ptr<Configuration> configuration);
 
     void initialize();
@@ -26,7 +26,7 @@ public:
 
 private:
     std::shared_ptr<OBDHandler> m_obdHandler;
-    std::shared_ptr<NVSHandler> m_nvsHandler;
+    std::shared_ptr<SPIFFSHandler> m_nvsHandler;
     std::shared_ptr<Configuration> m_configuration;
     WebServer m_server;
     IPAddress m_apIP;

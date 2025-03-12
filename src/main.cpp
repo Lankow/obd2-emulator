@@ -5,7 +5,7 @@
 #include "BtHandler.hpp"
 #include "DisplayHandler.hpp"
 #include "ButtonHandler.hpp"
-#include "NVSHandler.hpp"
+#include "SPIFFSHandler.hpp"
 #include "CycleHandler.hpp"
 #include "AccessPointInitializer.hpp"
 #include "Configuration.hpp"
@@ -13,7 +13,7 @@
 std::shared_ptr<Configuration> configuration = std::make_shared<Configuration>();
 std::shared_ptr<CycleHandler> cycleHandler = std::make_shared<CycleHandler>(configuration);
 std::shared_ptr<OBDHandler> obdHandler = std::make_shared<OBDHandler>(cycleHandler, configuration);
-std::shared_ptr<NVSHandler> nvsHandler = std::make_shared<NVSHandler>(obdHandler);
+std::shared_ptr<SPIFFSHandler> nvsHandler = std::make_shared<SPIFFSHandler>(obdHandler);
 
 AccessPointInitializer apInitializer(configuration);
 WebServerHandler webServerHandler(obdHandler, nvsHandler, configuration);
@@ -41,3 +41,4 @@ void loop()
   btHandler.cyclic();
   cycleHandler->endCycle();
 }
+
