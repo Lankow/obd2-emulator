@@ -11,10 +11,13 @@
 class JSONHandler
 {
 public:
-    std::string serializeConfig();
-    void deserializeConfig();
+    void loadJson(const std::string &fileName);
 
 private:
+    std::string readString(const std::string &key);
+    double readDouble(const std::string &key);
+    uint16_t readUint16(const std::string &key);
+
     StaticJsonDocument<512> m_json;
 };
 

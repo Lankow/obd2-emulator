@@ -1,0 +1,29 @@
+{
+    "ssid" : "OBDII-config",
+    "password" : "obd2config",
+    "cycleTime" : 100,
+    "additionalDebug" : false,
+    "obdInfo": 
+    [
+        {
+            "pid" : 268,
+            "length" : 2,
+            "description" : "Engine Speed",
+            "defaultMin" : 0,
+            "min" : 0,
+            "defaultMax" : 16383.75,
+            "increment" : 100,
+            "pace" : 1
+        },
+        {
+            "pid" : 269,
+            "length" : 2,
+            "description" : "Vehicle Speed",
+            "defaultMin" : 0,
+            "min" : 0,
+            "defaultMax" : 255,
+            "increment" : 1,
+            "pace" : 1
+        }
+    ]
+}
