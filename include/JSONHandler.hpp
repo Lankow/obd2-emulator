@@ -18,7 +18,7 @@ private:
     double readDouble(const std::string &key);
     uint16_t readUint16(const std::string &key);
 
-    StaticJsonDocument<512> m_json;
+    StaticJsonDocument<1024> m_json;
 };
 
 #endif // JSON_HANDLER_HPP

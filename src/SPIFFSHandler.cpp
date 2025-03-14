@@ -4,78 +4,91 @@
  * @author Lankow
  * @version 1.0
  */
+#include <SPIFFS.h>
 #include "SPIFFSHandler.hpp"
-#include <nvs_flash.h>
-#include "OBDInfo.hpp"
 
-// TODO: Could be merged with Configuration functionality
-SPIFFSHandler::SPIFFSHandler(std::shared_ptr<OBDHandler> obdHandler) : m_obdHandler(obdHandler), m_preferences() {};
+const std::string CONFIG_FILENAME = "/config.json";
+
+SPIFFSHandler::SPIFFSHandler() : m_initialized(false)
+{
+    initialize();
+};
 
 void SPIFFSHandler::initialize()
 {
-    if (settingsExist())
+    if (initializeSPIFFS() && configExists())
     {
-        intializeInfos();
+        m_initialized = true;
     }
 }
 
-template <typename SetterFunc>
-void SPIFFSHandler::getNvsToInfo(OBDInfo &info, const std::string &prefix, SetterFunc setter)
+std::string SPIFFSHandler::loadConfigFile()
 {
-    std::string key = prefix + std::to_string(info.m_pid);
-    if (m_preferences.isKey(key.c_str()))
+    if (!m_initialized)
     {
-        // TODO: Handle added arg to setter
-        // (info.*setter)(m_preferences.getDouble(key.c_str()));
+        Serial.println("Config Load FAILED - SPIFFS handler not initialized.");
+        return;
     }
-}
 
-void SPIFFSHandler::intializeInfos()
-{
-    for (auto &info : m_obdHandler->getAll())
+    File file = SPIFFS.open(CONFIG_FILENAME.c_str());
+    String fileText = "";
+
+    while (file.available())
     {
-        getNvsToInfo(info, "max", &OBDHandler::setMax);
-        getNvsToInfo(info, "min", &OBDHandler::setMin);
-        getNvsToInfo(info, "inc", &OBDHandler::setIncrement);
-        getNvsToInfo(info, "pac", &OBDHandler::setPace);
+        fileText = file.readString();
     }
+
+    file.close();
+    return fileText.c_str();
 };
 
-void SPIFFSHandler::clearSettings()
+void SPIFFSHandler::saveConfigFile(std::string &configStr)
 {
-    if (!settingsExist())
+    if (!m_initialized)
     {
-        Serial.println("Settings don't exist.");
+        Serial.println("Config Save FAILED - SPIFFS handler not initialized.");
+        return;
+    }
+
+    File file = SPIFFS.open(CONFIG_FILENAME.c_str(), FILE_WRITE);
+    if (!file)
+    {
+        Serial.println("Failed to open config file.");
+        return;
+    }
+    if (file.print(configStr.c_str()))
+    {
+        Serial.println("Config saved to SPIFFS.");
     }
     else
     {
-        m_preferences.clear();
-        Serial.println("Settings cleared.");
+        Serial.println("Config save to SPIFFS FAILED.");
     }
+    file.close();
 };
 
-void SPIFFSHandler::formatNVS()
+bool SPIFFSHandler::initializeSPIFFS()
 {
-    nvs_flash_erase();
-    nvs_flash_init();
-    delay(100);
-    ESP.restart();
-};
-
-void SPIFFSHandler::writeSetting(const std::string &key, double value)
-{
-    m_preferences.begin("settings", false);
-    m_preferences.putDouble(key.c_str(), value);
-    m_preferences.end();
-}
-
-bool SPIFFSHandler::settingsExist()
-{
-    if (!m_preferences.begin("settings", false))
+    if (!SPIFFS.begin(false))
     {
-        Serial.println("Failed to open NVS namespace.");
+        Serial.println("SPIFFS Mount Failed.");
         return false;
     }
 
     return true;
-}
+};
+
+bool SPIFFSHandler::configExists()
+{
+    File file = SPIFFS.open(CONFIG_FILENAME.c_str());
+    bool result = true;
+
+    if (!file || file.isDirectory())
+    {
+        Serial.println("Failed to open config file for reading.");
+        return false;
+    }
+
+    file.close();
+    return result;
+};

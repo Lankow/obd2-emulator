@@ -7,26 +7,17 @@
 #ifndef SPIFFS_HANDLER_HPP
 #define SPIFFS_HANDLER_HPP
 #include <Arduino.h>
-#include <Preferences.h>
-#include <memory>
-#include "OBDHandler.hpp"
+
 class SPIFFSHandler
 {
 public:
-    SPIFFSHandler(std::shared_ptr<OBDHandler> obdHandler);
-    void initialize();
-    void writeSetting(const std::string &key, double value);
-    void formatNVS();
+    std::string loadConfigFile();
+    void saveConfigFile(std::string &configStr);
 
 private:
-    std::shared_ptr<OBDHandler> m_obdHandler;
-    Preferences m_preferences;
-
-    void intializeInfos();
-    void initializeNamespace(const std::string &key);
-    bool settingsExist();
-    void clearSettings();
-    template <typename SetterFunc>
-    void getNvsToInfo(OBDInfo &info, const std::string &prefix, SetterFunc setter);
+    bool m_initialized;
+    void initialize();
+    bool initializeSPIFFS();
+    bool configExists();
 };
 #endif // SPIFFS_HANDLER_HPP

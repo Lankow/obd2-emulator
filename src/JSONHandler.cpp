@@ -5,3 +5,5 @@
  * @version 1.0
  */
 #include "JSONHandler.hpp"
+
+const String config_filename = "/config.json";
