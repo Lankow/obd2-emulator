@@ -5,7 +5,7 @@
 #include "BtHandler.hpp"
 #include "DisplayHandler.hpp"
 #include "ButtonHandler.hpp"
-#include "SPIFFSHandler.hpp"
+#include "FileSystemManager.hpp"
 #include "CycleHandler.hpp"
 #include "AccessPointInitializer.hpp"
 #include "Configuration.hpp"
@@ -13,7 +13,7 @@
 std::shared_ptr<Configuration> configuration = std::make_shared<Configuration>();
 std::shared_ptr<CycleHandler> cycleHandler = std::make_shared<CycleHandler>(configuration);
 std::shared_ptr<OBDHandler> obdHandler = std::make_shared<OBDHandler>(cycleHandler, configuration);
-std::shared_ptr<SPIFFSHandler> nvsHandler = std::make_shared<SPIFFSHandler>(obdHandler);
+std::shared_ptr<FileSystemManager> nvsHandler = std::make_shared<FileSystemManager>(obdHandler);
 
 AccessPointInitializer apInitializer(configuration);
 WebServerHandler webServerHandler(obdHandler, nvsHandler, configuration);
