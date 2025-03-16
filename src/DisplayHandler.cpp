@@ -7,6 +7,7 @@
 #include <Wire.h>
 #include <iomanip>
 #include <sstream>
+#include "WiFi.h"
 #include "DisplayHandler.hpp"
 
 constexpr int SCREEN_WIDTH = 128;
@@ -117,11 +118,13 @@ void DisplayHandler::displayOBDInfo()
 void DisplayHandler::displayWifiInfo()
 {
   std::ostringstream stream;
+  IPAddress apIp = WiFi.softAPIP();
+
   stream << "OBD2-Emulator" << std::endl
          << "Use to configure: " << std::endl
-         << "SSID: " << m_configuration->getSsid().c_str() << std::endl
+         << "SSID: " << m_configuration->getSSID().c_str() << std::endl
          << "Password: " << m_configuration->getPassword().c_str() << std::endl
-         << "IP: " << m_configuration->getIpAddress().toString().c_str() << std::endl;
+         << "IP: " << apIp.toString().c_str() << std::endl;
 
   update(stream.str());
 }

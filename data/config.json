@@ -12,6 +12,7 @@
             "defaultMin" : 0,
             "min" : 0,
             "defaultMax" : 16383.75,
+            "max" : 16383.75,
             "increment" : 100,
             "pace" : 1
         },
@@ -22,6 +23,7 @@
             "defaultMin" : 0,
             "min" : 0,
             "defaultMax" : 255,
+            "max" : 255,
             "increment" : 1,
             "pace" : 1
         }

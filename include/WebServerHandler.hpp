@@ -18,7 +18,6 @@ class WebServerHandler
 {
 public:
     WebServerHandler(std::shared_ptr<OBDHandler> obdHandler,
-                     std::shared_ptr<FileSystemManager> nvsHandler,
                      std::shared_ptr<Configuration> configuration);
 
     void initialize();
@@ -26,7 +25,6 @@ public:
 
 private:
     std::shared_ptr<OBDHandler> m_obdHandler;
-    std::shared_ptr<FileSystemManager> m_nvsHandler;
     std::shared_ptr<Configuration> m_configuration;
     WebServer m_server;
     IPAddress m_apIP;

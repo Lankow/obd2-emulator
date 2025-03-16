@@ -6,15 +6,14 @@
  */
 #include "OBDHandler.hpp"
 
-#define NO_CUSTOM_GETTER nullptr
-
 OBDHandler::OBDHandler(std::shared_ptr<CycleHandler> cycleHandler,
                        std::shared_ptr<Configuration> configuration) : m_cycleHandler(cycleHandler),
                                                                        m_configuration(configuration)
 {
-    addNewInfo(0x010C, 2, "Engine Speed", 0.0f, 0.0f, 16383.75f, 100.0f, 1,
-               [this](const float &current) -> int32_t
-               {
+    m_infos = configuration->getObdInfoList();
+
+    addCustomGetterFormula(0x010C, [this](const float &current) -> int32_t
+                           {
                    int32_t scaledValue = static_cast<int32_t>(current * 4);
                    uint8_t A = (scaledValue / 256) & 0xFF;
                    uint8_t B = scaledValue % 256;
@@ -24,10 +23,7 @@ OBDHandler::OBDHandler(std::shared_ptr<CycleHandler> cycleHandler,
                    Serial.println("Formula Engine Speed:");
                    Serial.println(result);
 
-                   return result;
-               });
-
-    addNewInfo(0x010D, 1, "Vehicle Speed", 0, 0, 255, 1, 1, NO_CUSTOM_GETTER);
+                   return result; });
 }
 
 void OBDHandler::updateAll()
@@ -94,25 +90,13 @@ const OBDInfo *OBDHandler::getByIndex(uint8_t index) const
     return &m_infos.at(indexToDisplay);
 }
 
-void OBDHandler::addNewInfo(uint16_t pid, uint8_t length, std::string description, double current,
-                            double min, double max, double increment, uint32_t pace,
-                            std::function<int32_t(const double &)> customGetter)
+void OBDHandler::addCustomGetterFormula(uint16_t pid, std::function<int32_t(const double &)> customGetter)
 {
-    OBDInfo obdInfo{
-        pid,
-        length,
-        description,
-        current,
-        min,
-        min,
-        max,
-        max,
-        increment,
-        pace,
-        false,
-        customGetter};
-
-    m_infos.push_back(obdInfo);
+    OBDInfo *info = getByPid(pid);
+    if (info != nullptr)
+    {
+        info->m_formulaGetter = customGetter;
+    }
 }
 
 void OBDHandler::update(OBDInfo &info)

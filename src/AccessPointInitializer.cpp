@@ -7,12 +7,16 @@
 #include "AccessPointInitializer.hpp"
 #include "WiFi.h"
 
+const IPAddress IP(192, 168, 4, 2);
+const IPAddress GATEWAY(192, 168, 4, 2);
+const IPAddress SUBNET(255, 255, 255, 0);
+
 AccessPointInitializer::AccessPointInitializer(std::shared_ptr<Configuration> configuration) : m_configuration(configuration) {};
 
 void AccessPointInitializer::initialize()
 {
-    WiFi.softAPConfig(m_configuration->getIpAddress(), m_configuration->getGateway(), m_configuration->getSubnet());
-    WiFi.softAP(m_configuration->getSsid().c_str(), m_configuration->getPassword().c_str());
+    WiFi.softAPConfig(IP, GATEWAY, SUBNET);
+    WiFi.softAP(m_configuration->getSSID().c_str(), m_configuration->getPassword().c_str());
     IPAddress apIp = WiFi.softAPIP();
 
     Serial.println("Access Point started.");

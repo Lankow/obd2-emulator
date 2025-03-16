@@ -10,6 +10,8 @@
 #include "OBDInfo.hpp"
 #include "StringUtils.hpp"
 
+constexpr uint16_t SERVER_PORT = 80;
+
 namespace HttpCode
 {
     constexpr int OK = 200;
@@ -20,11 +22,9 @@ namespace HttpCode
 }
 
 WebServerHandler::WebServerHandler(std::shared_ptr<OBDHandler> obdHandler,
-                                   std::shared_ptr<FileSystemManager> nvsHandler,
                                    std::shared_ptr<Configuration> configuration)
     : m_obdHandler(obdHandler),
-      m_nvsHandler(nvsHandler),
-      m_server(m_configuration->getServerPort()),
+      m_server(SERVER_PORT),
       m_configuration(configuration) {}
 
 void WebServerHandler::cyclic()
@@ -87,17 +87,11 @@ void WebServerHandler::handleSubmit()
     if (entry != nullptr)
     {
         entry->m_min = minValue;
-        m_nvsHandler->writeSetting("min" + std::to_string(entry->m_pid), minValue);
-
         entry->m_max = maxValue;
-        m_nvsHandler->writeSetting("max" + std::to_string(entry->m_pid), maxValue);
-
         entry->m_increment = increment;
-        m_nvsHandler->writeSetting("inc" + std::to_string(entry->m_pid), increment);
-
         entry->m_pace = pace;
-        m_nvsHandler->writeSetting("pac" + std::to_string(entry->m_pid), pace);
-
+        m_configuration->saveConfig();
+        
         std::string confirmPageHtml = PageGenerator::getConfirmPage("Object has been edited.");
         m_server.send(HttpCode::ACCEPTED, "text/html", confirmPageHtml.c_str());
     }
@@ -121,7 +115,6 @@ void WebServerHandler::handleSettings()
         if (arg == "reset")
         {
             confirmPageHtml = PageGenerator::getConfirmPage("Factory reset Performed. Reconnect to a device.");
-            m_nvsHandler->formatNVS();
         }
         else if (arg == "logging")
         {

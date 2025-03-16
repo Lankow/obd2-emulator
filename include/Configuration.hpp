@@ -8,35 +8,32 @@
 #ifndef CONFIGURATION_HPP
 #define CONFIGURATION_HPP
 #include <Arduino.h>
+#include <ArduinoJson.h>
+#include <vector>
+#include "OBDInfo.hpp"
 
 class Configuration
 {
 public:
     Configuration();
 
+    bool loadConfig();
+    bool saveConfig();
+
     uint32_t getCycleTime() const;
-    std::string getSsid() const;
+    std::string getSSID() const;
     std::string getPassword() const;
     bool getAdditionalDebug() const;
-    IPAddress getIpAddress() const;
-    IPAddress getGateway() const;
-    IPAddress getSubnet() const;
-    uint16_t getServerPort() const;
-
-    void setCycleTime();
-    void setSsid();
-    void setPassword();
+    std::vector<OBDInfo> &getObdInfoList();
     void setAdditionalDebug(bool isAdditionalDebug);
 
 private:
-    uint32_t m_cycleTime;
     std::string m_ssid;
     std::string m_password;
+    uint32_t m_cycleTime;
     bool m_additionalDebug;
+    std::vector<OBDInfo> m_obdInfoList;
 
-    IPAddress m_ipAddress;
-    IPAddress m_gateway;
-    IPAddress m_subnet;
-    uint16_t m_serverPort;
+    void parseJson(DynamicJsonDocument &doc);
 };
 #endif // CONFIGURATION_HPP

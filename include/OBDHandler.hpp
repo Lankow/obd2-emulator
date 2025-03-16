@@ -38,8 +38,6 @@ private:
 
     void updateAll();
     void printAll() const;
-    void addNewInfo(uint16_t pid, uint8_t length, std::string description, double current,
-                    double min, double max, double increment, uint32_t pace,
-                    std::function<int32_t(const double &)> customGetter);
+    void addCustomGetterFormula(uint16_t pid, std::function<int32_t(const double &)> customGetter);
 };
 #endif // OBD_HANDLER_HPP

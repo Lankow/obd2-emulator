@@ -15,6 +15,8 @@ bool FileSystemManager::initFS()
         Serial.println("SPIFFS Initialization Failed!");
         return false;
     }
+
+    Serial.println("SPIFFS Initialization Success!");
     return true;
 }
 
@@ -31,6 +33,7 @@ std::string FileSystemManager::readFile(const std::string &path)
     }
     file.close();
     return content.c_str();
+    return "{}";
 }
 
 bool FileSystemManager::writeFile(const std::string &path, const std::string &data)
