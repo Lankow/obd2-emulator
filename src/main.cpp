@@ -1,14 +1,14 @@
 #include <Arduino.h>
 #include <memory>
+#include "FileSystemManager.hpp"
+#include "Configuration.hpp"
+#include "CycleHandler.hpp"
 #include "OBDHandler.hpp"
+#include "AccessPointInitializer.hpp"
 #include "WebServerHandler.hpp"
 #include "BtHandler.hpp"
 #include "DisplayHandler.hpp"
 #include "ButtonHandler.hpp"
-#include "FileSystemManager.hpp"
-#include "CycleHandler.hpp"
-#include "AccessPointInitializer.hpp"
-#include "Configuration.hpp"
 
 std::shared_ptr<Configuration> configuration;
 std::shared_ptr<CycleHandler> cycleHandler;
@@ -21,8 +21,7 @@ std::shared_ptr<DisplayHandler> displayHandler;
 void setup()
 {
   Serial.begin(115200);
-  Serial.println("Starting OBD2-Emulator.");
-
+  Serial.println("--- OBD2-Emulator: Initialization Started. ---");
   configuration = std::make_shared<Configuration>();
   cycleHandler = std::make_shared<CycleHandler>(configuration);
   obdHandler = std::make_shared<OBDHandler>(cycleHandler, configuration);
@@ -35,14 +34,19 @@ void setup()
   apInitializer->initialize();
   webServerHandler->initialize();
   displayHandler->initialize();
+  Serial.println("--- OBD2-Emulator: Initialization Finished. ---");
 }
 
 void loop()
 {
+  if (configuration->getAdditionalDebug())
+    Serial.println("OBD2-Emulator: Cycle Started.");
   cycleHandler->startCycle();
   obdHandler->cyclic();
   displayHandler->cyclic();
   webServerHandler->cyclic();
   btHandler->cyclic();
   cycleHandler->endCycle();
+  if (configuration->getAdditionalDebug())
+    Serial.println("OBD2-Emulator: Cycle Finished.");
 }

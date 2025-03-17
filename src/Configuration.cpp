@@ -11,11 +11,14 @@ const std::string CONFIG_FILE_NAME = "/config.json";
 
 Configuration::Configuration()
 {
-    Serial.println("Configuration Init - START");
+    Serial.println("Configuration: Initialization Started.");
     if (FileSystemManager::initFS())
     {
-        loadConfig();
-        Serial.println("Configuration Init - FINISH");
+        if (loadConfig())
+        {
+            printConfig();
+            Serial.println("Configuration: Initialization Finished.");
+        }
     }
 };
 
@@ -24,7 +27,7 @@ bool Configuration::loadConfig()
     std::string jsonStr = FileSystemManager::readFile(CONFIG_FILE_NAME.c_str());
     if (jsonStr.empty())
     {
-        Serial.println("Configuration file not found!");
+        Serial.println("Configuration: Config File not found.");
         return false;
     }
 
@@ -32,7 +35,7 @@ bool Configuration::loadConfig()
     DeserializationError error = deserializeJson(doc, jsonStr);
     if (error)
     {
-        Serial.println("Configuration file deserialization error!");
+        Serial.println("Configuration: Config File deserialization Error!");
         return false;
     }
 
@@ -42,6 +45,7 @@ bool Configuration::loadConfig()
 
 bool Configuration::saveConfig()
 {
+    Serial.println("Configuration: Saving config file.");
     DynamicJsonDocument doc(1024);
     doc["ssid"] = m_ssid;
     doc["password"] = m_password;
@@ -64,11 +68,34 @@ bool Configuration::saveConfig()
 
     std::string jsonStr;
     serializeJson(doc, jsonStr);
-    return FileSystemManager::writeFile(CONFIG_FILE_NAME.c_str(), jsonStr);
+    if (FileSystemManager::writeFile(CONFIG_FILE_NAME.c_str(), jsonStr))
+    {
+        printConfig();
+        Serial.println("Configuration: Saving config file SUCCESS.");
+        return true;
+    }
+
+    Serial.println("Configuration: Saving config file FAILED.");
+    return false;
+}
+
+void Configuration::printConfig()
+{
+    Serial.print("SSID: ");
+    Serial.println(m_ssid.c_str());
+    Serial.print("Password: ");
+    Serial.println(m_password.c_str());
+    Serial.print("Cycle Time: ");
+    Serial.println(m_cycleTime);
+    Serial.print("Additional Debug: ");
+    Serial.println(m_additionalDebug ? "ENABLED" : "DISABLED");
+    Serial.print("Amount of OBD Infos: ");
+    Serial.println(m_obdInfoList.size());
 }
 
 void Configuration::parseJson(DynamicJsonDocument &doc)
 {
+    Serial.println("Configuration: Parsing config JSON file started.");
     m_ssid = doc["ssid"].as<std::string>();
     m_password = doc["password"].as<std::string>();
     m_cycleTime = doc["cycleTime"];
@@ -91,6 +118,7 @@ void Configuration::parseJson(DynamicJsonDocument &doc)
         obd.m_pace = v["pace"];
         m_obdInfoList.push_back(obd);
     }
+    Serial.println("Configuration: Parsing config JSON file finished.");
 }
 
 uint32_t Configuration::getCycleTime() const { return m_cycleTime; };

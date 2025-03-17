@@ -34,6 +34,7 @@ private:
     bool m_additionalDebug;
     std::vector<OBDInfo> m_obdInfoList;
 
+    void printConfig();
     void parseJson(DynamicJsonDocument &doc);
 };
 #endif // CONFIGURATION_HPP
