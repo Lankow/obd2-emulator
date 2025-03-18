@@ -27,6 +27,7 @@ bool Configuration::loadConfig()
     std::string jsonStr = FileSystemManager::readFile(CONFIG_FILE_NAME.c_str());
     if (jsonStr.empty())
     {
+        // TODO: Copy Default Config
         Serial.println("Configuration: Config File not found.");
         return false;
     }

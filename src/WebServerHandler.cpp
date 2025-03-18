@@ -147,6 +147,7 @@ void WebServerHandler::handleSettings()
         if (arg == "reset")
         {
             confirmPageHtml = PageGenerator::getConfirmPage("Factory reset Performed. Reconnect to a device.");
+            // TODO: Handle Reset
         }
         else if (arg == "logging")
         {
@@ -165,7 +166,6 @@ void WebServerHandler::handleSettings()
 void WebServerHandler::initialize()
 {
     Serial.print("WebServerHandler: Initialization Started. ");
-
     m_server.on("/", [this]()
                 { handleRoot(); });
     m_server.on("/edit", [this]()
