@@ -9,15 +9,15 @@
 
 bool FileSystemManager::initFS()
 {
-    Serial.println("FileSystemManager: Initialization Started.");
+    Serial.println("FileSystemManager: Initialization Started...");
 
     if (!SPIFFS.begin(true))
     {
-        Serial.println("FileSystemManager: Initialization Failed.");
+        Serial.println("FileSystemManager: Initialization Failed!!!");
         return false;
     }
 
-    Serial.println("FileSystemManager: Initialization Finished.");
+    Serial.println("FileSystemManager: Initialization Finished!");
     return true;
 }
 

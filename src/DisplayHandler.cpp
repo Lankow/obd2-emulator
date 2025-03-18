@@ -10,6 +10,8 @@
 #include "WiFi.h"
 #include "DisplayHandler.hpp"
 
+constexpr int SDA_PIN = 21;
+constexpr int SCL_PIN = 22;
 constexpr int SCREEN_WIDTH = 128;
 constexpr int SCREEN_HEIGHT = 64;
 constexpr int DISPLAY_COUNTER_DEFAULT = 0;
@@ -21,10 +23,13 @@ DisplayHandler::DisplayHandler(std::shared_ptr<OBDHandler> obdHandler, std::shar
       m_display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1),
       m_displayCounter(DISPLAY_COUNTER_DEFAULT),
       m_isDisplayInfo(false),
-      m_isDisplayInitialized(false) {};
+      m_isDisplayInitialized(true) {};
 
 void DisplayHandler::cyclic()
 {
+  if (m_configuration->getAdditionalDebug())
+    Serial.println("DisplayHandler: Cycle Started.");
+
   m_buttonHandler.cyclic();
   BootButtonState state = m_buttonHandler.getState();
 
@@ -52,22 +57,26 @@ void DisplayHandler::cyclic()
   {
     displayOBDInfo();
   }
+
+  if (m_configuration->getAdditionalDebug())
+    Serial.println("DisplayHandler: Cycle Finished.");
 }
 
 void DisplayHandler::initialize()
 {
+  Serial.println("DisplayHandler: OLED Initialization Started...");
   m_buttonHandler.initialize();
 
-  Wire.begin(21, 22); // SDA = GPIO21, SCL = GPIO22
-  Serial.println("Initializing OLED...");
+  if (!Wire.begin(SDA_PIN, SCL_PIN))
+    Serial.println("DisplayHandler: Failed to initialize Wire!");
 
   if (!m_display.begin(SSD1306_SWITCHCAPVCC, 0x3C))
   {
-    Serial.println("Failed to initialize SSD1306!");
+    Serial.println("DisplayHandler: Failed to initialize SSD1306!");
     m_isDisplayInitialized = false;
   }
 
-  m_isDisplayInitialized = true;
+  Serial.println("DisplayHandler: OLED Initialization Finished...");
   displayMainScreen();
 }
 

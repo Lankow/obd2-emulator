@@ -10,7 +10,12 @@ OBDHandler::OBDHandler(std::shared_ptr<CycleHandler> cycleHandler,
                        std::shared_ptr<Configuration> configuration) : m_cycleHandler(cycleHandler),
                                                                        m_configuration(configuration)
 {
+    Serial.print("OBDHandler: Initialization Started. ");
+
     m_infos = configuration->getObdInfoList();
+
+    Serial.println("OBDHandler: Loaded Infos: ");
+    printAll();
 
     addCustomGetterFormula(0x010C, [this](const float &current) -> int32_t
                            {
@@ -20,10 +25,15 @@ OBDHandler::OBDHandler(std::shared_ptr<CycleHandler> cycleHandler,
 
                    int32_t result = (A << 8) | B;
 
-                   Serial.println("Formula Engine Speed:");
-                   Serial.println(result);
+                   if(m_configuration->getAdditionalDebug())
+                   {
+                    Serial.println("OBDHandler: Formula Engine Speed:");
+                    Serial.println(result);
+                   }
 
                    return result; });
+
+    Serial.print("OBDHandler: Initialization Finished. ");
 }
 
 void OBDHandler::updateAll()
@@ -42,6 +52,7 @@ void OBDHandler::cyclic()
     updateAll();
     if (m_configuration->getAdditionalDebug())
     {
+        Serial.println("OBDHandler: Infos Current State: ");
         printAll();
     }
 }
@@ -50,12 +61,13 @@ void OBDHandler::printAll() const
 {
     for (const auto &info : m_infos)
     {
-        Serial.println("---------------");
+        Serial.println("--- PID: " + String(info.m_pid) + " ---");
         Serial.println(info.m_description.c_str());
-        Serial.println("Pid: " + String(info.m_pid));
         Serial.println("Length: " + String(info.m_length));
         Serial.println("Current: " + String(info.m_current));
+        Serial.println("Default Min: " + String(info.m_defaultMin));
         Serial.println("Min: " + String(info.m_min));
+        Serial.println("Default Max: " + String(info.m_defaultMax));
         Serial.println("Max: " + String(info.m_max));
         Serial.println("Pace: " + String(info.m_pace));
         Serial.println("Increment: " + String(info.m_increment));

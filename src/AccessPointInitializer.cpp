@@ -15,10 +15,14 @@ AccessPointInitializer::AccessPointInitializer(std::shared_ptr<Configuration> co
 
 void AccessPointInitializer::initialize()
 {
-    WiFi.softAPConfig(IP, GATEWAY, SUBNET);
-    WiFi.softAP(m_configuration->getSSID().c_str(), m_configuration->getPassword().c_str());
-    IPAddress apIp = WiFi.softAPIP();
+    Serial.println("AccessPointInitializer: Initialization Started...");
 
-    Serial.println("Access Point started.");
-    Serial.println(apIp.toString());
+    WiFi.softAPConfig(IP, GATEWAY, SUBNET);
+    if (WiFi.softAP(m_configuration->getSSID().c_str(), m_configuration->getPassword().c_str()))
+    {
+        IPAddress apIp = WiFi.softAPIP();
+
+        Serial.print("AccessPointInitializer: Initialization Finished using IP Address: ");
+        Serial.println(apIp.toString());
+    }
 }

@@ -11,13 +11,13 @@ const std::string CONFIG_FILE_NAME = "/config.json";
 
 Configuration::Configuration()
 {
-    Serial.println("Configuration: Initialization Started.");
+    Serial.println("Configuration: Initialization Started...");
     if (FileSystemManager::initFS())
     {
         if (loadConfig())
         {
             printConfig();
-            Serial.println("Configuration: Initialization Finished.");
+            Serial.println("Configuration: Initialization Finished!");
         }
     }
 };

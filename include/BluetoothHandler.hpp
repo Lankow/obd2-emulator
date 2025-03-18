@@ -1,5 +1,5 @@
 /**
- * @file BtHandler.hpp
+ * @file BluetoothHandler.hpp
  * @date   2025-01-04
  * @author Lankow
  * @version 1.0
@@ -13,16 +13,16 @@
 #include "OBDHandler.hpp"
 #include "StaticRespHandler.hpp"
 
-class BtHandler
+class BluetoothHandler
 {
 public:
-    BtHandler(std::shared_ptr<OBDHandler> obdHandler);
+    BluetoothHandler(std::shared_ptr<OBDHandler> obdHandler);
 
     void initialize();
     void cyclic();
 
 private:
-    BluetoothSerial m_btSerial;
+    BluetoothSerial m_bluetoothSerial;
     StaticRespHandler m_staticRespHandler;
     std::shared_ptr<OBDHandler> m_obdHandler;
     std::string getOBD2PIDResponse(const std::string &request);

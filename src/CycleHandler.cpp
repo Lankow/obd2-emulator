@@ -13,6 +13,9 @@ CycleHandler::CycleHandler(std::shared_ptr<Configuration> configuration) : m_con
 
 void CycleHandler::startCycle()
 {
+    if (m_configuration->getAdditionalDebug())
+        Serial.println("CycleHandler: Cycle Started.");
+
     m_cycleStart = millis();
 }
 
@@ -23,7 +26,7 @@ void CycleHandler::endCycle()
 
     if (cycleDiff > cycleTime)
     {
-        Serial.println("Cycle time exceeded. Diff Time: ");
+        Serial.println("CycleHandler: Cycle time exceeded. Diff Time: ");
         Serial.println(cycleDiff);
         uint32_t cycles = cycleDiff / cycleTime;
 
@@ -37,6 +40,9 @@ void CycleHandler::endCycle()
 
     long cycleDelay = cycleTime - cycleDiff;
     delay(cycleDelay);
+
+    if (m_configuration->getAdditionalDebug())
+        Serial.println("CycleHandler: Cycle Finished.");
 }
 
 const uint32_t CycleHandler::getCycleCount() const { return m_cycleCount; };
