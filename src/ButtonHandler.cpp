@@ -62,7 +62,12 @@ void ButtonHandler::cyclic()
     if (m_state == BootButtonState::Pressed)
     {
         m_pressedCounterMs += m_configuration->getCycleTime();
-        Serial.println(m_pressedCounterMs);
+
+        if (m_configuration->getAdditionalDebug())
+        {
+            Serial.print("ButtonHandler: Pressed Counter ms: ");
+            Serial.println(m_pressedCounterMs);
+        }
 
         if (m_pressedCounterMs >= BootButton::THRESHOLD_LONG_MS)
         {

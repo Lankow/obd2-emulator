@@ -34,6 +34,8 @@ bool Configuration::loadConfig()
             Serial.println("Configuration: Default configuration file copying failed.");
             return false;
         };
+
+        jsonStr = FileSystemManager::readFile(CONFIG_FILE_NAME.c_str());
     }
 
     DynamicJsonDocument doc(1024);
