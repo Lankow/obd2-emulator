@@ -13,6 +13,7 @@ class FileSystemManager
 public:
     static bool initFS();
     static std::string readFile(const std::string &path);
+    static bool copyFile(const std::string &path, const std::string &copyPath);
     static bool writeFile(const std::string &path, const std::string &data);
 };
 #endif // FILE_SYSTEM_MANAGER_HPP

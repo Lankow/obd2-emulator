@@ -43,6 +43,51 @@ std::string FileSystemManager::readFile(const std::string &path)
     return content.c_str();
 }
 
+bool FileSystemManager::copyFile(const std::string &path, const std::string &copyPath)
+{
+    Serial.print("FileSystemManager: Started copying file from ");
+    Serial.print(path.c_str());
+    Serial.print(" to ");
+    Serial.println(copyPath.c_str());
+
+    File sourceFile = SPIFFS.open(path.c_str(), "r");
+    if (!sourceFile)
+    {
+        Serial.println("FileSystemManager: Source file not found.");
+        return false;
+    }
+
+    if (SPIFFS.exists(copyPath.c_str()))
+    {
+        Serial.println("FileSystemManager: Destination file exists. Removing it...");
+        if (!SPIFFS.remove(copyPath.c_str()))
+        {
+            Serial.println("FileSystemManager: Failed to remove existing destination file.");
+            sourceFile.close();
+            return false;
+        }
+    }
+
+    File destFile = SPIFFS.open(copyPath.c_str(), "w");
+    if (!destFile)
+    {
+        Serial.println("FileSystemManager: Failed to create destination file.");
+        sourceFile.close();
+        return false;
+    }
+
+    while (sourceFile.available())
+    {
+        destFile.write(sourceFile.read());
+    }
+
+    sourceFile.close();
+    destFile.close();
+
+    Serial.println("FileSystemManager: File copy completed successfully.");
+    return true;
+}
+
 bool FileSystemManager::writeFile(const std::string &path, const std::string &data)
 {
     Serial.print("FileSystemManager: Started writing file: ");

@@ -146,8 +146,11 @@ void WebServerHandler::handleSettings()
         std::string confirmPageHtml;
         if (arg == "reset")
         {
-            confirmPageHtml = PageGenerator::getConfirmPage("Factory reset Performed. Reconnect to a device.");
-            // TODO: Handle Reset
+            if (m_configuration->resetConfig())
+            {
+                confirmPageHtml = PageGenerator::getConfirmPage("Factory reset Performed. Reconnect to a device.");
+                ESP.restart();
+            }
         }
         else if (arg == "logging")
         {

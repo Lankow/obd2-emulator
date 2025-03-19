@@ -19,6 +19,7 @@ public:
 
     bool loadConfig();
     bool saveConfig();
+    bool resetConfig();
 
     uint32_t getCycleTime() const;
     std::string getSSID() const;

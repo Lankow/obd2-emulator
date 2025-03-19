@@ -7,6 +7,7 @@
 #include "Configuration.hpp"
 #include "FileSystemManager.hpp"
 
+const std::string DEFAULT_CONFIG_FILE_NAME = "/default_config.json";
 const std::string CONFIG_FILE_NAME = "/config.json";
 
 Configuration::Configuration()
@@ -27,9 +28,12 @@ bool Configuration::loadConfig()
     std::string jsonStr = FileSystemManager::readFile(CONFIG_FILE_NAME.c_str());
     if (jsonStr.empty())
     {
-        // TODO: Copy Default Config
-        Serial.println("Configuration: Config File not found.");
-        return false;
+        Serial.println("Configuration: Config File not found. Trying to copy default configuration file.");
+        if (!FileSystemManager::copyFile(DEFAULT_CONFIG_FILE_NAME.c_str(), CONFIG_FILE_NAME.c_str()))
+        {
+            Serial.println("Configuration: Default configuration file copying failed.");
+            return false;
+        };
     }
 
     DynamicJsonDocument doc(1024);
@@ -78,6 +82,18 @@ bool Configuration::saveConfig()
 
     Serial.println("Configuration: Saving config file FAILED.");
     return false;
+}
+
+bool Configuration::resetConfig()
+{
+    Serial.println("Configuration: Resetting config to default version.");
+    if (FileSystemManager::copyFile(DEFAULT_CONFIG_FILE_NAME.c_str(), CONFIG_FILE_NAME.c_str()))
+    {
+        Serial.println("Configuration: Default configuration restoration failed... Restore configuration manually.");
+        return false;
+    };
+    Serial.println("Configuration: Resetting config to default version success.");
+    return true;
 }
 
 void Configuration::printConfig()
