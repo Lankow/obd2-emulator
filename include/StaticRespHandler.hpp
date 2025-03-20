@@ -12,6 +12,7 @@ class StaticRespHandler
 {
 public:
     StaticRespHandler();
+    
     std::string getResponse(const std::string &request) const;
 
 private:

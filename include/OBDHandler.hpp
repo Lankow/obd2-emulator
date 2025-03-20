@@ -19,6 +19,7 @@ class OBDHandler
 {
 public:
     explicit OBDHandler(std::shared_ptr<CycleHandler> cycleHandler, std::shared_ptr<Configuration> configuration);
+    
     void cyclic();
     OBDInfo *getByPid(uint16_t pid);
     const OBDInfo *getByIndex(uint8_t index) const;

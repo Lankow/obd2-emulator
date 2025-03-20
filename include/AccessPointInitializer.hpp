@@ -14,6 +14,7 @@ class AccessPointInitializer
 {
 public:
     AccessPointInitializer(std::shared_ptr<Configuration> configuration);
+    
     void initialize();
 
 private:

@@ -25,6 +25,7 @@ private:
     BluetoothSerial m_bluetoothSerial;
     StaticRespHandler m_staticRespHandler;
     std::shared_ptr<OBDHandler> m_obdHandler;
+    
     std::string getOBD2PIDResponse(const std::string &request);
 };
 #endif // BlUETOOTH_HANDLER_HPP

@@ -15,6 +15,7 @@ class CycleHandler
 {
 public:
     CycleHandler(std::shared_ptr<Configuration> configuration);
+    
     void startCycle();
     void endCycle();
     const uint32_t getCycleCount() const;
