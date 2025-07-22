@@ -10,6 +10,8 @@
 #include "StringUtils.hpp"
 
 const std::string BLUETOOTH_SERIAL_NAME = "OBDII-ESP";
+constexpr uint8_t SERVICE_RESPONSE_OFFSET = 0x40;
+constexpr uint8_t SERVICE_RESPONSE_LENGTH = 1;
 
 BluetoothHandler::BluetoothHandler(std::shared_ptr<OBDHandler> obdHandler) : m_staticRespHandler(), m_obdHandler(obdHandler) {}
 
@@ -66,7 +68,12 @@ std::string BluetoothHandler::getOBD2PIDResponse(const std::string &request)
 
   uint32_t pidValue = m_obdHandler->getFormula(*info);
   uint8_t pidLength = info->m_length;
+  uint8_t pidServiceByte = static_cast<uint8_t>((info->m_pid >> 8) + SERVICE_RESPONSE_OFFSET);
+  
+  std::string pidServiceStr = StringUtils::intToHexString(pidServiceByte, SERVICE_RESPONSE_LENGTH);
+  std::string pidValueStr = StringUtils::intToHexString(pidValue, pidLength);
 
-  std::string response = StringUtils::intToHexString(pidValue, pidLength);
+  std::string response = pidServiceStr + pidValueStr;
+
   return response;
 }
