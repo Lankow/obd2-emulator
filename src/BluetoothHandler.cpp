@@ -73,7 +73,7 @@ std::string BluetoothHandler::getOBD2PIDResponse(const std::string &request)
   std::string pidServiceStr = StringUtils::intToHexString(pidServiceByte, SERVICE_RESPONSE_LENGTH);
   std::string pidValueStr = StringUtils::intToHexString(pidValue, pidLength);
 
-  std::string response = pidServiceStr + pidValueStr;
+  std::string response = pidServiceStr + " " + pidValueStr;
 
   return response;
 }
