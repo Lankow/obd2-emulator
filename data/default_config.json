@@ -18,7 +18,7 @@
         },
         {
             "pid" : 269,
-            "length" : 2,
+            "length" : 1,
             "description" : "Vehicle Speed",
             "defaultMin" : 0,
             "min" : 0,
